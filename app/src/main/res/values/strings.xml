@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Woodlands Reclamation</string>
+
+    <string name="title_section1">Section 1</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section3">Section 3</string>
+    <string name="login_section">Login</string>
+    <string name="form_section">Forms</string>
+    <string name="sync_section">Data Synchronization</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_example">Example action</string>
+
+    <string name="action_settings">Settings</string>
+</resources>
