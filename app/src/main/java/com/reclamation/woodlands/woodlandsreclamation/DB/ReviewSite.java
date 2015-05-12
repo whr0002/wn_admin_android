@@ -5,6 +5,9 @@ package com.reclamation.woodlands.woodlandsreclamation.DB;
  */
 public class ReviewSite {
     public String ReviewSiteID;
+    public String DataOwner;
+    public String DispositionNumber;
+    public String SWPNumber;
     public String AFE;
     public String ProvincialAreaName;
     public String ProvincialAreaTypeName;
@@ -18,11 +21,4 @@ public class ReviewSite {
     public String UWI;
     public String WellsiteName;
     public String UTMZone;
-    public String ProvincialArea;
-    public String ProvincialAreaType;
-    public String OperatingArea;
-    public String County;
-    public String NaturalRegion;
-    public String NaturalSubRegion;
-    public String FMAHolder;
 }

@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,14 +29,31 @@ public class FT_DataSource extends AbastrctDataSource<FacilityType> {
                 FacilityType.COLUMN_FTN + " = '" + o.FacilityTypeName +"'", null);
     }
 
+    public void deleteAll(){
+        db.delete(FacilityType.TABLE_FT, null, null);
+    }
+
     @Override
     public List<FacilityType> getAll() {
+        List<FacilityType> facilityTypes = new ArrayList<FacilityType>();
 
-        return null;
+        Cursor cursor = db.query(FacilityType.TABLE_FT, null, null, null, null, null, null);
+        cursor.moveToFirst();
+
+        while(!cursor.isAfterLast()){
+            FacilityType f = cursorTo(cursor);
+            facilityTypes.add(f);
+
+            cursor.moveToNext();
+        }
+
+        return facilityTypes;
     }
 
     @Override
     public FacilityType cursorTo(Cursor cursor) {
-        return null;
+        FacilityType f = new FacilityType();
+        f.FacilityTypeName = cursor.getString(0);
+        return f;
     }
 }

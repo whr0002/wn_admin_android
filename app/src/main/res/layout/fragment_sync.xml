@@ -10,4 +10,17 @@
         android:layout_centerInParent="true"
         android:id="@+id/sync"/>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/test"
+        android:text="Get FacilityTypes"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/rs"
+        android:text="Get ReviewSites"
+        android:layout_toRightOf="@id/test"/>
+
 </RelativeLayout>

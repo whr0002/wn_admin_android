@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.reclamation.woodlands.woodlandsreclamation.Fragment.FormFragment;
 import com.reclamation.woodlands.woodlandsreclamation.Fragment.LoginFragment;
 import com.reclamation.woodlands.woodlandsreclamation.Fragment.SyncFragment;
 import com.reclamation.woodlands.woodlandsreclamation.Fragment.TestFragment;
@@ -64,8 +65,9 @@ public class MainActivity extends ActionBarActivity
 
             case 1:
                 fragmentManager.beginTransaction()
-                        .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
+                        .replace(R.id.container, new FormFragment())
                         .commit();
+                onSectionAttached(2);
                 break;
 
             case 2:

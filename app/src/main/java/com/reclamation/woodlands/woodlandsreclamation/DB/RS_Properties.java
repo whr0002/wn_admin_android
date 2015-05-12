@@ -6,6 +6,9 @@ package com.reclamation.woodlands.woodlandsreclamation.DB;
 public class RS_Properties {
     public static final String TABLE_REVIEWSITE = "ReviewSites";
     public static final String COLUMN_REVIEWSITEID = "ReviewSiteID";
+    public static final String COLUMN_DATAOWNER = "DataOwner";
+    public static final String COLUMN_DISPOSITIONNUMBER = "DispositionNumber";
+    public static final String COLUMN_SWPNUMBER = "SWPNumber";
     public static final String COLUMN_AFE = "AFE";
     public static final String COLUMN_PROVINCIALAREANAME = "ProvincialAreaName";
     public static final String COLUMN_PROVINCIALAREATYPENAME = "ProvincialAreaTypeName";
@@ -31,6 +34,9 @@ public class RS_Properties {
             "create table " + TABLE_REVIEWSITE
                     + "("
                     + COLUMN_REVIEWSITEID + " text primary key, "
+                    + COLUMN_DATAOWNER + " text, "
+                    + COLUMN_DISPOSITIONNUMBER + " text, "
+                    + COLUMN_SWPNUMBER + " text, "
                     + COLUMN_AFE + " text, "
                     + COLUMN_PROVINCIALAREANAME + " text, "
                     + COLUMN_PROVINCIALAREATYPENAME + " text, "
@@ -44,7 +50,6 @@ public class RS_Properties {
                     + COLUMN_UWI + " text, "
                     + COLUMN_WELLSITENAME + " text, "
                     + COLUMN_UTMZONE + " text, "
-
                     + COLUMN_PROVINCIALAREA + " text, "
                     + COLUMN_PROVINCIALAREATYPE + " text, "
                     + COLUMN_OPERATINGAREA + " text, "

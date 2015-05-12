@@ -10,7 +10,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_weight="0.8">
+        android:layout_weight="0.8"
+        android:id="@+id/loginView">
 
 
         <EditText
@@ -18,24 +19,58 @@
             android:layout_height="wrap_content"
             android:inputType="textEmailAddress"
             android:ems="10"
-            android:id="@+id/editText"
+            android:id="@+id/username"
             android:layout_gravity="center_horizontal"
-            android:hint="Email"/>
+            android:hint="Email"
+            android:text="whr0002@gmail.com"/>
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword"
             android:ems="10"
-            android:id="@+id/editText2"
+            android:id="@+id/password"
             android:layout_gravity="center_horizontal"
-            android:hint="Password"/>
+            android:hint="Password"
+            android:text="`Nmhwj0002"/>
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Login"
-            android:id="@+id/button"
+            android:id="@+id/login"
+            android:layout_gravity="right" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_weight="0.8"
+        android:id="@+id/logoutView"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/name"
+            android:textSize="25sp"
+            android:layout_marginBottom="5dp"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/role"
+            android:textSize="25sp"/>
+
+        
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Logout"
+            android:id="@+id/logout"
             android:layout_gravity="right" />
     </LinearLayout>
 

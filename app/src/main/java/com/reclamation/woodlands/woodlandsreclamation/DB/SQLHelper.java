@@ -11,7 +11,7 @@ import android.util.Log;
 public class SQLHelper extends SQLiteOpenHelper{
 
     private static final String DATABASE_NAME = "wn_reclamation.db";
-    private static final int DATABASE_VERSION = 7;
+    private static final int DATABASE_VERSION = 13;
 
 
     public SQLHelper(Context context) {
@@ -31,6 +31,7 @@ public class SQLHelper extends SQLiteOpenHelper{
         sqLiteDatabase.execSQL(RS_Properties.RS_CREATE);
         sqLiteDatabase.execSQL(DR_Properties.DR_CREATE);
         sqLiteDatabase.execSQL(FacilityType.FT_CREATE);
+        sqLiteDatabase.execSQL(UserInfo.USERINFO_CREATE);
 
     }
 
@@ -42,6 +43,8 @@ public class SQLHelper extends SQLiteOpenHelper{
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DR_Properties.TABLE_DESKTOPREVIEWS);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + RS_Properties.TABLE_REVIEWSITE);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + FacilityType.TABLE_FT);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + UserInfo.TABLE_USERINFO);
+
         onCreate(sqLiteDatabase);
     }
 }
