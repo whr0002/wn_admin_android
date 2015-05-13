@@ -1,51 +1,54 @@
 package com.reclamation.woodlands.woodlandsreclamation.DB;
 
+import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.Form;
+
 /**
  * Created by Jimmy on 5/12/2015.
  */
-public class F_SiteVisit {
-    public int ID;
+public class SiteVisitForm extends Form{
+    public int SiteVisitID;
     public String SiteID;
     public String Date;
 
     public String FacilityType;
 
-    public boolean RefusePF;
+    public int RefusePF;
     public String RefuseComment;
-
-    public boolean DrainagePF;
+    public int DrainagePF;
     public String DrainageComment;
-    public boolean RockGravelPF;
+    public int RockGravelPF;
     public String RockGravelComment;
-    public boolean BareGroundPF;
+    public int BareGroundPF;
     public String BareGroundComment;
-    public boolean SoilStabilityPF;
+    public int SoilStabilityPF;
     public String SoilStabilityComment;
-    public boolean ContoursPF;
+    public int ContoursPF;
     public String ContoursComment;
-    public boolean CWDPF;
+    public int CWDPF;
     public String CWDComment;
-    public boolean ErosionPF;
+    public int ErosionPF;
     public String ErosionComment;
 
-    public boolean SoilCharPF;
+    public int SoilCharPF;
     public String SoilCharComment;
-    public boolean TopsoilDepthPF;
+    public int TopsoilDepthPF;
     public String TopsoilDepthComment;
-    public boolean RootingPF;
+    public int RootingPF;
     public String RootingComment;
-    public boolean WSDPF;
+    public int WSDPF;
     public String WSDComment;
-    public boolean TreeHealthPF;
+    public int TreeHealthPF;
     public String TreeHealthComment;
-    public boolean WeedsInvasivesPF;
+    public int WeedsInvasivesPF;
     public String WeedsInvasivesComment;
-    public boolean NSCPF;
+    public int NSCPF;
     public String NSCComment;
-    public boolean LitterPF;
+    public int LitterPF;
     public String LitterComment;
 
     public String Recommendation;
+
+    public byte[] DRAWING;
 
     public byte[] NLF_Photo1;
     public byte[] NLF_Photo2;
@@ -74,10 +77,11 @@ public class F_SiteVisit {
     public byte[] AD_Photo3;
     public byte[] AD_Photo4;
     public byte[] AD_Photo5;
-
-
-
-
+    public byte[] AD_Photo6;
+    public byte[] AD_Photo7;
+    public byte[] AD_Photo8;
+    public byte[] AD_Photo9;
+    public byte[] AD_Photo10;
 
 
 

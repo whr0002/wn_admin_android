@@ -10,15 +10,16 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
-import com.google.gson.Gson;
 import com.reclamation.woodlands.woodlandsreclamation.Adapter.Test2Adapter;
 import com.reclamation.woodlands.woodlandsreclamation.Adapter.TestAdapter;
 import com.reclamation.woodlands.woodlandsreclamation.DB.DR_DataSource;
 import com.reclamation.woodlands.woodlandsreclamation.DB.DesktopReview;
 import com.reclamation.woodlands.woodlandsreclamation.DB.RS_DataSource;
 import com.reclamation.woodlands.woodlandsreclamation.DB.ReviewSite;
+import com.reclamation.woodlands.woodlandsreclamation.DB.SiteVisitForm;
 import com.reclamation.woodlands.woodlandsreclamation.R;
 
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Random;
 
@@ -107,15 +108,18 @@ public class TestFragment  extends Fragment implements View.OnClickListener{
                 break;
 
             case R.id.test:
-                Gson gson = new Gson();
-                String json = new String("{\"FacilityType\":{\"FacilityTypeName\":\"Prepared Wellsite (Not Drilled)\"},\"Landscape\":{\"LandscapeName\":\"P\"},\"LSDQuarter\":{\"AspectName\":\"SW\"},\"RelevantCriteria\":{\"RelevantCriteriaName\":\"2010 Forested Criteria\"},\"Soil\":{\"SoilName\":\"P (j)\"},\"Vegetation\":{\"VegetationName\":\"P\"},\"DesktopReviewID\":1,\"SiteID\":\"01-03-52-20-W5M\",\"FacilityTypeName\":\"Prepared Wellsite (Not Drilled)\",\"Notes\":\"R.C. pending, no work.\",\"Client\":null,\"ApprovalStatus\":null,\"WorkPhase\":\"R07\",\"Occupant\":null,\"OccupantInfo\":null,\"Disposition\":\"MSL062337\",\"SoilClass\":\"Orthic Gray Luvisol\",\"SoilGroup\":null,\"ERCBLic\":\"0359447\",\"Width\":120,\"Length\":120,\"AreaHA\":1.44,\"AreaAC\":3.558384,\"Northing\":5922965,\"Easting\":509663,\"Latitude\":53.4556117,\"Longitude\":-116.8544743,\"Elevation\":999,\"AspectName\":\"SW\",\"LSD\":\"01-03-52-20-W5M\",\"SurveyDate\":\"\\/Date(1148450400000)\\/\",\"ConstructionDate\":\"\\/Date(1175493600000)\\/\",\"SpudDate\":null,\"AbandonmentDate\":null,\"ReclamationDate\":null,\"RelevantCriteriaName\":\"2010 Forested Criteria\",\"LandscapeName\":\"P\",\"SoilName\":\"P (j)\",\"VegetationName\":\"P\",\"RCADate\":\"\\/Date(1420786800000)\\/\",\"RCNumber\":null,\"DSAComments\":\"RCA submitted, Cert App in progress. Site assessed by WNI in 2014. Soils pass with vegetation override; justifications approved by Kevin Ball on December 19, 2014.\",\"Exemptions\":\"Site is expected to comply with all aspects of the 2010 vegetation criteria; soils are expected to comply but extenuating conditions with topsoil may be justified.\",\"AmendDate\":null,\"AmendDetail\":\"N/A\",\"RevegDate\":\"\\/Date(1308204000000)\\/\",\"RevegDetail\":\"Trees (Stock type: 410A 2+0; Seedlot: SD 29-48-17-5-2003 PL)\"}");
-                DesktopReview desktopReview = new DesktopReview();
-                desktopReview = gson.fromJson(json, DesktopReview.class);
-                if(desktopReview != null) {
-                    Log.i("debug", "Result: " + desktopReview.DSAComments);
-                }else{
-                    Log.i("debug", "failed ");
+                SiteVisitForm sv = new SiteVisitForm();
+                for (Field field : sv.getClass().getDeclaredFields()) {
+                    field.setAccessible(true); // You might want to set modifier to public first.
+                    String name = field.getName();
+                    String nameU = "COLUMN_"+name.toUpperCase();
+//                    System.out.println("+ COLUMN_"+field.getName().toUpperCase() + " + \" text, \"");
+//                    Log.i("debug", "sv.put(SiteVisitProperties.COLUMN_"
+//                            + field.getName().toUpperCase() + ", o." + field.getName() + ");");
+//                    sv.AD_Photo1 = cursor.getBlob(cursor.getColumnIndex(SiteVisitProperties.COLUMN_AD_PHOTO1));
+                    Log.i("debug","sv." + name + " = cursor.getBlob(cursor.getColumnIndex(SiteVisitProperties."+ nameU + "));");
                 }
+
                 break;
 
             case R.id.add1:

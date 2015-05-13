@@ -22,8 +22,12 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".Activity.FormList">
-        </activity>
+
+
+        <activity android:name=".Activity.SiteVisitActivity"></activity>
+
+        <activity android:name=".Activity.SiteVisitDetailActivity"></activity>
+
     </application>
 
 </manifest>

@@ -68,11 +68,15 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
 
     private void checkUserInfo() {
 
-        UI_DataSource dao = new UI_DataSource(mActivity);
-        dao.open();
+        try {
+            UI_DataSource dao = new UI_DataSource(mActivity);
+            dao.open();
 
-        UserInfo ui = dao.getUserInfo();
-        showLogoutView(ui);
+            UserInfo ui = dao.getUserInfo();
+            showLogoutView(ui);
+        }catch (Exception e){
+
+        }
     }
 
     @Override

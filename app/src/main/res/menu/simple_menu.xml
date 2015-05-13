@@ -2,6 +2,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.reclamation.woodlands.woodlandsreclamation.Activity.FormList">
+    tools:context="com.reclamation.woodlands.woodlandsreclamation.Activity.FormActivity">
 
+    <item
+        android:id="@+id/create"
+        android:title="Create"
+        app:showAsAction="always"
+        android:orderInCategory="0"></item>
+
+    <item
+        android:id="@+id/delete"
+        android:title="Delete"
+        app:showAsAction="always"
+        android:orderInCategory="1"></item>
 </menu>

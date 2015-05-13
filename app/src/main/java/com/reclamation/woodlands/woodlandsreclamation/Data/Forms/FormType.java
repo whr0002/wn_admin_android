@@ -6,4 +6,7 @@ package com.reclamation.woodlands.woodlandsreclamation.Data.Forms;
 public class FormType {
     public int typeID;
     public String formName;
+
+    public static final int TYPE_SITEVISIT = 0;
+
 }

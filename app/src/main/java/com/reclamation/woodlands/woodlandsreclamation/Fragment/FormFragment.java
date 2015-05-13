@@ -10,8 +10,8 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
-import com.reclamation.woodlands.woodlandsreclamation.Activity.FormList;
-import com.reclamation.woodlands.woodlandsreclamation.Adapter.FormAdapter;
+import com.reclamation.woodlands.woodlandsreclamation.Activity.SiteVisitActivity;
+import com.reclamation.woodlands.woodlandsreclamation.Adapter.FormTypeAdapter;
 import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.FormType;
 import com.reclamation.woodlands.woodlandsreclamation.R;
 
@@ -24,7 +24,7 @@ public class FormFragment extends android.support.v4.app.Fragment implements Ada
 
     private Context mContext;
     private GridView gridView;
-    private FormAdapter formAdapter;
+    private FormTypeAdapter formAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -34,7 +34,7 @@ public class FormFragment extends android.support.v4.app.Fragment implements Ada
         gridView = (GridView) v.findViewById(R.id.gridview);
 
 
-        formAdapter = new FormAdapter(mContext, R.layout.in_gridview, getAllFormTypes());
+        formAdapter = new FormTypeAdapter(mContext, R.layout.in_gridview, getAllFormTypes());
 
         gridView.setAdapter(formAdapter);
         gridView.setOnItemClickListener(this);
@@ -74,14 +74,20 @@ public class FormFragment extends android.support.v4.app.Fragment implements Ada
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
         Toast.makeText(mContext, "" + position ,Toast.LENGTH_LONG).show();
 
-        Intent intent = new Intent(mContext, FormList.class);
+
 
         FormType f = formAdapter.getItem(position);
 
-        intent.putExtra("type", f.typeID);
+        switch(f.typeID){
+            case FormType.TYPE_SITEVISIT:
+                // Enter SiteVisitList Activity
+                Intent intent = new Intent(mContext, SiteVisitActivity.class);
+                startActivity(intent);
 
-        intent.putExtra("name", f.formName);
+                break;
 
-        startActivity(intent);
+        }
+
+
     }
 }
