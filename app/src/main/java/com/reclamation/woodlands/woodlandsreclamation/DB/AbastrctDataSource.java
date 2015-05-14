@@ -38,4 +38,6 @@ public abstract class AbastrctDataSource<T> {
     public abstract List<T> getAll();
 
     public abstract T cursorTo(Cursor cursor);
+
+    public abstract T findFormById(int id);
 }

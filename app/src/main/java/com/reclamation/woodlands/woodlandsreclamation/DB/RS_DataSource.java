@@ -101,4 +101,9 @@ public class RS_DataSource extends AbastrctDataSource<ReviewSite>{
 
         return o;
     }
+
+    @Override
+    public ReviewSite findFormById(int id) {
+        return null;
+    }
 }

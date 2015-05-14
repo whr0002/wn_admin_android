@@ -1,16 +1,15 @@
 package com.reclamation.woodlands.woodlandsreclamation.DB;
 
-import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.Form;
+import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.SiteForm;
 
 /**
  * Created by Jimmy on 5/12/2015.
  */
-public class SiteVisitForm extends Form{
-    public int SiteVisitID;
-    public String SiteID;
-    public String Date;
+public class SiteVisitForm extends SiteForm {
 
-    public String FacilityType;
+//    public String SiteID;
+//    public String Date;
+//    public String FacilityType;
 
     public int RefusePF;
     public String RefuseComment;

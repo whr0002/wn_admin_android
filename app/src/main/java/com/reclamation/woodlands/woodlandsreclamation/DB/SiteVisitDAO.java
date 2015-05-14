@@ -111,7 +111,7 @@ public class SiteVisitDAO extends AbastrctDataSource<SiteVisitForm> {
     @Override
     public void delete(SiteVisitForm o) {
         db.delete(SiteVisitProperties.TABLE_SITEVISIT,
-                SiteVisitProperties.COLUMN_SITEVISITID + " = " + o.SiteVisitID, null);
+                SiteVisitProperties.COLUMN_SITEVISITID + " = " + o.ID, null);
     }
 
     @Override
@@ -188,7 +188,7 @@ public class SiteVisitDAO extends AbastrctDataSource<SiteVisitForm> {
         sv.RootingComment = cursor.getString(cursor.getColumnIndex(SiteVisitProperties.COLUMN_ROOTINGCOMMENT));
         sv.RootingPF = cursor.getInt(cursor.getColumnIndex(SiteVisitProperties.COLUMN_ROOTINGPF));
         sv.SiteID = cursor.getString(cursor.getColumnIndex(SiteVisitProperties.COLUMN_SITEID));
-        sv.SiteVisitID = cursor.getInt(cursor.getColumnIndex(SiteVisitProperties.COLUMN_SITEVISITID));
+        sv.ID = cursor.getInt(cursor.getColumnIndex(SiteVisitProperties.COLUMN_SITEVISITID));
         sv.SoilCharComment = cursor.getString(cursor.getColumnIndex(SiteVisitProperties.COLUMN_SOILCHARCOMMENT));
         sv.SoilCharPF = cursor.getInt(cursor.getColumnIndex(SiteVisitProperties.COLUMN_SOILCHARPF));
         sv.SoilStabilityComment = cursor.getString(cursor.getColumnIndex(SiteVisitProperties.COLUMN_SOILSTABILITYCOMMENT));
@@ -204,5 +204,32 @@ public class SiteVisitDAO extends AbastrctDataSource<SiteVisitForm> {
 
 
         return sv;
+    }
+
+    @Override
+    public SiteVisitForm findFormById(int id) {
+        Cursor cursor = db.query(SiteVisitProperties.TABLE_SITEVISIT,
+                null, SiteVisitProperties.COLUMN_SITEVISITID + " = " + id
+                , null, null, null, null);
+
+        cursor.moveToFirst();
+
+        if(!cursor.isAfterLast()) {
+
+            SiteVisitForm svf = cursorTo(cursor);
+            cursor.close();
+            return svf;
+
+        }else{
+
+            cursor.close();
+            return null;
+
+        }
+
+
+
+
+
     }
 }

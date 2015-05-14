@@ -8,10 +8,10 @@ import java.util.List;
  * Created by Jimmy on 5/13/2015.
  */
 public interface FormCRUD {
-    List<Form> getAllForms();
-    void createForm(Form form);
-    void deleteForm(Form form);
-    void updateForm(Form form);
+    List<SiteForm> getAllForms();
+    void createForm(SiteForm siteForm);
+    void deleteForm(SiteForm siteForm);
+    void updateForm(SiteForm siteForm);
 
     FormAdapter getAdapter();
 

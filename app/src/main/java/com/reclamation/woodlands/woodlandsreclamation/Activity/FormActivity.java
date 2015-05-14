@@ -13,7 +13,7 @@ import com.reclamation.woodlands.woodlandsreclamation.Adapter.FormAdapter;
 import com.reclamation.woodlands.woodlandsreclamation.DB.RS_DataSource;
 import com.reclamation.woodlands.woodlandsreclamation.DB.ReviewSite;
 import com.reclamation.woodlands.woodlandsreclamation.DB.SiteVisitForm;
-import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.Form;
+import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.SiteForm;
 import com.reclamation.woodlands.woodlandsreclamation.R;
 
 import java.util.List;
@@ -46,7 +46,7 @@ public abstract class FormActivity extends ActionBarActivity implements AdapterV
 
         mListview = (ListView) findViewById(R.id.listView);
 
-        formAdapter = getAdapter();
+        formAdapter = new FormAdapter(mContext, R.layout.in_listview, getAllForms());
 
         mListview.setAdapter(formAdapter);
         mListview.setOnItemClickListener(this);
@@ -71,7 +71,7 @@ public abstract class FormActivity extends ActionBarActivity implements AdapterV
                 break;
 
             case R.id.create:
-                Form f = getTestData();
+                SiteForm f = getTestData();
                 createForm(f);
 
                 formAdapter.add(f);
@@ -82,7 +82,7 @@ public abstract class FormActivity extends ActionBarActivity implements AdapterV
 
             case R.id.delete:
                 if(formAdapter.getCount() > 0){
-                    Form temp = formAdapter.getItem(0);
+                    SiteForm temp = formAdapter.getItem(0);
                     deleteForm(temp);
 
                     formAdapter.remove(temp);
@@ -97,7 +97,7 @@ public abstract class FormActivity extends ActionBarActivity implements AdapterV
     }
 
 
-    public Form getTestData(){
+    public SiteForm getTestData(){
         SiteVisitForm sv = new SiteVisitForm();
         RS_DataSource dao = new RS_DataSource(mContext);
         dao.open();
@@ -125,17 +125,15 @@ public abstract class FormActivity extends ActionBarActivity implements AdapterV
 
 
 
-    public abstract List<Form> getAllForms();
+    public abstract List<SiteForm> getAllForms();
 
 
-    public abstract void createForm(Form form);
+    public abstract void createForm(SiteForm siteForm);
 
 
-    public abstract void deleteForm(Form form);
+    public abstract void deleteForm(SiteForm siteForm);
 
 
-    public abstract void updateForm(Form form);
+    public abstract void updateForm(SiteForm siteForm);
 
-
-    public abstract FormAdapter getAdapter();
 }

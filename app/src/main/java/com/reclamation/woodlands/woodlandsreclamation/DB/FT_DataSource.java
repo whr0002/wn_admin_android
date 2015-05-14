@@ -56,4 +56,9 @@ public class FT_DataSource extends AbastrctDataSource<FacilityType> {
         f.FacilityTypeName = cursor.getString(0);
         return f;
     }
+
+    @Override
+    public FacilityType findFormById(int id) {
+        return null;
+    }
 }

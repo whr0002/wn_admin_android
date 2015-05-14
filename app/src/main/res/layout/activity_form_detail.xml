@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Outer wrapper -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_margin="10dp">
+
+
+        <!-- Site ID -->
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            android:weightSum="1"
+            >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Site ID"
+                android:layout_marginLeft="10dp"
+                android:layout_gravity="center"
+                android:layout_weight="0.5"
+                android:textSize="18sp"
+                android:textColor="@color/black"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:id="@+id/siteIDView"
+                android:layout_gravity="center"
+                android:layout_weight="0.5"
+                android:textColor="@color/cblue"/>
+
+        </LinearLayout>
+        <!-- Date -->
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:weightSum="1">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textColor="@color/black"
+                android:text="Date"
+                android:id="@+id/dateLabel"
+                android:layout_marginLeft="10dp"
+
+                android:layout_gravity="center"
+                android:layout_weight="0.5" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:text="00-00-0000"
+                android:id="@+id/dateView"
+                android:layout_gravity="center"
+                android:layout_weight="0.5"
+                android:textColor="@color/cblue"/>
+
+
+        </LinearLayout>
+        <!-- Facility Type -->
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            android:weightSum="1"
+            >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+
+                android:text="Facility Type"
+                android:layout_marginLeft="10dp"
+                android:layout_gravity="center"
+                android:layout_weight="0.5"
+                android:textSize="18sp"
+                android:textColor="@color/black"/>
+
+            <Spinner
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:id="@+id/facilityTypeSpinner"
+                android:layout_weight="0.5"
+                android:layout_gravity="center"/>
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</LinearLayout>

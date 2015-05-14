@@ -59,6 +59,11 @@ public class UI_DataSource extends AbastrctDataSource<UserInfo> {
 
     }
 
+    @Override
+    public UserInfo findFormById(int id) {
+        return null;
+    }
+
     public UserInfo getUserInfo(){
         Cursor cursor = db.query(UserInfo.TABLE_USERINFO, null, null, null, null, null, null);
         cursor.moveToFirst();
