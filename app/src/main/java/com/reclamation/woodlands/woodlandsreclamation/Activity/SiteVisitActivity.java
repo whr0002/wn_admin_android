@@ -5,8 +5,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 
-import com.reclamation.woodlands.woodlandsreclamation.DB.SiteVisitDAO;
-import com.reclamation.woodlands.woodlandsreclamation.DB.SiteVisitForm;
+import com.reclamation.woodlands.woodlandsreclamation.DB.Table_SiteVisit.SiteVisitDAO;
+import com.reclamation.woodlands.woodlandsreclamation.DB.Table_SiteVisit.SiteVisitForm;
 import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.SiteForm;
 
 import java.util.ArrayList;
@@ -64,15 +64,16 @@ public class SiteVisitActivity extends FormActivity {
 
     @Override
     public void createForm(SiteForm siteForm) {
-        SiteVisitForm sv = (SiteVisitForm) siteForm;
-        dao = new SiteVisitDAO(mContext);
-        dao.open();
+//        SiteVisitForm sv = (SiteVisitForm) siteForm;
+//        dao = new SiteVisitDAO(mContext);
+//        dao.open();
+//
+//        siteForm = dao.create(sv);
+//
+//        dao.close();
 
-        siteForm = dao.create(sv);
-
-
-
-        dao.close();
+        Intent intent = new Intent(mContext, SiteVisitDetailActivity.class);
+        startActivityForResult(intent, 1);
     }
 
     @Override

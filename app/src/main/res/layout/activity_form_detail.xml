@@ -30,14 +30,21 @@
                 android:textSize="18sp"
                 android:textColor="@color/black"/>
 
-            <TextView
+            <!--TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
                 android:id="@+id/siteIDView"
                 android:layout_gravity="center"
                 android:layout_weight="0.5"
-                android:textColor="@color/cblue"/>
+                android:textColor="@color/cblue"/-->
+
+            <Spinner
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:id="@+id/siteIdSpinner"
+                android:layout_weight="0.5"
+                android:layout_gravity="center"/>
 
         </LinearLayout>
         <!-- Date -->
@@ -72,6 +79,7 @@
 
 
         </LinearLayout>
+
         <!-- Facility Type -->
         <LinearLayout
             android:orientation="horizontal"
@@ -98,6 +106,37 @@
                 android:id="@+id/facilityTypeSpinner"
                 android:layout_weight="0.5"
                 android:layout_gravity="center"/>
+
+
+        </LinearLayout>
+
+
+        <!-- Sketch -->
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            android:weightSum="1"
+            >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Site Sketch"
+                android:layout_marginLeft="10dp"
+                android:layout_gravity="center"
+                android:layout_weight="0.5"
+                android:textSize="18sp"
+                android:textColor="@color/black"/>
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:text="Open drawer"
+                android:layout_weight="0.5"
+                android:id="@+id/open_drawer"/>
+
 
 
         </LinearLayout>

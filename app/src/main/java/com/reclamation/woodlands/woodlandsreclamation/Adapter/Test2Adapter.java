@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.reclamation.woodlands.woodlandsreclamation.DB.DesktopReview;
+import com.reclamation.woodlands.woodlandsreclamation.DB.Table_DesktopReview.DesktopReview;
 import com.reclamation.woodlands.woodlandsreclamation.R;
 
 import java.util.List;

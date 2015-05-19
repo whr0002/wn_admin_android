@@ -1,9 +1,11 @@
-package com.reclamation.woodlands.woodlandsreclamation.DB;
+package com.reclamation.woodlands.woodlandsreclamation.DB.Table_DesktopReview;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
+
+import com.reclamation.woodlands.woodlandsreclamation.DB.AbastrctDataSource;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +13,7 @@ import java.util.List;
 /**
  * Created by Jimmy on 5/8/2015.
  */
-public class DR_DataSource extends AbastrctDataSource<DesktopReview>{
+public class DR_DataSource extends AbastrctDataSource<DesktopReview> {
 
     private String[] allColumns = {
             DR_Properties.COLUMN_ID,

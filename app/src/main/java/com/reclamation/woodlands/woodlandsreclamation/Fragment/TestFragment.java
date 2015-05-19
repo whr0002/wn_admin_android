@@ -12,23 +12,21 @@ import android.widget.ListView;
 
 import com.reclamation.woodlands.woodlandsreclamation.Adapter.Test2Adapter;
 import com.reclamation.woodlands.woodlandsreclamation.Adapter.TestAdapter;
-import com.reclamation.woodlands.woodlandsreclamation.DB.DR_DataSource;
-import com.reclamation.woodlands.woodlandsreclamation.DB.DesktopReview;
-import com.reclamation.woodlands.woodlandsreclamation.DB.RS_DataSource;
-import com.reclamation.woodlands.woodlandsreclamation.DB.ReviewSite;
-import com.reclamation.woodlands.woodlandsreclamation.DB.SiteVisitForm;
+import com.reclamation.woodlands.woodlandsreclamation.DB.Table_DesktopReview.DesktopReview;
+import com.reclamation.woodlands.woodlandsreclamation.DB.Table_ReviewSite.ReviewSite;
+import com.reclamation.woodlands.woodlandsreclamation.DB.Table_SiteVisit.SiteVisitForm;
 import com.reclamation.woodlands.woodlandsreclamation.R;
 
 import java.lang.reflect.Field;
-import java.util.List;
 import java.util.Random;
 
 /**
  * Created by Jimmy on 5/8/2015.
  */
 public class TestFragment  extends Fragment implements View.OnClickListener{
-    private RS_DataSource dataSource;
-    private DR_DataSource dr_dataSource;
+//    private RS_DataSource dataSource;
+//    private DR_DataSource dr_dataSource;
+
 
     private  ListView listView;
     private  ListView listView1;
@@ -36,6 +34,7 @@ public class TestFragment  extends Fragment implements View.OnClickListener{
     private ArrayAdapter<DesktopReview> adapter_DR;
     private TestAdapter adapter;
     private Test2Adapter adapter1;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -54,24 +53,29 @@ public class TestFragment  extends Fragment implements View.OnClickListener{
         delete1.setOnClickListener(this);
         test.setOnClickListener(this);
 
-        dataSource = new RS_DataSource(this.getActivity());
-        dataSource.open();
+//        dataSource = new RS_DataSource(this.getActivity());
+//        dataSource.open();
+//
+//        dr_dataSource = new DR_DataSource(this.getActivity());
+//        dr_dataSource.open();
 
-        dr_dataSource = new DR_DataSource(this.getActivity());
-        dr_dataSource.open();
 
 
         listView = (ListView) v.findViewById(R.id.listview);
         listView1 = (ListView) v.findViewById(R.id.listview1);
 
-        List<ReviewSite> reviewSites = dataSource.getAll();
-        List<DesktopReview> desktopReviews = dr_dataSource.getAll();
+//        List<ReviewSite> reviewSites = dataSource.getAll();
+//        List<DesktopReview> desktopReviews = dr_dataSource.getAll();
 
 
-        adapter = new TestAdapter(this.getActivity(),
-                android.R.layout.simple_list_item_1, reviewSites);
-        adapter1 = new Test2Adapter(this.getActivity(),
-                android.R.layout.simple_list_item_1, desktopReviews);
+
+//        adapter = new TestAdapter(this.getActivity(),
+//                android.R.layout.simple_list_item_1, reviewSites);
+//        adapter1 = new Test2Adapter(this.getActivity(),
+//                android.R.layout.simple_list_item_1, desktopReviews);
+
+
+
 
         listView.setAdapter(adapter);
         listView1.setAdapter(adapter1);
@@ -92,7 +96,7 @@ public class TestFragment  extends Fragment implements View.OnClickListener{
                 ReviewSite temp = new ReviewSite();
 //                temp.SiteID = drs[nextInt];
                 temp.ReviewSiteID = drs[nextInt];
-                dr = dataSource.create(temp);
+//                dr = dataSource.create(temp);
                 adapter.add(dr);
                 break;
 
@@ -100,7 +104,7 @@ public class TestFragment  extends Fragment implements View.OnClickListener{
             case R.id.delete:
                 if(adapter.getCount()>0){
                     dr = adapter.getItem(0);
-                    dataSource.delete(dr);
+//                    dataSource.delete(dr);
                     adapter.remove(dr);
                     reset();
                 }
@@ -127,7 +131,7 @@ public class TestFragment  extends Fragment implements View.OnClickListener{
                 int nextInt1 = new Random().nextInt(3);
                 DesktopReview desktopReview1 = new DesktopReview();
                 desktopReview1.SiteID = sites1[nextInt1];
-                dr_dataSource.create(desktopReview1);
+//                dr_dataSource.create(desktopReview1);
                 adapter1.add(desktopReview1);
 
                 break;
@@ -135,7 +139,7 @@ public class TestFragment  extends Fragment implements View.OnClickListener{
             case R.id.delete1:
                 if(adapter1.getCount()>0){
                     DesktopReview temp1 = adapter1.getItem(0);
-                    dr_dataSource.delete(temp1);
+//                    dr_dataSource.delete(temp1);
                     adapter1.remove(temp1);
                 }
                 break;
@@ -146,25 +150,25 @@ public class TestFragment  extends Fragment implements View.OnClickListener{
 
     private void reset() {
         adapter1.clear();
-        adapter1.addAll(dr_dataSource.getAll());
+//        adapter1.addAll(dr_dataSource.getAll());
         adapter1.notifyDataSetChanged();
     }
 
     @Override
     public void onResume() {
-        dataSource.open();
+//        dataSource.open();
         super.onResume();
     }
 
     @Override
     public void onPause() {
-        dataSource.close();
+//        dataSource.close();
         super.onPause();
     }
 
     @Override
     public void onDestroy() {
-        dataSource.close();
+//        dataSource.close();
         super.onDestroy();
     }
 }

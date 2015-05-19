@@ -15,12 +15,12 @@ import com.google.gson.Gson;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
-import com.reclamation.woodlands.woodlandsreclamation.DB.FT_DataSource;
-import com.reclamation.woodlands.woodlandsreclamation.DB.FacilityType;
-import com.reclamation.woodlands.woodlandsreclamation.DB.RS_DataSource;
-import com.reclamation.woodlands.woodlandsreclamation.DB.ReviewSite;
-import com.reclamation.woodlands.woodlandsreclamation.DB.UI_DataSource;
-import com.reclamation.woodlands.woodlandsreclamation.DB.UserInfo;
+import com.reclamation.woodlands.woodlandsreclamation.DB.Table_FacilityType.FT_DataSource;
+import com.reclamation.woodlands.woodlandsreclamation.DB.Table_FacilityType.FacilityType;
+import com.reclamation.woodlands.woodlandsreclamation.DB.Table_ReviewSite.RS_DataSource;
+import com.reclamation.woodlands.woodlandsreclamation.DB.Table_ReviewSite.ReviewSite;
+import com.reclamation.woodlands.woodlandsreclamation.DB.Table_UserInfo.UI_DataSource;
+import com.reclamation.woodlands.woodlandsreclamation.DB.Table_UserInfo.UserInfo;
 import com.reclamation.woodlands.woodlandsreclamation.R;
 
 import org.apache.http.Header;

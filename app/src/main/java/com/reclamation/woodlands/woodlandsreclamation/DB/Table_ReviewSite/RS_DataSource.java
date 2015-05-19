@@ -1,8 +1,10 @@
-package com.reclamation.woodlands.woodlandsreclamation.DB;
+package com.reclamation.woodlands.woodlandsreclamation.DB.Table_ReviewSite;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+
+import com.reclamation.woodlands.woodlandsreclamation.DB.AbastrctDataSource;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +12,7 @@ import java.util.List;
 /**
  * Created by Jimmy on 5/11/2015.
  */
-public class RS_DataSource extends AbastrctDataSource<ReviewSite>{
+public class RS_DataSource extends AbastrctDataSource<ReviewSite> {
 
     public RS_DataSource(Context context) {
         super(context);

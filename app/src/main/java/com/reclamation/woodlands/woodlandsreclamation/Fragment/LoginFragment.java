@@ -16,8 +16,8 @@ import android.widget.Toast;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
-import com.reclamation.woodlands.woodlandsreclamation.DB.UI_DataSource;
-import com.reclamation.woodlands.woodlandsreclamation.DB.UserInfo;
+import com.reclamation.woodlands.woodlandsreclamation.DB.Table_UserInfo.UI_DataSource;
+import com.reclamation.woodlands.woodlandsreclamation.DB.Table_UserInfo.UserInfo;
 import com.reclamation.woodlands.woodlandsreclamation.R;
 
 import org.apache.http.Header;

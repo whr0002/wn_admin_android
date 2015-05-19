@@ -5,13 +5,20 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.reclamation.woodlands.woodlandsreclamation.DB.Table_DesktopReview.DR_Properties;
+import com.reclamation.woodlands.woodlandsreclamation.DB.Table_FacilityType.FacilityType;
+import com.reclamation.woodlands.woodlandsreclamation.DB.Table_Photo.Photo;
+import com.reclamation.woodlands.woodlandsreclamation.DB.Table_ReviewSite.RS_Properties;
+import com.reclamation.woodlands.woodlandsreclamation.DB.Table_SiteVisit.SiteVisitProperties;
+import com.reclamation.woodlands.woodlandsreclamation.DB.Table_UserInfo.UserInfo;
+
 /**
  * Created by Jimmy on 5/8/2015.
  */
 public class SQLHelper extends SQLiteOpenHelper{
 
     private static final String DATABASE_NAME = "wn_reclamation.db";
-    private static final int DATABASE_VERSION = 15;
+    private static final int DATABASE_VERSION = 17;
 
 
     public SQLHelper(Context context) {
@@ -34,6 +41,8 @@ public class SQLHelper extends SQLiteOpenHelper{
         sqLiteDatabase.execSQL(UserInfo.USERINFO_CREATE);
         sqLiteDatabase.execSQL(SiteVisitProperties.SITEVISIT_CREATE);
 
+        sqLiteDatabase.execSQL(Photo.TABLE_CREATE);
+
     }
 
     @Override
@@ -46,6 +55,8 @@ public class SQLHelper extends SQLiteOpenHelper{
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + FacilityType.TABLE_FT);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + UserInfo.TABLE_USERINFO);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + SiteVisitProperties.TABLE_SITEVISIT);
+
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + Photo.TABLE_NAME);
 
         onCreate(sqLiteDatabase);
     }

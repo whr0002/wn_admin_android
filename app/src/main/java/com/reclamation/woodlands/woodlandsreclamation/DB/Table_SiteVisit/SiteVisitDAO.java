@@ -1,8 +1,10 @@
-package com.reclamation.woodlands.woodlandsreclamation.DB;
+package com.reclamation.woodlands.woodlandsreclamation.DB.Table_SiteVisit;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+
+import com.reclamation.woodlands.woodlandsreclamation.DB.AbastrctDataSource;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,38 +20,14 @@ public class SiteVisitDAO extends AbastrctDataSource<SiteVisitForm> {
     @Override
     public SiteVisitForm create(SiteVisitForm o) {
         ContentValues cv = new ContentValues();
-        cv.put(SiteVisitProperties.COLUMN_AD_PHOTO1, o.AD_Photo1);
-        cv.put(SiteVisitProperties.COLUMN_AD_PHOTO10, o.AD_Photo10);
-        cv.put(SiteVisitProperties.COLUMN_AD_PHOTO2, o.AD_Photo2);
-        cv.put(SiteVisitProperties.COLUMN_AD_PHOTO3, o.AD_Photo3);
-        cv.put(SiteVisitProperties.COLUMN_AD_PHOTO4, o.AD_Photo4);
-        cv.put(SiteVisitProperties.COLUMN_AD_PHOTO5, o.AD_Photo5);
-        cv.put(SiteVisitProperties.COLUMN_AD_PHOTO6, o.AD_Photo6);
-        cv.put(SiteVisitProperties.COLUMN_AD_PHOTO7, o.AD_Photo7);
-        cv.put(SiteVisitProperties.COLUMN_AD_PHOTO8, o.AD_Photo8);
-        cv.put(SiteVisitProperties.COLUMN_AD_PHOTO9, o.AD_Photo9);
-        cv.put(SiteVisitProperties.COLUMN_AP_PHOTO1, o.AP_Photo1);
-        cv.put(SiteVisitProperties.COLUMN_AP_PHOTO10, o.AP_Photo10);
-        cv.put(SiteVisitProperties.COLUMN_AP_PHOTO11, o.AP_Photo11);
-        cv.put(SiteVisitProperties.COLUMN_AP_PHOTO12, o.AP_Photo12);
-        cv.put(SiteVisitProperties.COLUMN_AP_PHOTO13, o.AP_Photo13);
-        cv.put(SiteVisitProperties.COLUMN_AP_PHOTO14, o.AP_Photo14);
-        cv.put(SiteVisitProperties.COLUMN_AP_PHOTO15, o.AP_Photo15);
-        cv.put(SiteVisitProperties.COLUMN_AP_PHOTO2, o.AP_Photo2);
-        cv.put(SiteVisitProperties.COLUMN_AP_PHOTO3, o.AP_Photo3);
-        cv.put(SiteVisitProperties.COLUMN_AP_PHOTO4, o.AP_Photo4);
-        cv.put(SiteVisitProperties.COLUMN_AP_PHOTO5, o.AP_Photo5);
-        cv.put(SiteVisitProperties.COLUMN_AP_PHOTO6, o.AP_Photo6);
-        cv.put(SiteVisitProperties.COLUMN_AP_PHOTO7, o.AP_Photo7);
-        cv.put(SiteVisitProperties.COLUMN_AP_PHOTO8, o.AP_Photo8);
-        cv.put(SiteVisitProperties.COLUMN_AP_PHOTO9, o.AP_Photo9);
+
         cv.put(SiteVisitProperties.COLUMN_BAREGROUNDCOMMENT, o.BareGroundComment);
         cv.put(SiteVisitProperties.COLUMN_BAREGROUNDPF, o.BareGroundPF);
         cv.put(SiteVisitProperties.COLUMN_CWDCOMMENT, o.CWDComment);
         cv.put(SiteVisitProperties.COLUMN_CWDPF, o.CWDPF);
         cv.put(SiteVisitProperties.COLUMN_CONTOURSCOMMENT, o.ContoursComment);
         cv.put(SiteVisitProperties.COLUMN_CONTOURSPF, o.ContoursPF);
-        cv.put(SiteVisitProperties.COLUMN_DRAWING, o.DRAWING);
+
         cv.put(SiteVisitProperties.COLUMN_DATE, o.Date);
         cv.put(SiteVisitProperties.COLUMN_DRAINAGECOMMENT, o.DrainageComment);
         cv.put(SiteVisitProperties.COLUMN_DRAINAGEPF, o.DrainagePF);
@@ -58,11 +36,7 @@ public class SiteVisitDAO extends AbastrctDataSource<SiteVisitForm> {
         cv.put(SiteVisitProperties.COLUMN_FACILITYTYPE, o.FacilityType);
         cv.put(SiteVisitProperties.COLUMN_LITTERCOMMENT, o.LitterComment);
         cv.put(SiteVisitProperties.COLUMN_LITTERPF, o.LitterPF);
-        cv.put(SiteVisitProperties.COLUMN_NLF_PHOTO1, o.NLF_Photo1);
-        cv.put(SiteVisitProperties.COLUMN_NLF_PHOTO2, o.NLF_Photo2);
-        cv.put(SiteVisitProperties.COLUMN_NLF_PHOTO3, o.NLF_Photo3);
-        cv.put(SiteVisitProperties.COLUMN_NLF_PHOTO4, o.NLF_Photo4);
-        cv.put(SiteVisitProperties.COLUMN_NLF_PHOTO5, o.NLF_Photo5);
+
         cv.put(SiteVisitProperties.COLUMN_NSCCOMMENT, o.NSCComment);
         cv.put(SiteVisitProperties.COLUMN_NSCPF, o.NSCPF);
         cv.put(SiteVisitProperties.COLUMN_RECOMMENDATION, o.Recommendation);
@@ -133,38 +107,14 @@ public class SiteVisitDAO extends AbastrctDataSource<SiteVisitForm> {
     @Override
     public SiteVisitForm cursorTo(Cursor cursor) {
         SiteVisitForm sv = new SiteVisitForm();
-        sv.AD_Photo1 = cursor.getBlob(cursor.getColumnIndex(SiteVisitProperties.COLUMN_AD_PHOTO1));
-        sv.AD_Photo10 = cursor.getBlob(cursor.getColumnIndex(SiteVisitProperties.COLUMN_AD_PHOTO10));
-        sv.AD_Photo2 = cursor.getBlob(cursor.getColumnIndex(SiteVisitProperties.COLUMN_AD_PHOTO2));
-        sv.AD_Photo3 = cursor.getBlob(cursor.getColumnIndex(SiteVisitProperties.COLUMN_AD_PHOTO3));
-        sv.AD_Photo4 = cursor.getBlob(cursor.getColumnIndex(SiteVisitProperties.COLUMN_AD_PHOTO4));
-        sv.AD_Photo5 = cursor.getBlob(cursor.getColumnIndex(SiteVisitProperties.COLUMN_AD_PHOTO5));
-        sv.AD_Photo6 = cursor.getBlob(cursor.getColumnIndex(SiteVisitProperties.COLUMN_AD_PHOTO6));
-        sv.AD_Photo7 = cursor.getBlob(cursor.getColumnIndex(SiteVisitProperties.COLUMN_AD_PHOTO7));
-        sv.AD_Photo8 = cursor.getBlob(cursor.getColumnIndex(SiteVisitProperties.COLUMN_AD_PHOTO8));
-        sv.AD_Photo9 = cursor.getBlob(cursor.getColumnIndex(SiteVisitProperties.COLUMN_AD_PHOTO9));
-        sv.AP_Photo1 = cursor.getBlob(cursor.getColumnIndex(SiteVisitProperties.COLUMN_AP_PHOTO1));
-        sv.AP_Photo10 = cursor.getBlob(cursor.getColumnIndex(SiteVisitProperties.COLUMN_AP_PHOTO10));
-        sv.AP_Photo11 = cursor.getBlob(cursor.getColumnIndex(SiteVisitProperties.COLUMN_AP_PHOTO11));
-        sv.AP_Photo12 = cursor.getBlob(cursor.getColumnIndex(SiteVisitProperties.COLUMN_AP_PHOTO12));
-        sv.AP_Photo13 = cursor.getBlob(cursor.getColumnIndex(SiteVisitProperties.COLUMN_AP_PHOTO13));
-        sv.AP_Photo14 = cursor.getBlob(cursor.getColumnIndex(SiteVisitProperties.COLUMN_AP_PHOTO14));
-        sv.AP_Photo15 = cursor.getBlob(cursor.getColumnIndex(SiteVisitProperties.COLUMN_AP_PHOTO15));
-        sv.AP_Photo2 = cursor.getBlob(cursor.getColumnIndex(SiteVisitProperties.COLUMN_AP_PHOTO2));
-        sv.AP_Photo3 = cursor.getBlob(cursor.getColumnIndex(SiteVisitProperties.COLUMN_AP_PHOTO3));
-        sv.AP_Photo4 = cursor.getBlob(cursor.getColumnIndex(SiteVisitProperties.COLUMN_AP_PHOTO4));
-        sv.AP_Photo5 = cursor.getBlob(cursor.getColumnIndex(SiteVisitProperties.COLUMN_AP_PHOTO5));
-        sv.AP_Photo6 = cursor.getBlob(cursor.getColumnIndex(SiteVisitProperties.COLUMN_AP_PHOTO6));
-        sv.AP_Photo7 = cursor.getBlob(cursor.getColumnIndex(SiteVisitProperties.COLUMN_AP_PHOTO7));
-        sv.AP_Photo8 = cursor.getBlob(cursor.getColumnIndex(SiteVisitProperties.COLUMN_AP_PHOTO8));
-        sv.AP_Photo9 = cursor.getBlob(cursor.getColumnIndex(SiteVisitProperties.COLUMN_AP_PHOTO9));
+
         sv.BareGroundComment = cursor.getString(cursor.getColumnIndex(SiteVisitProperties.COLUMN_BAREGROUNDCOMMENT));
         sv.BareGroundPF = cursor.getInt(cursor.getColumnIndex(SiteVisitProperties.COLUMN_BAREGROUNDPF));
         sv.CWDComment = cursor.getString(cursor.getColumnIndex(SiteVisitProperties.COLUMN_CWDCOMMENT));
         sv.CWDPF = cursor.getInt(cursor.getColumnIndex(SiteVisitProperties.COLUMN_CWDPF));
         sv.ContoursComment = cursor.getString(cursor.getColumnIndex(SiteVisitProperties.COLUMN_CONTOURSCOMMENT));
         sv.ContoursPF = cursor.getInt(cursor.getColumnIndex(SiteVisitProperties.COLUMN_CONTOURSPF));
-        sv.DRAWING = cursor.getBlob(cursor.getColumnIndex(SiteVisitProperties.COLUMN_DRAWING));
+
         sv.Date = cursor.getString(cursor.getColumnIndex(SiteVisitProperties.COLUMN_DATE));
         sv.DrainageComment = cursor.getString(cursor.getColumnIndex(SiteVisitProperties.COLUMN_DRAINAGECOMMENT));
         sv.DrainagePF = cursor.getInt(cursor.getColumnIndex(SiteVisitProperties.COLUMN_DRAINAGEPF));
@@ -173,11 +123,8 @@ public class SiteVisitDAO extends AbastrctDataSource<SiteVisitForm> {
         sv.FacilityType = cursor.getString(cursor.getColumnIndex(SiteVisitProperties.COLUMN_FACILITYTYPE));
         sv.LitterComment = cursor.getString(cursor.getColumnIndex(SiteVisitProperties.COLUMN_LITTERCOMMENT));
         sv.LitterPF = cursor.getInt(cursor.getColumnIndex(SiteVisitProperties.COLUMN_LITTERPF));
-        sv.NLF_Photo1 = cursor.getBlob(cursor.getColumnIndex(SiteVisitProperties.COLUMN_NLF_PHOTO1));
-        sv.NLF_Photo2 = cursor.getBlob(cursor.getColumnIndex(SiteVisitProperties.COLUMN_NLF_PHOTO2));
-        sv.NLF_Photo3 = cursor.getBlob(cursor.getColumnIndex(SiteVisitProperties.COLUMN_NLF_PHOTO3));
-        sv.NLF_Photo4 = cursor.getBlob(cursor.getColumnIndex(SiteVisitProperties.COLUMN_NLF_PHOTO4));
-        sv.NLF_Photo5 = cursor.getBlob(cursor.getColumnIndex(SiteVisitProperties.COLUMN_NLF_PHOTO5));
+
+
         sv.NSCComment = cursor.getString(cursor.getColumnIndex(SiteVisitProperties.COLUMN_NSCCOMMENT));
         sv.NSCPF = cursor.getInt(cursor.getColumnIndex(SiteVisitProperties.COLUMN_NSCPF));
         sv.Recommendation = cursor.getString(cursor.getColumnIndex(SiteVisitProperties.COLUMN_RECOMMENDATION));

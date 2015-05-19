@@ -1,4 +1,4 @@
-package com.reclamation.woodlands.woodlandsreclamation.DB;
+package com.reclamation.woodlands.woodlandsreclamation.DB.Table_ReviewSite;
 
 /**
  * Created by Jimmy on 5/11/2015.

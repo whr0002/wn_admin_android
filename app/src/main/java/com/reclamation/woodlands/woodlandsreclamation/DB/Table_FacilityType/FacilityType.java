@@ -1,4 +1,4 @@
-package com.reclamation.woodlands.woodlandsreclamation.DB;
+package com.reclamation.woodlands.woodlandsreclamation.DB.Table_FacilityType;
 
 /**
  * Created by Jimmy on 5/11/2015.

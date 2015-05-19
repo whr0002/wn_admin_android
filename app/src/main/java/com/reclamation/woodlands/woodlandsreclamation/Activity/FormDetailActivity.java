@@ -2,6 +2,7 @@ package com.reclamation.woodlands.woodlandsreclamation.Activity;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -27,7 +28,7 @@ public abstract class FormDetailActivity extends ActionBarActivity{
 
         setLayout(this);
 
-        mContext = this;
+        mContext = this.getApplicationContext();
         mActionBar = getSupportActionBar();
         mActionBar.setDisplayHomeAsUpEnabled(true);
 
@@ -52,7 +53,13 @@ public abstract class FormDetailActivity extends ActionBarActivity{
 
             case R.id.save:
                 Log.i("debug", "save");
+
                 addOrUpdate(getCurrentForm());
+
+                Intent intent = new Intent();
+                setResult(RESULT_OK, intent);
+                finish();
+
                 break;
 
 

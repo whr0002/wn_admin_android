@@ -1,4 +1,6 @@
-package com.reclamation.woodlands.woodlandsreclamation.DB;
+package com.reclamation.woodlands.woodlandsreclamation.DB.Table_DesktopReview;
+
+import com.reclamation.woodlands.woodlandsreclamation.DB.Table_ReviewSite.RS_Properties;
 
 /**
  * Created by Jimmy on 5/11/2015.

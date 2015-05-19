@@ -1,4 +1,4 @@
-package com.reclamation.woodlands.woodlandsreclamation.DB;
+package com.reclamation.woodlands.woodlandsreclamation.DB.Table_UserInfo;
 
 /**
  * Created by Jimmy on 5/12/2015.

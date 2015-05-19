@@ -23,7 +23,7 @@ public abstract class AbastrctDataSource<T> {
         try {
             db = dbHelper.getWritableDatabase();
         }catch (Exception e){
-
+            e.printStackTrace();
         }
     }
 
