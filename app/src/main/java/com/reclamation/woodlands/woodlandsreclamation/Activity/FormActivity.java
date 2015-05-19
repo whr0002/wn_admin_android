@@ -1,18 +1,20 @@
 package com.reclamation.woodlands.woodlandsreclamation.Activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.reclamation.woodlands.woodlandsreclamation.Adapter.FormAdapter;
-import com.reclamation.woodlands.woodlandsreclamation.DB.RS_DataSource;
-import com.reclamation.woodlands.woodlandsreclamation.DB.ReviewSite;
-import com.reclamation.woodlands.woodlandsreclamation.DB.SiteVisitForm;
+import com.reclamation.woodlands.woodlandsreclamation.DB.Table_ReviewSite.RS_DataSource;
+import com.reclamation.woodlands.woodlandsreclamation.DB.Table_ReviewSite.ReviewSite;
+import com.reclamation.woodlands.woodlandsreclamation.DB.Table_SiteVisit.SiteVisitForm;
 import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.SiteForm;
 import com.reclamation.woodlands.woodlandsreclamation.R;
 
@@ -118,12 +120,21 @@ public abstract class FormActivity extends ActionBarActivity implements AdapterV
         }
 
         dao.close();
-        return null;
+        return sv;
     }
 
+    private void onDataSetChanged(){
+        formAdapter = new FormAdapter(mContext, R.layout.in_listview, getAllForms());
+        mListview.setAdapter(formAdapter);
+    }
 
-
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == 1){
+            Log.i("debug", "back");
+            onDataSetChanged();
+        }
+    }
 
     public abstract List<SiteForm> getAllForms();
 
