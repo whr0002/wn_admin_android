@@ -2,6 +2,7 @@ package com.reclamation.woodlands.woodlandsreclamation.Data.Forms.Drawing;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -35,6 +36,8 @@ public class DrawingView extends View {
 
     private boolean erase = false;
 
+    private boolean hasBitmap = false;
+
     public DrawingView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
@@ -50,6 +53,10 @@ public class DrawingView extends View {
         canvas.drawBitmap(canvasBitmap, 0, 0, canvasPaint);
         canvas.drawPath(drawPath, drawPaint);
 
+
+    }
+
+    public void drawText(String gText, Canvas canvas){
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         // text color - #3D3D3D
         paint.setColor(Color.rgb(61, 61, 61));
@@ -60,7 +67,7 @@ public class DrawingView extends View {
 
         // draw text to the Canvas center
         Rect bounds = new Rect();
-        String gText = "Hello";
+
         paint.getTextBounds(gText, 0, gText.length(), bounds);
         int x = (canvasBitmap.getWidth() - bounds.width())/2;
         int y = (canvasBitmap.getHeight() + bounds.height())/2;
@@ -122,7 +129,11 @@ public class DrawingView extends View {
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
 
-        canvasBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+        if(!hasBitmap) {
+            canvasBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+        }else{
+            canvasBitmap = canvasBitmap.copy(Bitmap.Config.ARGB_8888, true);
+        }
         drawCanvas = new Canvas(canvasBitmap);
     }
 
@@ -163,5 +174,10 @@ public class DrawingView extends View {
     public void startNew(){
         drawCanvas.drawColor(0, PorterDuff.Mode.CLEAR);
         invalidate();
+    }
+
+    public void setCanvasBitmap(String path){
+        canvasBitmap = BitmapFactory.decodeFile(path);
+        hasBitmap = true;
     }
 }

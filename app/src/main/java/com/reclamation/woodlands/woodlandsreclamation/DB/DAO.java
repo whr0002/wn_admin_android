@@ -9,13 +9,13 @@ import java.util.List;
 /**
  * Created by Jimmy on 5/11/2015.
  */
-public abstract class AbastrctDataSource<T> {
+public abstract class DAO<T> {
 
     public SQLiteDatabase db;
     public SQLHelper dbHelper;
 
 
-    public AbastrctDataSource(Context context){
+    public DAO(Context context){
         dbHelper = new SQLHelper(context);
     }
 
@@ -32,6 +32,8 @@ public abstract class AbastrctDataSource<T> {
     }
 
     public abstract T create(T o);
+
+    public abstract void update(T o);
 
     public abstract void delete(T o);
 

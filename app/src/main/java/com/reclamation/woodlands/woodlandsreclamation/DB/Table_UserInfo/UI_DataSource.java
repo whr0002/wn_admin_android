@@ -4,7 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
-import com.reclamation.woodlands.woodlandsreclamation.DB.AbastrctDataSource;
+import com.reclamation.woodlands.woodlandsreclamation.DB.DAO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Created by Jimmy on 5/12/2015.
  */
-public class UI_DataSource extends AbastrctDataSource<UserInfo> {
+public class UI_DataSource extends DAO<UserInfo> {
     public UI_DataSource(Context context) {
         super(context);
     }
@@ -27,6 +27,11 @@ public class UI_DataSource extends AbastrctDataSource<UserInfo> {
         db.insert(UserInfo.TABLE_USERINFO, null, values);
 
         return o;
+    }
+
+    @Override
+    public void update(UserInfo o) {
+
     }
 
     @Override

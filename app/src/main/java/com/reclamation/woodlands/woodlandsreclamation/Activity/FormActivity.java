@@ -73,13 +73,8 @@ public abstract class FormActivity extends ActionBarActivity implements AdapterV
                 break;
 
             case R.id.create:
-                SiteForm f = getTestData();
-                createForm(f);
-
-                formAdapter.add(f);
-
-
-
+//                SiteForm f = getTestData();
+                createForm();
                 break;
 
             case R.id.delete:
@@ -139,7 +134,7 @@ public abstract class FormActivity extends ActionBarActivity implements AdapterV
     public abstract List<SiteForm> getAllForms();
 
 
-    public abstract void createForm(SiteForm siteForm);
+    public abstract void createForm();
 
 
     public abstract void deleteForm(SiteForm siteForm);

@@ -137,10 +137,64 @@
                 android:layout_weight="0.5"
                 android:id="@+id/open_drawer"/>
 
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:scaleType="fitCenter"
+            android:id="@+id/drawing"
+            android:visibility="gone"/>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <!-- Facility Type -->
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_gravity="center"
+                android:weightSum="1"
+                >
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+
+                    android:text="Photos(non-linear facilities)"
+                    android:layout_marginLeft="10dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.5"
+                    android:textSize="18sp"
+                    android:textColor="@color/black"/>
+
+                <ImageButton
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/add"
+                    android:scaleType="fitCenter"
+                    android:layout_weight="0.5"
+                    android:id="@+id/nlf_image_add"/>
+
+
+            </LinearLayout>
+
+            <GridView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:numColumns="auto_fit"
+                android:columnWidth="150dp"
+                android:gravity="center"
+                android:stretchMode="columnWidth"
+                android:horizontalSpacing="5dp"
+                android:verticalSpacing="5dp"
+                android:id="@+id/nlf_grid"></GridView>
 
 
         </LinearLayout>
-
 
     </LinearLayout>
 

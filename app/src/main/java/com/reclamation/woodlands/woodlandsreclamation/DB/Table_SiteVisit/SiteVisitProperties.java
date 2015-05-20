@@ -47,6 +47,11 @@ public class SiteVisitProperties {
     public static final String COLUMN_WEEDSINVASIVESCOMMENT = "WeedsInvasivesComment";
     public static final String COLUMN_WEEDSINVASIVESPF = "WeedsInvasivesPF";
 
+    public static final String FORM_TYPE = "SiteVisit";
+    public static final String PHOTO_DRAWING = "Drawing";
+    public static final String PHOTO_NLF = "NLF";
+    public static final String PHOTO_AP = "AP";
+    public static final String PHOTO_AD = "AD";
 
     public static final String TABLE_SITEVISIT = "SiteVisit";
 

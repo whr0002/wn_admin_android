@@ -4,7 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
-import com.reclamation.woodlands.woodlandsreclamation.DB.AbastrctDataSource;
+import com.reclamation.woodlands.woodlandsreclamation.DB.DAO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Created by Jimmy on 5/19/2015.
  */
-public class PhotoDAO extends AbastrctDataSource<Photo>{
+public class PhotoDAO extends DAO<Photo> {
 
 
     public PhotoDAO(Context context) {
@@ -32,6 +32,28 @@ public class PhotoDAO extends AbastrctDataSource<Photo>{
 
 
         return null;
+    }
+
+    @Override
+    public void update(Photo o) {
+        ContentValues cv = new ContentValues();
+        cv.put(Photo.COLUMN_FORMTYPE, o.formType);
+        cv.put(Photo.COLUMN_FORMID, o.formId);
+        cv.put(Photo.COLUMN_PATH, o.path);
+        cv.put(Photo.COLUMN_DESC, o.description);
+        cv.put(Photo.COLUMN_CLASS, o.classification);
+
+    }
+
+    public void update(Photo old, Photo newPhoto){
+        ContentValues cv = new ContentValues();
+        cv.put(Photo.COLUMN_FORMTYPE, newPhoto.formType);
+        cv.put(Photo.COLUMN_FORMID, newPhoto.formId);
+        cv.put(Photo.COLUMN_PATH, newPhoto.path);
+        cv.put(Photo.COLUMN_DESC, newPhoto.description);
+        cv.put(Photo.COLUMN_CLASS, newPhoto.classification);
+
+        db.update(Photo.TABLE_NAME, cv, Photo.COLUMN_PATH + " = '" + old.path +"'", null);
     }
 
     @Override
@@ -74,5 +96,33 @@ public class PhotoDAO extends AbastrctDataSource<Photo>{
     @Override
     public Photo findFormById(int id) {
         return null;
+    }
+
+    public ArrayList<Photo> findPhotos(String formType, int formId, String classification){
+
+        ArrayList<Photo> photos = new ArrayList<Photo>();
+        Cursor cursor = null;
+        if(classification == null) {
+            cursor = db.query(Photo.TABLE_NAME, null,
+                    Photo.COLUMN_FORMTYPE + " = '" + formType + "' AND "
+                            + Photo.COLUMN_FORMID + " = " + formId, null, null, null, null, null);
+        }else{
+            cursor = db.query(Photo.TABLE_NAME, null,
+                    Photo.COLUMN_FORMTYPE + " = '"
+                            + formType + "' AND "
+                            + Photo.COLUMN_FORMID + " = " + formId + " AND "
+                            + Photo.COLUMN_CLASS + " = '" + classification + "'", null, null, null, null, null);
+        }
+            cursor.moveToFirst();
+
+            while (!cursor.isAfterLast()) {
+
+                photos.add(cursorTo(cursor));
+                cursor.moveToNext();
+            }
+
+            cursor.close();
+
+        return photos;
     }
 }

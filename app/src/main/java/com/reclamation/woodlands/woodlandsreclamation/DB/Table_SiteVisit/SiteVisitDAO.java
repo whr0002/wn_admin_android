@@ -4,7 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
-import com.reclamation.woodlands.woodlandsreclamation.DB.AbastrctDataSource;
+import com.reclamation.woodlands.woodlandsreclamation.DB.DAO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Created by Jimmy on 5/13/2015.
  */
-public class SiteVisitDAO extends AbastrctDataSource<SiteVisitForm> {
+public class SiteVisitDAO extends DAO<SiteVisitForm> {
     public SiteVisitDAO(Context context) {
         super(context);
     }
@@ -79,6 +79,54 @@ public class SiteVisitDAO extends AbastrctDataSource<SiteVisitForm> {
             return null;
         }
 
+
+    }
+
+    @Override
+    public void update(SiteVisitForm o) {
+        ContentValues cv = new ContentValues();
+
+        cv.put(SiteVisitProperties.COLUMN_BAREGROUNDCOMMENT, o.BareGroundComment);
+        cv.put(SiteVisitProperties.COLUMN_BAREGROUNDPF, o.BareGroundPF);
+        cv.put(SiteVisitProperties.COLUMN_CWDCOMMENT, o.CWDComment);
+        cv.put(SiteVisitProperties.COLUMN_CWDPF, o.CWDPF);
+        cv.put(SiteVisitProperties.COLUMN_CONTOURSCOMMENT, o.ContoursComment);
+        cv.put(SiteVisitProperties.COLUMN_CONTOURSPF, o.ContoursPF);
+
+        cv.put(SiteVisitProperties.COLUMN_DATE, o.Date);
+        cv.put(SiteVisitProperties.COLUMN_DRAINAGECOMMENT, o.DrainageComment);
+        cv.put(SiteVisitProperties.COLUMN_DRAINAGEPF, o.DrainagePF);
+        cv.put(SiteVisitProperties.COLUMN_EROSIONCOMMENT, o.ErosionComment);
+        cv.put(SiteVisitProperties.COLUMN_EROSIONPF, o.ErosionPF);
+        cv.put(SiteVisitProperties.COLUMN_FACILITYTYPE, o.FacilityType);
+        cv.put(SiteVisitProperties.COLUMN_LITTERCOMMENT, o.LitterComment);
+        cv.put(SiteVisitProperties.COLUMN_LITTERPF, o.LitterPF);
+
+        cv.put(SiteVisitProperties.COLUMN_NSCCOMMENT, o.NSCComment);
+        cv.put(SiteVisitProperties.COLUMN_NSCPF, o.NSCPF);
+        cv.put(SiteVisitProperties.COLUMN_RECOMMENDATION, o.Recommendation);
+        cv.put(SiteVisitProperties.COLUMN_REFUSECOMMENT, o.RefuseComment);
+        cv.put(SiteVisitProperties.COLUMN_REFUSEPF, o.RefusePF);
+        cv.put(SiteVisitProperties.COLUMN_ROCKGRAVELCOMMENT, o.RockGravelComment);
+        cv.put(SiteVisitProperties.COLUMN_ROCKGRAVELPF, o.RockGravelPF);
+        cv.put(SiteVisitProperties.COLUMN_ROOTINGCOMMENT, o.RootingComment);
+        cv.put(SiteVisitProperties.COLUMN_ROOTINGPF, o.RootingPF);
+        cv.put(SiteVisitProperties.COLUMN_SITEID, o.SiteID);
+        cv.put(SiteVisitProperties.COLUMN_SOILCHARCOMMENT, o.SoilCharComment);
+        cv.put(SiteVisitProperties.COLUMN_SOILCHARPF, o.SoilCharPF);
+        cv.put(SiteVisitProperties.COLUMN_SOILSTABILITYCOMMENT, o.SoilStabilityComment);
+        cv.put(SiteVisitProperties.COLUMN_SOILSTABILITYPF, o.SoilStabilityPF);
+        cv.put(SiteVisitProperties.COLUMN_TOPSOILDEPTHCOMMENT, o.TopsoilDepthComment);
+        cv.put(SiteVisitProperties.COLUMN_TOPSOILDEPTHPF, o.TopsoilDepthPF);
+        cv.put(SiteVisitProperties.COLUMN_TREEHEALTHCOMMENT, o.TreeHealthComment);
+        cv.put(SiteVisitProperties.COLUMN_TREEHEALTHPF, o.TreeHealthPF);
+        cv.put(SiteVisitProperties.COLUMN_WSDCOMMENT, o.WSDComment);
+        cv.put(SiteVisitProperties.COLUMN_WSDPF, o.WSDPF);
+        cv.put(SiteVisitProperties.COLUMN_WEEDSINVASIVESCOMMENT, o.WeedsInvasivesComment);
+        cv.put(SiteVisitProperties.COLUMN_WEEDSINVASIVESPF, o.WeedsInvasivesPF);
+
+        db.update(SiteVisitProperties.TABLE_SITEVISIT, cv,
+                SiteVisitProperties.COLUMN_SITEVISITID + " = " + o.ID, null);
 
     }
 

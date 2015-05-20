@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -43,6 +44,15 @@ public class DrawingActivity extends ActionBarActivity implements View.OnClickLi
 
         drawingView = (DrawingView) findViewById(R.id.drawing);
 
+        Bundle bundle = getIntent().getExtras();
+        if(bundle != null) {
+            String path = bundle.getString("path");
+            if (path != null && path.length() > 0) {
+                Log.i("debug", "Got: " + path);
+                drawingView.setCanvasBitmap(path);
+
+            }
+        }
 
         LinearLayout paintLayout = (LinearLayout) findViewById(R.id.paint_colors);
 

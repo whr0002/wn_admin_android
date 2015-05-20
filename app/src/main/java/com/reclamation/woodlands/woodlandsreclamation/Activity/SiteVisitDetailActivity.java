@@ -2,22 +2,33 @@ package com.reclamation.woodlands.woodlandsreclamation.Activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.Spinner;
 
+import com.reclamation.woodlands.woodlandsreclamation.Adapter.ImageGridAdapter;
+import com.reclamation.woodlands.woodlandsreclamation.DB.DaoFactory;
 import com.reclamation.woodlands.woodlandsreclamation.DB.Table_FacilityType.FT_DataSource;
 import com.reclamation.woodlands.woodlandsreclamation.DB.Table_FacilityType.FacilityType;
+import com.reclamation.woodlands.woodlandsreclamation.DB.Table_Photo.Photo;
+import com.reclamation.woodlands.woodlandsreclamation.DB.Table_Photo.PhotoDAO;
 import com.reclamation.woodlands.woodlandsreclamation.DB.Table_ReviewSite.RS_DataSource;
 import com.reclamation.woodlands.woodlandsreclamation.DB.Table_ReviewSite.ReviewSite;
 import com.reclamation.woodlands.woodlandsreclamation.DB.Table_SiteVisit.SiteVisitDAO;
 import com.reclamation.woodlands.woodlandsreclamation.DB.Table_SiteVisit.SiteVisitForm;
+import com.reclamation.woodlands.woodlandsreclamation.DB.Table_SiteVisit.SiteVisitProperties;
 import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.SiteForm;
 import com.reclamation.woodlands.woodlandsreclamation.R;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -28,29 +39,80 @@ public class SiteVisitDetailActivity extends FormDetailActivity implements View.
     private SiteVisitDAO svDao;
     private SiteForm sf;
 
-//    private TextView siteIDView;
+    private Photo curDrawing = null;
+
+
+    private ImageView drawingView;
 
     private Spinner facilityTypeSpinner, siteIdSpinner;
 
     private Button drawerBtn;
+
+    private int mId;
+
+    private Photo oldDrawing = null;
+
+    private PhotoDAO photoDAO;
+
+    private ArrayList<String> drawingUrls;
+
+    private ArrayList<String> tempImagePaths;
+
+    private HashMap<String, String> changedPhotos;
+
+    private GridView nlfGridView;
+
+    private ArrayList<Photo> nlfPhotos;
+
+    private ImageGridAdapter imageGridAdapter;
+
 
 
     @Override
     public void setLayout(Activity a) {
         a.setContentView(R.layout.activity_form_detail);
 
-        svDao = new SiteVisitDAO(a);
+        DaoFactory daoFactory = new DaoFactory(this);
+
+        svDao = new SiteVisitDAO(this);
+
+        photoDAO = new PhotoDAO(this);
+
+        drawingUrls = new ArrayList<String>();
+
+        tempImagePaths = new ArrayList<String>();
+
+        changedPhotos = new HashMap<String, String>();
 
         setSpinners(a);
 
         drawerBtn = (Button) a.findViewById(R.id.open_drawer);
         drawerBtn.setOnClickListener(this);
 
+        setImageViews();
 
-        int id = a.getIntent().getIntExtra("ID", -1);
-        if(id != -1){
-            setForm(id);
+        setGridViews();
+
+
+        mId = a.getIntent().getIntExtra("ID", -1);
+        if(mId != -1){
+            setForm(mId);
+
         }
+
+    }
+
+    private void setGridViews(){
+        nlfPhotos = new ArrayList<Photo>();
+        imageGridAdapter = new ImageGridAdapter(this, R.layout.image_in_gridview, nlfPhotos);
+
+        nlfGridView = (GridView) findViewById(R.id.nlf_grid);
+        nlfGridView.setAdapter(imageGridAdapter);
+
+    }
+
+    private void setImageViews(){
+        drawingView = (ImageView) findViewById(R.id.drawing);
 
     }
 
@@ -64,15 +126,45 @@ public class SiteVisitDetailActivity extends FormDetailActivity implements View.
 
     private void setForm(int id) {
         svDao.open();
-        sf = svDao.findFormById(id);
+        sf = (SiteForm) svDao.findFormById(id);
         svDao.close();
 
         if(sf != null){
-            // Set form in View Mode
 
+            // Set form in View Mode
             siteIdSpinner.setSelection(getSpinnerIndex(siteIdSpinner, sf.SiteID));
+
+            // Get all photos associated with this form
+            photoDAO.open();
+            ArrayList<Photo> photos = photoDAO.findPhotos(SiteVisitProperties.FORM_TYPE, sf.ID, null);
+            photoDAO.close();
+
+            // Set image views
+            if(photos != null && photos.size() > 0){
+
+                for(Photo p : photos){
+                    if(p.classification.equalsIgnoreCase(SiteVisitProperties.PHOTO_DRAWING)){
+
+                        // temporary save the path of old drawing
+                        oldDrawing = new Photo();
+                        oldDrawing.path = p.path;
+
+                        // Set the drawing view
+                        setDrawing(p);
+                        curDrawing = p;
+
+                    }
+                }
+
+            }
         }
 
+    }
+
+    private void setDrawing(Photo p){
+        Bitmap bm = BitmapFactory.decodeFile(p.path);
+        drawingView.setImageBitmap(bm);
+        drawingView.setVisibility(View.VISIBLE);
     }
 
     private void setFTSpinner(Spinner spinner) {
@@ -140,13 +232,90 @@ public class SiteVisitDetailActivity extends FormDetailActivity implements View.
 
     @Override
     public void addOrUpdate(SiteForm f) {
-        svDao.open();
 
-        svDao.create((SiteVisitForm)f);
 
-        svDao.close();
+        if(mId == -1){
+
+            // Creating a form
+            Log.i("debug", "creating");
+            svDao.open();
+            SiteVisitForm svTemp = svDao.create((SiteVisitForm)f);
+            svDao.close();
+
+            if(drawingUrls != null && drawingUrls.size()>0) {
+                int lastIndex = drawingUrls.size()-1;
+
+                Photo p = new Photo();
+                p.formType = "SiteVisit";
+                p.formId = svTemp.ID;
+                p.path = drawingUrls.get(lastIndex);
+                p.classification = "Drawing";
+
+                photoDAO.open();
+                photoDAO.create(p);
+                photoDAO.close();
+
+                drawingUrls.remove(lastIndex);
+
+            }
+
+        }else{
+
+            // Updating a form
+            Log.i("debug", "updating");
+
+            f.ID = mId;
+            svDao.open();
+            svDao.update((SiteVisitForm)f);
+            svDao.close();
+
+            photoDAO.open();
+
+            if(drawingUrls.size()>0) {
+                if (oldDrawing != null) {
+                    // have photo initially
+
+                    photoDAO.update(oldDrawing, curDrawing);
+                    drawingUrls.remove(drawingUrls.size() -1);
+                    drawingUrls.add(oldDrawing.path);
+
+                } else {
+                    // does not have photo initially
+
+                    Photo p = new Photo();
+                    p.formType = "SiteVisit";
+                    p.formId = f.ID;
+                    p.path = drawingUrls.get(drawingUrls.size() - 1);
+                    p.classification = "Drawing";
+
+                    photoDAO.create(p);
+
+                    drawingUrls.remove(drawingUrls.size() -1);
+                }
+                photoDAO.close();
+
+            }
+
+        }
+
+        clearTempImages();
+
     }
 
+    private void clearTempImages(){
+        if(drawingUrls != null && drawingUrls.size() > 0){
+
+            for(String s : drawingUrls){
+                File f = new File(s);
+
+                if(f != null && f.exists()){
+                    f.delete();
+                }
+
+            }
+
+        }
+    }
 
     @Override
     public SiteForm getCurrentForm() {
@@ -160,11 +329,28 @@ public class SiteVisitDetailActivity extends FormDetailActivity implements View.
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == 1){
+
             // coming from drawing activity
             if(resultCode == RESULT_OK){
+
                 // saved drawing
                 String result = data.getStringExtra("result");
                 Log.i("debug", result);
+
+                if(result != null && result.length()>0){
+
+                    if(curDrawing == null){
+                        curDrawing = new Photo();
+                    }
+
+                    curDrawing.path = result;
+                    drawingUrls.add(result);
+
+                    Photo p = new Photo();
+                    p.path = result;
+                    setDrawing(p);
+                }
+
 
             }
         }
@@ -176,6 +362,10 @@ public class SiteVisitDetailActivity extends FormDetailActivity implements View.
             case R.id.open_drawer:
 
                 Intent intent = new Intent(mContext, DrawingActivity.class);
+                if(curDrawing != null){
+                    intent.putExtra("path", curDrawing.path);
+
+                }
                 startActivityForResult(intent, 1);
 
                 break;

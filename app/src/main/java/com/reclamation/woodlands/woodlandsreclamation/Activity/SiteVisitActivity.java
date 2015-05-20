@@ -2,13 +2,18 @@ package com.reclamation.woodlands.woodlandsreclamation.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 
+import com.reclamation.woodlands.woodlandsreclamation.DB.Table_Photo.Photo;
+import com.reclamation.woodlands.woodlandsreclamation.DB.Table_Photo.PhotoDAO;
 import com.reclamation.woodlands.woodlandsreclamation.DB.Table_SiteVisit.SiteVisitDAO;
 import com.reclamation.woodlands.woodlandsreclamation.DB.Table_SiteVisit.SiteVisitForm;
+import com.reclamation.woodlands.woodlandsreclamation.DB.Table_SiteVisit.SiteVisitProperties;
 import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.SiteForm;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,6 +59,26 @@ public class SiteVisitActivity extends FormActivity {
         dao.delete(sv);
 
         dao.close();
+
+        PhotoDAO photoDAO = new PhotoDAO(mContext);
+        photoDAO.open();
+        List<Photo> photos = photoDAO.findPhotos(SiteVisitProperties.FORM_TYPE, siteForm.ID, null);
+
+        if(photos != null && photos.size() > 0){
+            Log.i("debug", "Size: " + photos.size());
+            for(Photo p : photos){
+                photoDAO.delete(p);
+
+                File f = new File(p.path);
+                if(f != null && f.exists()){
+                    f.delete();
+                }
+            }
+        }else{
+
+        }
+
+        photoDAO.close();
     }
 
     @Override
@@ -63,14 +88,7 @@ public class SiteVisitActivity extends FormActivity {
 
 
     @Override
-    public void createForm(SiteForm siteForm) {
-//        SiteVisitForm sv = (SiteVisitForm) siteForm;
-//        dao = new SiteVisitDAO(mContext);
-//        dao.open();
-//
-//        siteForm = dao.create(sv);
-//
-//        dao.close();
+    public void createForm() {
 
         Intent intent = new Intent(mContext, SiteVisitDetailActivity.class);
         startActivityForResult(intent, 1);
@@ -81,6 +99,6 @@ public class SiteVisitActivity extends FormActivity {
         SiteForm f = formAdapter.getItem(position);
         Intent i = new Intent(mContext, SiteVisitDetailActivity.class);
         i.putExtra("ID", f.ID);
-        startActivity(i);
+        startActivityForResult(i, 1);
     }
 }

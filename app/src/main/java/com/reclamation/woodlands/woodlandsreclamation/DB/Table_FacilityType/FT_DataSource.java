@@ -4,7 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
-import com.reclamation.woodlands.woodlandsreclamation.DB.AbastrctDataSource;
+import com.reclamation.woodlands.woodlandsreclamation.DB.DAO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Created by Jimmy on 5/11/2015.
  */
-public class FT_DataSource extends AbastrctDataSource<FacilityType> {
+public class FT_DataSource extends DAO<FacilityType> {
     public FT_DataSource(Context context) {
         super(context);
     }
@@ -23,6 +23,11 @@ public class FT_DataSource extends AbastrctDataSource<FacilityType> {
         values.put(FacilityType.COLUMN_FTN, o.FacilityTypeName);
         db.insert(FacilityType.TABLE_FT, null, values);
         return null;
+    }
+
+    @Override
+    public void update(FacilityType o) {
+
     }
 
     @Override
