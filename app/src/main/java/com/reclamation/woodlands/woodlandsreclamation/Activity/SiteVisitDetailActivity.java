@@ -4,13 +4,18 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.reclamation.woodlands.woodlandsreclamation.Adapter.ImageGridAdapter;
 import com.reclamation.woodlands.woodlandsreclamation.DB.DaoFactory;
@@ -23,11 +28,14 @@ import com.reclamation.woodlands.woodlandsreclamation.DB.Table_ReviewSite.Review
 import com.reclamation.woodlands.woodlandsreclamation.DB.Table_SiteVisit.SiteVisitDAO;
 import com.reclamation.woodlands.woodlandsreclamation.DB.Table_SiteVisit.SiteVisitForm;
 import com.reclamation.woodlands.woodlandsreclamation.DB.Table_SiteVisit.SiteVisitProperties;
+import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.ImageProcessor;
 import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.SiteForm;
 import com.reclamation.woodlands.woodlandsreclamation.R;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -36,6 +44,7 @@ import java.util.List;
  */
 public class SiteVisitDetailActivity extends FormDetailActivity implements View.OnClickListener{
 
+    public static final int CAMERA_REQUEST_CODE = 10;
     private SiteVisitDAO svDao;
     private SiteForm sf;
 
@@ -66,7 +75,11 @@ public class SiteVisitDetailActivity extends FormDetailActivity implements View.
 
     private ImageGridAdapter imageGridAdapter;
 
+    private ImageButton NLFImageBtn;
 
+    private String currentPath;
+
+    private ImageProcessor imageProcessor;
 
     @Override
     public void setLayout(Activity a) {
@@ -84,10 +97,12 @@ public class SiteVisitDetailActivity extends FormDetailActivity implements View.
 
         changedPhotos = new HashMap<String, String>();
 
+        imageProcessor = new ImageProcessor(null);
+
         setSpinners(a);
 
-        drawerBtn = (Button) a.findViewById(R.id.open_drawer);
-        drawerBtn.setOnClickListener(this);
+        setButtons();
+
 
         setImageViews();
 
@@ -99,6 +114,15 @@ public class SiteVisitDetailActivity extends FormDetailActivity implements View.
             setForm(mId);
 
         }
+
+    }
+
+    private void setButtons(){
+        drawerBtn = (Button) findViewById(R.id.open_drawer);
+        drawerBtn.setOnClickListener(this);
+
+        NLFImageBtn = (ImageButton) findViewById(R.id.nlf_image_add);
+        NLFImageBtn.setOnClickListener(this);
 
     }
 
@@ -270,7 +294,6 @@ public class SiteVisitDetailActivity extends FormDetailActivity implements View.
             svDao.close();
 
             photoDAO.open();
-
             if(drawingUrls.size()>0) {
                 if (oldDrawing != null) {
                     // have photo initially
@@ -292,9 +315,8 @@ public class SiteVisitDetailActivity extends FormDetailActivity implements View.
 
                     drawingUrls.remove(drawingUrls.size() -1);
                 }
-                photoDAO.close();
-
             }
+            photoDAO.close();
 
         }
 
@@ -354,6 +376,73 @@ public class SiteVisitDetailActivity extends FormDetailActivity implements View.
 
             }
         }
+
+        if(requestCode == CAMERA_REQUEST_CODE){
+            // back from camera intent
+            Log.i("debug", "back from camera");
+
+
+            Photo photo = new Photo();
+
+            if(currentPath != null) {
+
+                imageProcessor.shrinkImage(currentPath);
+
+                photo.path = currentPath;
+
+                imageGridAdapter.add(photo);
+                imageGridAdapter.notifyDataSetChanged();
+
+
+            }
+        }
+
+
+    }
+
+    public void openCamera(){
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        if(cameraIntent.resolveActivity(getPackageManager()) != null){
+            // image capture app exists
+            String path = generateImagePath(SiteVisitProperties.FORM_TYPE+"_NLF_");
+            currentPath = path;
+
+            if(path != null){
+
+                File file = new File(path);
+                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
+                startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE);
+            }else{
+                Toast.makeText(this, "Could not generate image path", Toast.LENGTH_SHORT).show();
+            }
+
+        }
+    }
+
+    public String generateImagePath(String prefix){
+
+        if(prefix == null){
+            prefix = SiteVisitProperties.FORM_TYPE + "_";
+        }
+
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+
+        String dir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+                + File.separator + "picupload" + File.separator;
+
+        File dirFile = new File(dir);
+        if(!dirFile.exists()){
+            dirFile.mkdir();
+        }
+
+        String fullPath = dir + prefix + timeStamp + ".jpg";
+
+        Log.i("debug", "Full image path: "+fullPath);
+
+        return fullPath;
+
+
     }
 
     @Override
@@ -367,6 +456,11 @@ public class SiteVisitDetailActivity extends FormDetailActivity implements View.
 
                 }
                 startActivityForResult(intent, 1);
+
+                break;
+
+            case R.id.nlf_image_add:
+                openCamera();
 
                 break;
 

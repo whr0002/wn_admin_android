@@ -60,6 +60,7 @@ public class SiteVisitActivity extends FormActivity {
 
         dao.close();
 
+
         PhotoDAO photoDAO = new PhotoDAO(mContext);
         photoDAO.open();
         List<Photo> photos = photoDAO.findPhotos(SiteVisitProperties.FORM_TYPE, siteForm.ID, null);
