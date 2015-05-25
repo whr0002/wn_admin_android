@@ -67,6 +67,8 @@ public class ImageProcessor {
     }
 
     public void shrinkImage(String mPath){
+
+
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
         BitmapFactory.decodeFile(mPath, options);
@@ -79,6 +81,17 @@ public class ImageProcessor {
         compressImage(bitmap, mPath);
 
 
+    }
+
+    public boolean isImageFound(String path){
+        if(path != null) {
+            File file = new File(path);
+            if(file != null && file.exists()){
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public void compressImage(Bitmap b, String mPath){

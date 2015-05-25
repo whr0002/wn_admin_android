@@ -1,7 +1,9 @@
 package com.reclamation.woodlands.woodlandsreclamation.Activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -48,7 +50,9 @@ public abstract class FormDetailActivity extends ActionBarActivity{
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case android.R.id.home:
-                finish();
+
+                showExitDialog();
+
                 break;
 
             case R.id.save:
@@ -70,10 +74,44 @@ public abstract class FormDetailActivity extends ActionBarActivity{
         return super.onOptionsItemSelected(item);
     }
 
+    public void showExitDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Exit");
+        builder.setMessage("Do you want to exit without saving?");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                onFinishWithoutSave();
+                finish();
+
+            }
+        });
+
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+
+        builder.show();
+
+
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        showExitDialog();
+    }
+
     public abstract void setLayout(Activity a);
 
     public abstract void addOrUpdate(SiteForm f);
 
     public abstract SiteForm getCurrentForm();
+
+    public abstract void onFinishWithoutSave();
 
 }

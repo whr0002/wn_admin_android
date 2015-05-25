@@ -1,6 +1,7 @@
 package com.reclamation.woodlands.woodlandsreclamation.Activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -8,13 +9,16 @@ import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.reclamation.woodlands.woodlandsreclamation.Adapter.ImageGridAdapter;
@@ -28,6 +32,7 @@ import com.reclamation.woodlands.woodlandsreclamation.DB.Table_ReviewSite.Review
 import com.reclamation.woodlands.woodlandsreclamation.DB.Table_SiteVisit.SiteVisitDAO;
 import com.reclamation.woodlands.woodlandsreclamation.DB.Table_SiteVisit.SiteVisitForm;
 import com.reclamation.woodlands.woodlandsreclamation.DB.Table_SiteVisit.SiteVisitProperties;
+import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.ImagePopup;
 import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.ImageProcessor;
 import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.SiteForm;
 import com.reclamation.woodlands.woodlandsreclamation.R;
@@ -65,11 +70,14 @@ public class SiteVisitDetailActivity extends FormDetailActivity implements View.
 
     private ArrayList<String> drawingUrls;
 
-    private ArrayList<String> tempImagePaths;
 
-    private HashMap<String, String> changedPhotos;
+    private HashMap<String, Boolean> photoMap;
 
-    private GridView nlfGridView;
+    public ArrayList<Photo> existedPhotos;
+
+    private ArrayList<Photo> removedPhotos;
+
+    private ArrayList<Photo> newCreatedPhotos;
 
     private ArrayList<Photo> nlfPhotos;
 
@@ -77,13 +85,21 @@ public class SiteVisitDetailActivity extends FormDetailActivity implements View.
 
     private ImageButton NLFImageBtn;
 
-    private String currentPath;
+//    private String currentPath;
+    private Photo currentPhoto;
+
 
     private ImageProcessor imageProcessor;
+
+    private LinearLayout NLFLayout;
+
+    private Context mContext;
 
     @Override
     public void setLayout(Activity a) {
         a.setContentView(R.layout.activity_form_detail);
+
+        mContext = this;
 
         DaoFactory daoFactory = new DaoFactory(this);
 
@@ -93,24 +109,28 @@ public class SiteVisitDetailActivity extends FormDetailActivity implements View.
 
         drawingUrls = new ArrayList<String>();
 
-        tempImagePaths = new ArrayList<String>();
-
-        changedPhotos = new HashMap<String, String>();
 
         imageProcessor = new ImageProcessor(null);
+
+        NLFLayout = (LinearLayout)findViewById(R.id.nlf_image_gallery);
+        nlfPhotos = new ArrayList<Photo>();
+        removedPhotos = new ArrayList<Photo>();
+        newCreatedPhotos = new ArrayList<Photo>();
+        photoMap = new HashMap<String, Boolean>();
 
         setSpinners(a);
 
         setButtons();
 
-
         setImageViews();
 
-        setGridViews();
+
 
 
         mId = a.getIntent().getIntExtra("ID", -1);
+        Log.i("debug", "Form id: " + mId);
         if(mId != -1){
+            setGallery();
             setForm(mId);
 
         }
@@ -126,14 +146,90 @@ public class SiteVisitDetailActivity extends FormDetailActivity implements View.
 
     }
 
-    private void setGridViews(){
-        nlfPhotos = new ArrayList<Photo>();
-        imageGridAdapter = new ImageGridAdapter(this, R.layout.image_in_gridview, nlfPhotos);
 
-        nlfGridView = (GridView) findViewById(R.id.nlf_grid);
-        nlfGridView.setAdapter(imageGridAdapter);
+    private void setGallery(){
+
+
+        photoDAO.open();
+
+        nlfPhotos = photoDAO.findPhotos(SiteVisitProperties.FORM_TYPE, mId, SiteVisitProperties.PHOTO_NLF);
+
+        Log.i("debug", "Size NLF get: " + nlfPhotos.size());
+
+
+
+        photoDAO.close();
+
+        if(nlfPhotos != null && nlfPhotos.size()>0){
+
+            for(int i=0;i<nlfPhotos.size();i++){
+                photoMap.put(nlfPhotos.get(i).path, true);
+                addGalleryItem(i, nlfPhotos.get(i), NLFLayout, nlfPhotos);
+            }
+        }
+
+
 
     }
+
+    private void addGalleryItem(int id, Photo photo, LinearLayout galleryLayout, final ArrayList<Photo> photos){
+        LinearLayout linearLayout = new LinearLayout(this);
+        linearLayout.setId(id);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout
+                .LayoutParams(150
+                , ViewGroup.LayoutParams.MATCH_PARENT);
+        linearLayout.setPadding(5,5,5,5);
+        linearLayout.setOrientation(LinearLayout.VERTICAL);
+        linearLayout.setWeightSum(1.0f);
+
+        linearLayout.setLayoutParams(layoutParams);
+
+        TextView textView = new TextView(this);
+
+        if(photo.description != null){
+            textView.setText(photo.description);
+        }else {
+            textView.setText("Image title goes here");
+        }
+
+        textView.setId(R.id.image_desc);
+        LinearLayout.LayoutParams textViewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, 0);
+        textViewParams.weight = 0.2f;
+        textViewParams.gravity = Gravity.CENTER;
+        textView.setLayoutParams(textViewParams);
+        textView.setSingleLine(true);
+
+
+        ImageView imageView = new ImageView(this);
+        imageView.setId(R.id.image);
+        imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+
+        LinearLayout.LayoutParams imageViewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0);
+        imageViewParams.weight = 0.8f;
+        imageView.setLayoutParams(imageViewParams);
+
+
+        Bitmap bm = BitmapFactory.decodeFile(photo.path);
+        imageView.setImageBitmap(bm);
+
+        linearLayout.addView(imageView);
+        linearLayout.addView(textView);
+
+
+        linearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ImagePopup imagePopup = new ImagePopup(mContext, view, photos, removedPhotos, NLFLayout);
+                imagePopup.showPopup();
+            }
+        });
+
+
+//        photos.add(photo);
+        galleryLayout.addView(linearLayout);
+
+    }
+
 
     private void setImageViews(){
         drawingView = (ImageView) findViewById(R.id.drawing);
@@ -160,13 +256,13 @@ public class SiteVisitDetailActivity extends FormDetailActivity implements View.
 
             // Get all photos associated with this form
             photoDAO.open();
-            ArrayList<Photo> photos = photoDAO.findPhotos(SiteVisitProperties.FORM_TYPE, sf.ID, null);
+            existedPhotos = photoDAO.findPhotos(SiteVisitProperties.FORM_TYPE, sf.ID, null);
             photoDAO.close();
 
             // Set image views
-            if(photos != null && photos.size() > 0){
+            if(existedPhotos != null && existedPhotos.size() > 0){
 
-                for(Photo p : photos){
+                for(Photo p : existedPhotos){
                     if(p.classification.equalsIgnoreCase(SiteVisitProperties.PHOTO_DRAWING)){
 
                         // temporary save the path of old drawing
@@ -178,6 +274,7 @@ public class SiteVisitDetailActivity extends FormDetailActivity implements View.
                         curDrawing = p;
 
                     }
+
                 }
 
             }
@@ -266,6 +363,8 @@ public class SiteVisitDetailActivity extends FormDetailActivity implements View.
             SiteVisitForm svTemp = svDao.create((SiteVisitForm)f);
             svDao.close();
 
+
+            photoDAO.open();
             if(drawingUrls != null && drawingUrls.size()>0) {
                 int lastIndex = drawingUrls.size()-1;
 
@@ -275,13 +374,23 @@ public class SiteVisitDetailActivity extends FormDetailActivity implements View.
                 p.path = drawingUrls.get(lastIndex);
                 p.classification = "Drawing";
 
-                photoDAO.open();
                 photoDAO.create(p);
-                photoDAO.close();
 
                 drawingUrls.remove(lastIndex);
-
             }
+
+            if(nlfPhotos != null && nlfPhotos.size()>0){
+                for(Photo photo : nlfPhotos){
+                    photo.formId = svTemp.ID;
+
+                    photoDAO.create(photo);
+
+                }
+            }
+
+
+
+            photoDAO.close();
 
         }else{
 
@@ -290,10 +399,11 @@ public class SiteVisitDetailActivity extends FormDetailActivity implements View.
 
             f.ID = mId;
             svDao.open();
-            svDao.update((SiteVisitForm)f);
+            svDao.update((SiteVisitForm) f);
             svDao.close();
 
             photoDAO.open();
+
             if(drawingUrls.size()>0) {
                 if (oldDrawing != null) {
                     // have photo initially
@@ -316,6 +426,33 @@ public class SiteVisitDetailActivity extends FormDetailActivity implements View.
                     drawingUrls.remove(drawingUrls.size() -1);
                 }
             }
+
+            // update all photos
+
+            Log.i("debug", "Size NLF: " + nlfPhotos.size());
+            Log.i("debug", "Size Existed Photos: " + existedPhotos.size());
+            // update NLF photos
+            for(Photo p : nlfPhotos){
+                Log.i("debug", "NLF Path: " + p.path);
+                Boolean hasPhoto = photoMap.get(p.path);
+
+                if(hasPhoto != null){
+                    // The photo exists in db
+                    Log.i("debug", "Existed path: " + p.path);
+                    photoDAO.update(p, p);
+
+                }else{
+                    // Photo does not exist in database, create a new photo
+                    Log.i("debug", "Updating ------ Creating");
+                    p.formId = f.ID;
+                    photoDAO.create(p);
+                }
+
+            }
+
+
+
+
             photoDAO.close();
 
         }
@@ -337,6 +474,24 @@ public class SiteVisitDetailActivity extends FormDetailActivity implements View.
             }
 
         }
+
+        if(removedPhotos != null && removedPhotos.size() > 0){
+            photoDAO.open();
+
+            for(Photo photo : removedPhotos){
+
+                File file = new File(photo.path);
+
+                if(file != null && file.exists()){
+                    file.delete();
+                }
+                photoDAO.delete(photo);
+
+            }
+
+            photoDAO.close();
+
+        }
     }
 
     @Override
@@ -346,6 +501,23 @@ public class SiteVisitDetailActivity extends FormDetailActivity implements View.
         svf.SiteID = siteIdSpinner.getSelectedItem().toString();
 
         return svf;
+    }
+
+    @Override
+    public void onFinishWithoutSave() {
+        // Clear new created images
+//        clearTempImages();
+        Log.i("debug", "Created size: " + newCreatedPhotos.size());
+        if(newCreatedPhotos != null){
+            for(Photo photo : newCreatedPhotos){
+                File file = new File(photo.path);
+
+                if(file != null && file.exists()){
+                    file.delete();
+                }
+            }
+        }
+
     }
 
     @Override
@@ -381,18 +553,28 @@ public class SiteVisitDetailActivity extends FormDetailActivity implements View.
             // back from camera intent
             Log.i("debug", "back from camera");
 
+            if(currentPhoto != null) {
 
-            Photo photo = new Photo();
+                if(imageProcessor.isImageFound(currentPhoto.path)) {
 
-            if(currentPath != null) {
+                    imageProcessor.shrinkImage(currentPhoto.path);
 
-                imageProcessor.shrinkImage(currentPath);
+                    Photo p = new Photo();
+                    p.path = currentPhoto.path;
+                    p.formType = currentPhoto.formType;
+                    p.classification = currentPhoto.classification;
+                    p.description = currentPhoto.description;
 
-                photo.path = currentPath;
+                    currentPhoto = null;
 
-                imageGridAdapter.add(photo);
-                imageGridAdapter.notifyDataSetChanged();
+                    newCreatedPhotos.add(p);
 
+                    nlfPhotos.add(p);
+                    addGalleryItem(nlfPhotos.size() - 1, p, NLFLayout, nlfPhotos);
+
+                }else{
+                    Log.i("debug", "image does not exist");
+                }
 
             }
         }
@@ -400,13 +582,18 @@ public class SiteVisitDetailActivity extends FormDetailActivity implements View.
 
     }
 
-    public void openCamera(){
+    public void openCamera(String classification){
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
         if(cameraIntent.resolveActivity(getPackageManager()) != null){
             // image capture app exists
-            String path = generateImagePath(SiteVisitProperties.FORM_TYPE+"_NLF_");
-            currentPath = path;
+            String path = generateImagePath(SiteVisitProperties.FORM_TYPE+"_"+ classification +"_");
+
+            currentPhoto = new Photo();
+            currentPhoto.path = path;
+            currentPhoto.classification = classification;
+            currentPhoto.formType = SiteVisitProperties.FORM_TYPE;
+
 
             if(path != null){
 
@@ -460,7 +647,8 @@ public class SiteVisitDetailActivity extends FormDetailActivity implements View.
                 break;
 
             case R.id.nlf_image_add:
-                openCamera();
+//                addGalleryItem(nlfPhotos.size(), "/storage/emulated/0/Android/data/com.reclamation.woodlands.woodlandsreclamation/files/Pictures/picupload/SiteVisit_NLF_20150522_083421.jpg",NLFLayout, nlfPhotos);
+                openCamera(SiteVisitProperties.PHOTO_NLF);
 
                 break;
 
