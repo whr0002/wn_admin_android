@@ -19,4 +19,43 @@
     <string name="sml">Small</string>
     <string name="med">Medium</string>
     <string name="lrg">Large</string>
+
+    <string-array name="pass_fail">
+        <item></item>
+        <item>Pass</item>
+        <item>Fail</item>
+    </string-array>
+
+    <string-array
+        name="fo_landscape_items">
+        <item>Refuse</item>
+        <item>Drainage</item>
+        <item>Rock/Gravel Content</item>
+        <item>Bare Ground</item>
+        <item>Soil Stability</item>
+        <item>Contours</item>
+        <item>Coarse Woody Debris</item>
+        <item>Erosion</item>
+    </string-array>
+
+    <string-array name="fo_soil_items">
+
+        <item>Soil Characteristics</item>
+        <item>Topsoil Depth</item>
+        <item>Rooting Restrictions</item>
+
+    </string-array>
+
+
+    <string-array name="fo_vegetation_items">
+
+        <item>Woody Stem Density</item>
+        <item>Tree Health</item>
+        <item>Weeds and Invasives</item>
+        <item>Native Species Cover</item>
+        <item>Litter/LFH</item>
+
+
+    </string-array>
+
 </resources>

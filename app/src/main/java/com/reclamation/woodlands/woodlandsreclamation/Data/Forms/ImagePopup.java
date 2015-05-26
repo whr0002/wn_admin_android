@@ -23,12 +23,13 @@ import java.util.ArrayList;
  */
 public class ImagePopup {
 
-    private Context mContext;
-    private View mView;
-    private Photo mPhoto;
-    private ArrayList<Photo> mPhotos;
-    private ArrayList<Photo> mRemovedPhotos;
-    private LinearLayout mGallery;
+    public Context mContext;
+    public View mView;
+    public Photo mPhoto;
+    public ArrayList<Photo> mPhotos;
+    public ArrayList<Photo> mRemovedPhotos;
+    public LinearLayout mGallery;
+
     public ImagePopup(Context context, View view, ArrayList<Photo> photos, ArrayList<Photo> removedPhotos, LinearLayout gallery){
 
         mContext = context;

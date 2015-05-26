@@ -35,7 +35,10 @@
 
         <activity android:name=".Activity.SiteVisitActivity"></activity>
 
-        <activity android:name=".Activity.SiteVisitDetailActivity"></activity>
+        <activity
+            android:name=".Activity.SiteVisitDetailActivity"
+            android:configChanges="orientation|screenSize"
+            android:windowSoftInputMode="stateHidden"></activity>
 
         <activity android:name=".Activity.DrawingActivity"></activity>
 

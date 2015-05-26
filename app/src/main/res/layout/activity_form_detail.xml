@@ -3,154 +3,84 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Outer wrapper -->
+    <!-- Dummy item to prevent AutoCompleteTextView from receiving focus -->
     <LinearLayout
+        android:focusable="true" android:focusableInTouchMode="true"
+        android:layout_width="0px" android:layout_height="0px"/>
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_margin="10dp">
+        android:layout_height="match_parent">
 
-
-        <!-- Site ID -->
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_gravity="center"
-            android:weightSum="1"
-            >
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="Site ID"
-                android:layout_marginLeft="10dp"
-                android:layout_gravity="center"
-                android:layout_weight="0.5"
-                android:textSize="18sp"
-                android:textColor="@color/black"/>
-
-            <!--TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:id="@+id/siteIDView"
-                android:layout_gravity="center"
-                android:layout_weight="0.5"
-                android:textColor="@color/cblue"/-->
-
-            <Spinner
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:id="@+id/siteIdSpinner"
-                android:layout_weight="0.5"
-                android:layout_gravity="center"/>
-
-        </LinearLayout>
-        <!-- Date -->
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:weightSum="1">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:textColor="@color/black"
-                android:text="Date"
-                android:id="@+id/dateLabel"
-                android:layout_marginLeft="10dp"
-
-                android:layout_gravity="center"
-                android:layout_weight="0.5" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:text="00-00-0000"
-                android:id="@+id/dateView"
-                android:layout_gravity="center"
-                android:layout_weight="0.5"
-                android:textColor="@color/cblue"/>
-
-
-        </LinearLayout>
-
-        <!-- Facility Type -->
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_gravity="center"
-            android:weightSum="1"
-            >
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-
-                android:text="Facility Type"
-                android:layout_marginLeft="10dp"
-                android:layout_gravity="center"
-                android:layout_weight="0.5"
-                android:textSize="18sp"
-                android:textColor="@color/black"/>
-
-            <Spinner
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:id="@+id/facilityTypeSpinner"
-                android:layout_weight="0.5"
-                android:layout_gravity="center"/>
-
-
-        </LinearLayout>
-
-
-        <!-- Sketch -->
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_gravity="center"
-            android:weightSum="1"
-            >
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="Site Sketch"
-                android:layout_marginLeft="10dp"
-                android:layout_gravity="center"
-                android:layout_weight="0.5"
-                android:textSize="18sp"
-                android:textColor="@color/black"/>
-
-            <Button
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:text="Open drawer"
-                android:layout_weight="0.5"
-                android:id="@+id/open_drawer"/>
-
-        </LinearLayout>
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:scaleType="fitCenter"
-            android:id="@+id/drawing"
-            android:visibility="gone"/>
-
-
+        <!-- Outer wrapper -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+
+            <!-- Site ID -->
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_gravity="center"
+                android:weightSum="1"
+                >
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Site ID"
+                    android:layout_marginLeft="10dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.5"
+                    android:textSize="18sp"
+                    android:textColor="@color/black"/>
+
+                <Spinner
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:id="@+id/siteIdSpinner"
+                    android:layout_weight="0.5"
+                    android:layout_gravity="center"/>
+
+            </LinearLayout>
+
+            <!-- Date -->
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:weightSum="1">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:textColor="@color/black"
+                    android:text="Date"
+                    android:id="@+id/dateLabel"
+                    android:layout_marginLeft="10dp"
+
+                    android:layout_gravity="center"
+                    android:layout_weight="0.5" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:text="00-00-0000"
+                    android:id="@+id/dateView"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.5"
+                    android:textColor="@color/cblue"/>
+
+
+            </LinearLayout>
+
             <!-- Facility Type -->
             <LinearLayout
                 android:orientation="horizontal"
@@ -164,50 +94,305 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
 
-                    android:text="Photos(non-linear facilities)"
+                    android:text="Facility Type"
                     android:layout_marginLeft="10dp"
                     android:layout_gravity="center"
                     android:layout_weight="0.5"
                     android:textSize="18sp"
                     android:textColor="@color/black"/>
 
-                <ImageButton
+                <Spinner
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:src="@drawable/add"
-                    android:scaleType="fitCenter"
+                    android:id="@+id/facilityTypeSpinner"
                     android:layout_weight="0.5"
-                    android:id="@+id/nlf_image_add"/>
+                    android:layout_gravity="center"/>
 
 
             </LinearLayout>
 
-            <HorizontalScrollView
+            <!-- Sketch -->
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="200dp">
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/border"
+                android:layout_marginTop="10dp">
+
 
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
                     android:orientation="horizontal"
-                    android:id="@+id/nlf_image_gallery"></LinearLayout>
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_gravity="center"
+                    android:weightSum="1"
+                    >
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="Site Sketch"
+                        android:layout_marginLeft="10dp"
+                        android:layout_gravity="center"
+                        android:layout_weight="0.5"
+                        android:textSize="18sp"
+                        android:textColor="@color/black"/>
+
+                    <Button
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:text="Open drawer"
+                        android:layout_weight="0.5"
+                        android:id="@+id/open_drawer"/>
+
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:scaleType="fitCenter"
+                    android:id="@+id/drawing"
+                    android:layout_marginBottom="10dp"
+                    android:visibility="gone"/>
+            </LinearLayout>
+
+            <!-- Field Observations -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/border"
+                android:padding="10dp"
+                android:layout_marginTop="10dp"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="25sp"
+                    android:text="Field Observations"
+                    android:layout_gravity="center"
+                    />
+
+                <!-- Landscape Section -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:id="@+id/landscape"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/border"
+                    android:padding="3dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="LANDSCAPE"
+                        android:textSize="20sp"/>
+                </LinearLayout>
+
+                <!-- Soil Section -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:id="@+id/soil"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/border"
+                    android:padding="3dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="SOIL"
+                        android:textSize="20sp"/>
+                </LinearLayout>
+
+                <!-- Vegetation Section -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:id="@+id/vegetation"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/border"
+                    android:padding="3dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="VEGETATION"
+                        android:textSize="20sp"/>
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+
+
+            <!-- NLF Photos -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/border"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_gravity="center"
+                    android:weightSum="1"
+                    >
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+
+                        android:text="Photos(non-linear facilities)"
+                        android:layout_marginLeft="10dp"
+                        android:layout_gravity="center"
+                        android:layout_weight="0.5"
+                        android:textSize="18sp"
+                        android:textColor="@color/black"/>
+
+                    <ImageButton
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/add"
+                        android:scaleType="fitCenter"
+                        android:layout_weight="0.5"
+                        android:id="@+id/nlf_image_add"/>
+
+
+                </LinearLayout>
+
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/nlf_scroll_view">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:id="@+id/nlf_image_gallery"></LinearLayout>
 
                 </HorizontalScrollView>
 
-            <GridView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:numColumns="auto_fit"
-                android:columnWidth="150dp"
-                android:gravity="center"
-                android:stretchMode="columnWidth"
-                android:horizontalSpacing="5dp"
-                android:verticalSpacing="5dp"
-                android:id="@+id/nlf_grid"></GridView>
+            </LinearLayout>
 
+
+            <!-- AP Photos -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/border"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_gravity="center"
+                    android:weightSum="1"
+                    >
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+
+                        android:text="Photos(access roads, pipelines)"
+                        android:layout_marginLeft="10dp"
+                        android:layout_gravity="center"
+                        android:layout_weight="0.5"
+                        android:textSize="18sp"
+                        android:textColor="@color/black"/>
+
+                    <ImageButton
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/add"
+                        android:scaleType="fitCenter"
+                        android:layout_weight="0.5"
+                        android:id="@+id/ap_image_add"/>
+
+
+                </LinearLayout>
+
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/ap_scroll_view">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:id="@+id/ap_image_gallery"></LinearLayout>
+
+                </HorizontalScrollView>
+
+            </LinearLayout>
+
+            <!-- AD Photos -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/border"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_gravity="center"
+                    android:weightSum="1"
+                    >
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+
+                        android:text="Photos(additional)"
+                        android:layout_marginLeft="10dp"
+                        android:layout_gravity="center"
+                        android:layout_weight="0.5"
+                        android:textSize="18sp"
+                        android:textColor="@color/black"/>
+
+                    <ImageButton
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/add"
+                        android:scaleType="fitCenter"
+                        android:layout_weight="0.5"
+                        android:id="@+id/ad_image_add"/>
+
+
+                </LinearLayout>
+
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/ad_scroll_view">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:id="@+id/ad_image_gallery"></LinearLayout>
+
+                </HorizontalScrollView>
+
+            </LinearLayout>
 
         </LinearLayout>
 
-    </LinearLayout>
+    </ScrollView>
+
 
 </LinearLayout>
