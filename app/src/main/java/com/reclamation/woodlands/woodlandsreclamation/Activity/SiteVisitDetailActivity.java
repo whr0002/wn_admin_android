@@ -57,6 +57,9 @@ public class SiteVisitDetailActivity extends FormDetailActivity implements View.
 
     private Photo curDrawing;
 
+    private TextView dateView;
+    private String timeStamp;
+    private EditText recommendation;
 
     private ImageView drawingView;
     private Spinner facilityTypeSpinner, siteIdSpinner;
@@ -104,6 +107,9 @@ public class SiteVisitDetailActivity extends FormDetailActivity implements View.
 
 //        NLFScrollView = (HorizontalScrollView) findViewById(R.id.nlf_scroll_view);
 
+        dateView = (TextView)findViewById(R.id.dateView);
+        recommendation = (EditText)findViewById(R.id.recommendation);
+
         allPhotos = new ArrayList<Photo>();
         removedPhotos = new ArrayList<Photo>();
         newCreatedPhotos = new ArrayList<Photo>();
@@ -123,8 +129,18 @@ public class SiteVisitDetailActivity extends FormDetailActivity implements View.
             setGallery();
             setForm(mId);
 
+        }else{
+            setDate();
         }
 
+    }
+
+    private void setDate(){
+        Date date = new Date();
+        String cDate = new SimpleDateFormat("yyyy-MM-dd").format(date);
+        timeStamp = new SimpleDateFormat("HH:mm:ss").format(date);
+
+        dateView.setText(cDate);
     }
 
     private void setButtons(){
@@ -191,7 +207,7 @@ public class SiteVisitDetailActivity extends FormDetailActivity implements View.
 
     }
 
-    private void addGalleryItem(int id, Photo photo, LinearLayout galleryLayout, final ArrayList<Photo> photos){
+    private void addGalleryItem(int id, Photo photo, final LinearLayout galleryLayout, final ArrayList<Photo> photos){
         LinearLayout linearLayout = new LinearLayout(this);
         linearLayout.setId(id);
         LinearLayout.LayoutParams layoutParams = new LinearLayout
@@ -228,30 +244,30 @@ public class SiteVisitDetailActivity extends FormDetailActivity implements View.
         imageView.setLayoutParams(imageViewParams);
 
 
-//        Bitmap bm = BitmapFactory.decodeFile(photo.path);
-//        imageView.setImageBitmap(bm);
+
+
+        // Attach views
+        linearLayout.addView(imageView);
+        linearLayout.addView(textView);
+
+        linearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ImagePopup imagePopup = new ImagePopup(mContext, view, photos, removedPhotos, galleryLayout);
+                imagePopup.showPopup();
+            }
+        });
+
+        galleryLayout.addView(linearLayout);
+
+
+
+        // Decode bitmap and set it
         PathView pv = new PathView();
         pv.imagePath = photo.path;
         pv.imageView = imageView;
         decodeImageAsync = new DecodeImageAsync();
         decodeImageAsync.execute(pv);
-
-
-        linearLayout.addView(imageView);
-        linearLayout.addView(textView);
-
-
-        linearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ImagePopup imagePopup = new ImagePopup(mContext, view, photos, removedPhotos, NLFLayout);
-                imagePopup.showPopup();
-            }
-        });
-
-
-//        photos.add(photo);
-        galleryLayout.addView(linearLayout);
 
     }
 
@@ -277,7 +293,11 @@ public class SiteVisitDetailActivity extends FormDetailActivity implements View.
         if(sf != null){
 
             // Set form in View Mode
+            dateView.setText(sf.Date);
             siteIdSpinner.setSelection(getSpinnerIndex(siteIdSpinner, sf.SiteID));
+            facilityTypeSpinner.setSelection(getSpinnerIndex(facilityTypeSpinner, sf.FacilityType));
+            getFieldObservations((SiteVisitForm)sf);
+            recommendation.setText(((SiteVisitForm) sf).Recommendation);
 
         }
 
@@ -385,11 +405,19 @@ public class SiteVisitDetailActivity extends FormDetailActivity implements View.
 
     @Override
     public SiteForm getCurrentForm() {
-        SiteVisitForm svf = new SiteVisitForm();
 
-        svf.SiteID = siteIdSpinner.getSelectedItem().toString();
+        // Binding form data
 
-        return svf;
+        SiteVisitForm sf  = new SiteVisitForm();
+
+        sf.SiteID = siteIdSpinner.getSelectedItem().toString();
+        sf.Date = dateView.getText().toString();
+        sf.TimeStamp = timeStamp;
+        sf.FacilityType = facilityTypeSpinner.getSelectedItem().toString();
+        setFieldObservations(sf);
+        sf.Recommendation = recommendation.getText().toString();
+
+        return sf;
     }
 
     @Override
@@ -595,7 +623,7 @@ public class SiteVisitDetailActivity extends FormDetailActivity implements View.
             photoDAO.close();
 
         }else{
-            test();
+
             // Updating a form
             Log.i("debug", "updating");
 
@@ -637,15 +665,203 @@ public class SiteVisitDetailActivity extends FormDetailActivity implements View.
 
     }
 
-    private void test(){
+    private void setFieldObservations(SiteVisitForm sf){
         for(LinearLayout linearLayout : foItems){
-            Spinner s = (Spinner) linearLayout.getChildAt(0);
+            Spinner passFail = (Spinner) linearLayout.getChildAt(0);
+            EditText description = (EditText) linearLayout.getChildAt(1);
+            String fieldName = linearLayout.getTag().toString();
 
-            EditText editText = (EditText) linearLayout.getChildAt(1);
-            Log.i("debug", linearLayout.getTag().toString() + ": "+ s.getSelectedItem().toString() + " | " + editText.getText().toString());
+            String pf = passFail.getSelectedItem().toString();
 
+
+            if(fieldName.equalsIgnoreCase("Refuse")){
+
+                sf.RefusePF = pf.equals("Pass") ? 1 : (pf.equals("Fail") ? 2 : 0);
+                sf.RefuseComment = description.getText().toString();
+
+            }else if(fieldName.equalsIgnoreCase("Drainage")){
+
+                sf.DrainagePF = pf.equals("Pass") ? 1 : (pf.equals("Fail") ? 2 : 0);
+                sf.DrainageComment = description.getText().toString();
+
+            }else if(fieldName.equalsIgnoreCase("Rock/Gravel Content")){
+
+                sf.RockGravelPF = pf.equals("Pass") ? 1 : (pf.equals("Fail") ? 2 : 0);
+                sf.RockGravelComment = description.getText().toString();
+
+            }else if(fieldName.equalsIgnoreCase("Bare Ground")){
+
+                sf.BareGroundPF = pf.equals("Pass") ? 1 : (pf.equals("Fail") ? 2 : 0);
+                sf.BareGroundComment = description.getText().toString();
+
+            }else if(fieldName.equalsIgnoreCase("Soil Stability")){
+
+                sf.SoilStabilityPF = pf.equals("Pass") ? 1 : (pf.equals("Fail") ? 2 : 0);
+                sf.SoilStabilityComment = description.getText().toString();
+
+            }else if(fieldName.equalsIgnoreCase("Contours")){
+
+                sf.ContoursPF = pf.equals("Pass") ? 1 : (pf.equals("Fail") ? 2 : 0);
+                sf.ContoursComment = description.getText().toString();
+
+            }else if(fieldName.equalsIgnoreCase("Coarse Woody Debris")){
+
+                sf.CWDPF = pf.equals("Pass") ? 1 : (pf.equals("Fail") ? 2 : 0);
+                sf.CWDComment = description.getText().toString();
+
+            }else if(fieldName.equalsIgnoreCase("Erosion")){
+
+                sf.ErosionPF = pf.equals("Pass") ? 1 : (pf.equals("Fail") ? 2 : 0);
+                sf.ErosionComment = description.getText().toString();
+
+            }else if(fieldName.equalsIgnoreCase("Soil Characteristics")){
+
+                sf.SoilCharPF = pf.equals("Pass") ? 1 : (pf.equals("Fail") ? 2 : 0);
+                sf.SoilCharComment = description.getText().toString();
+
+            }else if(fieldName.equalsIgnoreCase("Topsoil Depth")){
+
+                sf.TopsoilDepthPF = pf.equals("Pass") ? 1 : (pf.equals("Fail") ? 2 : 0);
+                sf.TopsoilDepthComment = description.getText().toString();
+
+            }else if(fieldName.equalsIgnoreCase("Rooting Restrictions")){
+
+                sf.RootingPF = pf.equals("Pass") ? 1 : (pf.equals("Fail") ? 2 : 0);
+                sf.RootingComment = description.getText().toString();
+
+            }else if(fieldName.equalsIgnoreCase("Woody Stem Density")){
+
+                sf.WSDPF = pf.equals("Pass") ? 1 : (pf.equals("Fail") ? 2 : 0);
+                sf.WSDComment = description.getText().toString();
+
+            }else if(fieldName.equalsIgnoreCase("Tree Health")){
+
+                sf.TreeHealthPF = pf.equals("Pass") ? 1 : (pf.equals("Fail") ? 2 : 0);
+                sf.TreeHealthComment = description.getText().toString();
+
+            }else if(fieldName.equalsIgnoreCase("Weeds and Invasives")){
+
+                sf.WeedsInvasivesPF = pf.equals("Pass") ? 1 : (pf.equals("Fail") ? 2 : 0);
+                sf.WeedsInvasivesComment = description.getText().toString();
+
+            }else if(fieldName.equalsIgnoreCase("Native Species Cover")){
+
+                sf.NSCPF = pf.equals("Pass") ? 1 : (pf.equals("Fail") ? 2 : 0);
+                sf.NSCComment = description.getText().toString();
+
+            }else if(fieldName.equalsIgnoreCase("Litter/LFH")){
+
+                sf.LitterPF = pf.equals("Pass") ? 1 : (pf.equals("Fail") ? 2 : 0);
+                sf.LitterComment = description.getText().toString();
+
+            }
 
         }
+    }
+
+    private void getFieldObservations(SiteVisitForm sf){
+
+        for(LinearLayout linearLayout : foItems){
+
+            Spinner passFail = (Spinner) linearLayout.getChildAt(0);
+            EditText description = (EditText) linearLayout.getChildAt(1);
+            String fieldName = linearLayout.getTag().toString();
+
+            if(fieldName.equalsIgnoreCase("Refuse")){
+
+                passFail.setSelection(sf.RefusePF);
+                description.setText(sf.RefuseComment);
+
+            }else if(fieldName.equalsIgnoreCase("Drainage")){
+
+                passFail.setSelection(sf.DrainagePF);
+                description.setText(sf.DrainageComment);
+
+            }else if(fieldName.equalsIgnoreCase("Rock/Gravel Content")){
+
+                passFail.setSelection(sf.RockGravelPF);
+                description.setText(sf.RockGravelComment);
+
+            }else if(fieldName.equalsIgnoreCase("Bare Ground")){
+
+                passFail.setSelection(sf.BareGroundPF);
+                description.setText(sf.BareGroundComment);
+
+            }else if(fieldName.equalsIgnoreCase("Soil Stability")){
+
+                passFail.setSelection(sf.SoilStabilityPF);
+                description.setText(sf.SoilStabilityComment);
+
+            }else if(fieldName.equalsIgnoreCase("Contours")){
+
+                passFail.setSelection(sf.ContoursPF);
+                description.setText(sf.ContoursComment);
+
+            }else if(fieldName.equalsIgnoreCase("Coarse Woody Debris")){
+
+                passFail.setSelection(sf.CWDPF);
+                description.setText(sf.CWDComment);
+
+            }else if(fieldName.equalsIgnoreCase("Erosion")){
+
+                passFail.setSelection(sf.ErosionPF);
+                description.setText(sf.ErosionComment);
+
+            }else if(fieldName.equalsIgnoreCase("Soil Characteristics")){
+
+                passFail.setSelection(sf.SoilCharPF);
+                description.setText(sf.SoilCharComment);
+
+            }else if(fieldName.equalsIgnoreCase("Topsoil Depth")){
+
+                passFail.setSelection(sf.TopsoilDepthPF);
+                description.setText(sf.TopsoilDepthComment);
+
+            }else if(fieldName.equalsIgnoreCase("Rooting Restrictions")){
+
+                passFail.setSelection(sf.RootingPF);
+                description.setText(sf.RootingComment);
+
+            }else if(fieldName.equalsIgnoreCase("Woody Stem Density")){
+
+                passFail.setSelection(sf.WSDPF);
+                description.setText(sf.WSDComment);
+
+            }else if(fieldName.equalsIgnoreCase("Tree Health")){
+
+                passFail.setSelection(sf.TreeHealthPF);
+                description.setText(sf.TreeHealthComment);
+
+            }else if(fieldName.equalsIgnoreCase("Weeds and Invasives")){
+
+                passFail.setSelection(sf.WeedsInvasivesPF);
+                description.setText(sf.WeedsInvasivesComment);
+
+            }else if(fieldName.equalsIgnoreCase("Native Species Cover")){
+
+                passFail.setSelection(sf.NSCPF);
+                description.setText(sf.NSCComment);
+
+            }else if(fieldName.equalsIgnoreCase("Litter/LFH")){
+
+                passFail.setSelection(sf.LitterPF);
+                description.setText(sf.LitterComment);
+
+            }
+        }
+    }
+
+    private void setFOItem(Spinner spinner, int number){
+
+        spinner.setSelection(number);
+//
+//        if(number == 1){
+//            spinner.setSelection(getSpinnerIndex(spinner, "Pass"));
+//        }else if(number == 2){
+//            spinner.setSelection(getSpinnerIndex(spinner, "Fail"));
+//        }else{
+//            spinner.setSelection(0);
+//        }
     }
 
     @Override

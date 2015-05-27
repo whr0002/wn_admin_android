@@ -11,7 +11,7 @@
 
 
         <RelativeLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="0.5">
 
@@ -32,7 +32,17 @@
                 android:id="@+id/site_id"
                 android:layout_toRightOf="@+id/position"/>
 
-            </RelativeLayout>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_weight="0.5"
+            android:weightSum="1">
+
+
+        </LinearLayout>
 
 
     </LinearLayout>

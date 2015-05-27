@@ -13,10 +13,12 @@ public abstract class DAO<T> {
 
     public SQLiteDatabase db;
     public SQLHelper dbHelper;
+    public Context mContext;
 
 
     public DAO(Context context){
         dbHelper = new SQLHelper(context);
+        mContext = context;
     }
 
     public void open(){

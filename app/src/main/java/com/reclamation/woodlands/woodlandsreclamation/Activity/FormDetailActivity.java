@@ -2,9 +2,11 @@ package com.reclamation.woodlands.woodlandsreclamation.Activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -23,6 +25,8 @@ public abstract class FormDetailActivity extends ActionBarActivity{
 
     protected Context mContext;
     protected ActionBar mActionBar;
+    protected ProgressDialog progressDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,12 +61,12 @@ public abstract class FormDetailActivity extends ActionBarActivity{
 
             case R.id.save:
                 Log.i("debug", "save");
+                SaveAsync saveAsync = new SaveAsync();
+                progressDialog = ProgressDialog.show(this, "", "Saving...", true);
+//                addOrUpdate(getCurrentForm());
+                saveAsync.execute();
 
-                addOrUpdate(getCurrentForm());
 
-                Intent intent = new Intent();
-                setResult(RESULT_OK, intent);
-                finish();
 
                 break;
 
@@ -114,4 +118,22 @@ public abstract class FormDetailActivity extends ActionBarActivity{
 
     public abstract void onFinishWithoutSave();
 
+
+    class SaveAsync extends AsyncTask {
+        @Override
+        protected Object doInBackground(Object[] objects) {
+
+            addOrUpdate(getCurrentForm());
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Object o) {
+            progressDialog.dismiss();
+            Intent intent = new Intent();
+            setResult(RESULT_OK, intent);
+            finish();
+        }
+    }
 }

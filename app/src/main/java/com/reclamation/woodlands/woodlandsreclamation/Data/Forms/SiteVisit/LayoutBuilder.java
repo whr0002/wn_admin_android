@@ -75,7 +75,7 @@ public class LayoutBuilder {
         Spinner passFailSpinner = new Spinner(mContext);
         LinearLayout.LayoutParams spinnerParam = new LinearLayout
                 .LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT);
-        spinnerParam.weight = 0.5f;
+        spinnerParam.weight = 0.3f;
         passFailSpinner.setLayoutParams(spinnerParam);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter
@@ -87,9 +87,10 @@ public class LayoutBuilder {
 
         // Description
         EditText editText = new EditText(mContext);
+        editText.setSingleLine();
         LinearLayout.LayoutParams editParam = new LinearLayout
                 .LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT);
-        editParam.weight = 0.5f;
+        editParam.weight = 0.7f;
         editText.setLayoutParams(editParam);
 
 

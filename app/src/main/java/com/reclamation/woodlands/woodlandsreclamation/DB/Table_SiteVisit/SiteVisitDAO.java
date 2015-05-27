@@ -3,9 +3,13 @@ package com.reclamation.woodlands.woodlandsreclamation.DB.Table_SiteVisit;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.util.Log;
 
 import com.reclamation.woodlands.woodlandsreclamation.DB.DAO;
+import com.reclamation.woodlands.woodlandsreclamation.DB.Table_Photo.Photo;
+import com.reclamation.woodlands.woodlandsreclamation.DB.Table_Photo.PhotoDAO;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -132,8 +136,27 @@ public class SiteVisitDAO extends DAO<SiteVisitForm> {
 
     @Override
     public void delete(SiteVisitForm o) {
+
         db.delete(SiteVisitProperties.TABLE_SITEVISIT,
                 SiteVisitProperties.COLUMN_SITEVISITID + " = " + o.ID, null);
+
+        PhotoDAO photoDAO = new PhotoDAO(mContext);
+        photoDAO.open();
+        List<Photo> photos = photoDAO.findPhotos(SiteVisitProperties.FORM_TYPE, o.ID, null);
+
+        if(photos != null && photos.size() > 0){
+            Log.i("debug", "Size: " + photos.size());
+            for(Photo p : photos){
+                photoDAO.delete(p);
+
+                File f = new File(p.path);
+                if(f != null && f.exists()){
+                    f.delete();
+                }
+            }
+        }
+
+        photoDAO.close();
     }
 
     @Override

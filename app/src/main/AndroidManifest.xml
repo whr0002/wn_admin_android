@@ -33,7 +33,9 @@
 
 
 
-        <activity android:name=".Activity.SiteVisitActivity"></activity>
+        <activity android:name=".Activity.SiteVisitActivity"
+            android:configChanges="orientation|screenSize"
+            android:windowSoftInputMode="stateHidden"></activity>
 
         <activity
             android:name=".Activity.SiteVisitDetailActivity"

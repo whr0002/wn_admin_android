@@ -105,13 +105,15 @@ public class PhotoDAO extends DAO<Photo> {
         if(classification == null) {
             cursor = db.query(Photo.TABLE_NAME, null,
                     Photo.COLUMN_FORMTYPE + " = '" + formType + "' AND "
-                            + Photo.COLUMN_FORMID + " = " + formId, null, null, null, null, null);
+                            + Photo.COLUMN_FORMID + " = " + formId,
+                    null, null, null, Photo.COLUMN_PATH, null);
         }else{
             cursor = db.query(Photo.TABLE_NAME, null,
                     Photo.COLUMN_FORMTYPE + " = '"
                             + formType + "' AND "
                             + Photo.COLUMN_FORMID + " = " + formId + " AND "
-                            + Photo.COLUMN_CLASS + " = '" + classification + "'", null, null, null, null, null);
+                            + Photo.COLUMN_CLASS + " = '" + classification + "'",
+                    null, null, null, Photo.COLUMN_PATH, null);
         }
             cursor.moveToFirst();
 

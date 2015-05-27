@@ -1,7 +1,9 @@
 package com.reclamation.woodlands.woodlandsreclamation.Activity;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -16,6 +18,7 @@ import com.reclamation.woodlands.woodlandsreclamation.DB.Table_ReviewSite.RS_Dat
 import com.reclamation.woodlands.woodlandsreclamation.DB.Table_ReviewSite.ReviewSite;
 import com.reclamation.woodlands.woodlandsreclamation.DB.Table_SiteVisit.SiteVisitForm;
 import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.SiteForm;
+import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.SubmitAllDialog;
 import com.reclamation.woodlands.woodlandsreclamation.R;
 
 import java.util.List;
@@ -30,6 +33,7 @@ public abstract class FormActivity extends ActionBarActivity implements AdapterV
     protected ActionBar mActionBar;
     protected ListView mListview;
     protected FormAdapter formAdapter;
+    protected ProgressDialog progressDialog;
 
     protected final String DEBUG = "debug";
 
@@ -78,12 +82,19 @@ public abstract class FormActivity extends ActionBarActivity implements AdapterV
                 break;
 
             case R.id.delete:
-                if(formAdapter.getCount() > 0){
-                    SiteForm temp = formAdapter.getItem(0);
-                    deleteForm(temp);
+                progressDialog = ProgressDialog.show(this, "", "Deleting...", true);
+                DeleteAsync deleteAsync = new DeleteAsync();
+                deleteAsync.execute();
 
-                    formAdapter.remove(temp);
-                }
+
+
+                break;
+
+            case R.id.submit_all:
+                Log.i("debug", "Submit all");
+                SubmitAllDialog submitAllDialog = new SubmitAllDialog(this);
+                submitAllDialog.show();
+
                 break;
 
         }
@@ -140,6 +151,35 @@ public abstract class FormActivity extends ActionBarActivity implements AdapterV
     public abstract void deleteForm(SiteForm siteForm);
 
 
+    public abstract void submitForms(List<SiteForm> forms);
+
     public abstract void updateForm(SiteForm siteForm);
+
+    class DeleteAsync extends AsyncTask<Object,Object,SiteForm> {
+
+
+        @Override
+        protected SiteForm doInBackground(Object[] objects) {
+
+            if(formAdapter.getCount() > 0){
+                SiteForm temp = formAdapter.getItem(0);
+                deleteForm(temp);
+                return temp;
+
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(SiteForm siteForm) {
+
+            if(siteForm != null) {
+                formAdapter.remove(siteForm);
+
+            }
+            progressDialog.dismiss();
+        }
+    }
 
 }

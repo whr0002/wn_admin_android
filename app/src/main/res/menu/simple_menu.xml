@@ -15,4 +15,10 @@
         android:title="Delete"
         app:showAsAction="always"
         android:orderInCategory="1"></item>
+
+    <item
+        android:id="@+id/submit_all"
+        android:title="Submit"
+        app:showAsAction="always"
+        android:orderInCategory="2"></item>
 </menu>

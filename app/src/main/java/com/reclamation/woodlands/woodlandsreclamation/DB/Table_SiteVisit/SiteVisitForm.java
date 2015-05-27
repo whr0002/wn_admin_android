@@ -48,16 +48,4 @@ public class SiteVisitForm extends SiteForm {
     public String Recommendation;
 
 
-    public String Drawing;
-
-    public String NLF_Photos;
-
-    public String AP_Photos;
-
-
-    public String AD_Photos;
-
-
-
-
 }

@@ -1,19 +1,16 @@
 package com.reclamation.woodlands.woodlandsreclamation.Activity;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 
-import com.reclamation.woodlands.woodlandsreclamation.DB.Table_Photo.Photo;
-import com.reclamation.woodlands.woodlandsreclamation.DB.Table_Photo.PhotoDAO;
 import com.reclamation.woodlands.woodlandsreclamation.DB.Table_SiteVisit.SiteVisitDAO;
 import com.reclamation.woodlands.woodlandsreclamation.DB.Table_SiteVisit.SiteVisitForm;
-import com.reclamation.woodlands.woodlandsreclamation.DB.Table_SiteVisit.SiteVisitProperties;
 import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.SiteForm;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,7 +48,12 @@ public class SiteVisitActivity extends FormActivity {
     }
 
     @Override
-    public void deleteForm(SiteForm siteForm) {
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public synchronized void deleteForm(SiteForm siteForm) {
         SiteVisitForm sv = (SiteVisitForm) siteForm;
         dao = new SiteVisitDAO(mContext);
         dao.open();
@@ -61,25 +63,28 @@ public class SiteVisitActivity extends FormActivity {
         dao.close();
 
 
-        PhotoDAO photoDAO = new PhotoDAO(mContext);
-        photoDAO.open();
-        List<Photo> photos = photoDAO.findPhotos(SiteVisitProperties.FORM_TYPE, siteForm.ID, null);
+//        PhotoDAO photoDAO = new PhotoDAO(mContext);
+//        photoDAO.open();
+//        List<Photo> photos = photoDAO.findPhotos(SiteVisitProperties.FORM_TYPE, siteForm.ID, null);
+//
+//        if(photos != null && photos.size() > 0){
+//            Log.i("debug", "Size: " + photos.size());
+//            for(Photo p : photos){
+//                photoDAO.delete(p);
+//
+//                File f = new File(p.path);
+//                if(f != null && f.exists()){
+//                    f.delete();
+//                }
+//            }
+//        }
+//
+//        photoDAO.close();
+    }
 
-        if(photos != null && photos.size() > 0){
-            Log.i("debug", "Size: " + photos.size());
-            for(Photo p : photos){
-                photoDAO.delete(p);
-
-                File f = new File(p.path);
-                if(f != null && f.exists()){
-                    f.delete();
-                }
-            }
-        }else{
-
-        }
-
-        photoDAO.close();
+    @Override
+    public void submitForms(List<SiteForm> forms) {
+        Log.i("debug", "Total number of forms: " + forms.size());
     }
 
     @Override
