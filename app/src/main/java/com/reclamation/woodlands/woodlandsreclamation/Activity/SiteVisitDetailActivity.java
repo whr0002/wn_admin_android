@@ -137,7 +137,7 @@ public class SiteVisitDetailActivity extends FormDetailActivity implements View.
 
     private void setDate(){
         Date date = new Date();
-        String cDate = new SimpleDateFormat("yyyy-MM-dd").format(date);
+        String cDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
         timeStamp = new SimpleDateFormat("HH:mm:ss").format(date);
 
         dateView.setText(cDate);

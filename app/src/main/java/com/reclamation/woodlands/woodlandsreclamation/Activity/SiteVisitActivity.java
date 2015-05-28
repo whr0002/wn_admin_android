@@ -1,15 +1,20 @@
 package com.reclamation.woodlands.woodlandsreclamation.Activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Toast;
 
 import com.reclamation.woodlands.woodlandsreclamation.DB.Table_SiteVisit.SiteVisitDAO;
 import com.reclamation.woodlands.woodlandsreclamation.DB.Table_SiteVisit.SiteVisitForm;
+import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.Form;
 import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.SiteForm;
+import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.SiteVisit.SVUploader;
+import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.Uploader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,28 +68,29 @@ public class SiteVisitActivity extends FormActivity {
         dao.close();
 
 
-//        PhotoDAO photoDAO = new PhotoDAO(mContext);
-//        photoDAO.open();
-//        List<Photo> photos = photoDAO.findPhotos(SiteVisitProperties.FORM_TYPE, siteForm.ID, null);
-//
-//        if(photos != null && photos.size() > 0){
-//            Log.i("debug", "Size: " + photos.size());
-//            for(Photo p : photos){
-//                photoDAO.delete(p);
-//
-//                File f = new File(p.path);
-//                if(f != null && f.exists()){
-//                    f.delete();
-//                }
-//            }
-//        }
-//
-//        photoDAO.close();
     }
 
     @Override
     public void submitForms(List<SiteForm> forms) {
         Log.i("debug", "Total number of forms: " + forms.size());
+
+        if(forms.size() > 0){
+            ProgressDialog progressDialog = new ProgressDialog(this);
+            progressDialog.setMessage("Uploading...");
+            progressDialog.setMax(forms.size());
+            progressDialog.setProgress(0);
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            progressDialog.show();
+
+
+            Uploader uploader = new SVUploader(mContext, forms.size(), dao, progressDialog);
+            for(Form form : forms){
+                uploader.execute(form);
+            }
+
+        }else{
+            Toast.makeText(this, "Nothing to submit!", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

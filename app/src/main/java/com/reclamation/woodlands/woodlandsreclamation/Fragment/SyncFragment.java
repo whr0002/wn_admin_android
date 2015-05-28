@@ -35,7 +35,7 @@ import java.util.List;
 public class SyncFragment  extends Fragment implements View.OnClickListener{
 
     private static AsyncHttpClient client;
-    private static final String url = "http://wntest.azurewebsites.net/rdata/all";
+    private static final String url = "http://reclamation.azurewebsites.net/rdata/all";
     private static UI_DataSource daoUI;
     private Activity mActivity;
 

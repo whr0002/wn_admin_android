@@ -40,7 +40,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
 
     private ProgressDialog progressDialog;
 
-    private static final String LOGIN_URL = "http://wntest.azurewebsites.net/android/login";
+    private static final String LOGIN_URL = "http://reclamation.azurewebsites.net/android/login";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -73,6 +73,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
             dao.open();
 
             UserInfo ui = dao.getUserInfo();
+            dao.close();
             showLogoutView(ui);
         }catch (Exception e){
 
