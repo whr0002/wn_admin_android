@@ -32,11 +32,14 @@ import com.reclamation.woodlands.woodlandsreclamation.DB.Table_SiteVisit.SiteVis
 import com.reclamation.woodlands.woodlandsreclamation.DB.Table_SiteVisit.SiteVisitProperties;
 import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.DecodeImageAsync;
 import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.Drawing.DrawingPopup;
-import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.PathView;
+import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.Form;
 import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.ImagePopup;
 import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.ImageProcessor;
+import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.PathView;
 import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.SiteForm;
 import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.SiteVisit.LayoutBuilder;
+import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.SiteVisitValidator;
+import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.Validator;
 import com.reclamation.woodlands.woodlandsreclamation.R;
 
 import java.io.File;
@@ -438,6 +441,11 @@ public class SiteVisitDetailActivity extends FormDetailActivity implements View.
     }
 
     @Override
+    public Validator getValidator() {
+        return new SiteVisitValidator();
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == 1){
 
@@ -597,8 +605,8 @@ public class SiteVisitDetailActivity extends FormDetailActivity implements View.
     }
 
     @Override
-    public void addOrUpdate(SiteForm f) {
-
+    public void addOrUpdate(Form form) {
+        SiteVisitForm f = (SiteVisitForm) form;
 
         if(mId == -1){
 

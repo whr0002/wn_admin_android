@@ -1,10 +1,10 @@
 package com.reclamation.woodlands.woodlandsreclamation.Data.Forms.SiteVisit;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.widget.Toast;
 
 import com.loopj.android.http.RequestParams;
+import com.reclamation.woodlands.woodlandsreclamation.Activity.FormActivity;
 import com.reclamation.woodlands.woodlandsreclamation.DB.DAO;
 import com.reclamation.woodlands.woodlandsreclamation.DB.Table_Photo.Photo;
 import com.reclamation.woodlands.woodlandsreclamation.DB.Table_SiteVisit.SiteVisitForm;
@@ -22,8 +22,8 @@ import java.util.List;
 public class SVUploader extends Uploader {
 
 
-    public SVUploader(Context c, int total, DAO dao, ProgressDialog progressDialog) {
-        super(c, total, dao, progressDialog);
+    public SVUploader(FormActivity a, int total, DAO dao, ProgressDialog progressDialog) {
+        super(a, total, dao, progressDialog);
     }
 
     @Override
@@ -107,7 +107,7 @@ public class SVUploader extends Uploader {
                     try {
                         p.put(fileParamName, file);
                     }catch (FileNotFoundException e){
-                        Toast.makeText(mContext,"Missing photos", Toast.LENGTH_LONG).show();
+                        Toast.makeText(mActivity,"Missing photos", Toast.LENGTH_LONG).show();
                         return null;
                     }
 
@@ -115,7 +115,7 @@ public class SVUploader extends Uploader {
                     p.put(descParamName, photo.description);
                     p.put(classificationName, photo.classification);
                 }else{
-                    Toast.makeText(mContext,"Missing photos", Toast.LENGTH_LONG).show();
+                    Toast.makeText(mActivity,"Missing photos", Toast.LENGTH_LONG).show();
                     return null;
                 }
 
@@ -135,16 +135,16 @@ public class SVUploader extends Uploader {
     private String getRealPath(File file, String role){
         if(file.exists()){
             String filename = file.getName();
-            String fullPath = "";
-            if(role == null){
-                fullPath = BASE_STORAGE_URL+"unknown/"+filename;
-            }else if(role.toLowerCase().equals("super admin")){
-                fullPath = BASE_STORAGE_URL+"superadmin/"+filename;
-            }else{
-                fullPath = BASE_STORAGE_URL+role.toLowerCase()+"/"+filename;
-            }
+//            String fullPath = "";
+//            if(role == null){
+//                fullPath = BASE_STORAGE_URL+"unknown/"+filename;
+//            }else if(role.toLowerCase().equals("super admin")){
+//                fullPath = BASE_STORAGE_URL+"superadmin/"+filename;
+//            }else{
+//                fullPath = BASE_STORAGE_URL+role.toLowerCase()+"/"+filename;
+//            }
 
-            return fullPath;
+            return filename;
         }
 
 

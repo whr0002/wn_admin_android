@@ -61,6 +61,7 @@ public class PhotoDAO extends DAO<Photo> {
         db.delete(Photo.TABLE_NAME, Photo.COLUMN_PATH + " = '" + o.path + "'", null);
     }
 
+
     @Override
     public List<Photo> getAll() {
 

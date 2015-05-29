@@ -3,7 +3,6 @@ package com.reclamation.woodlands.woodlandsreclamation.DB.Table_SiteVisit;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.util.Log;
 
 import com.reclamation.woodlands.woodlandsreclamation.DB.DAO;
 import com.reclamation.woodlands.woodlandsreclamation.DB.Table_Photo.Photo;
@@ -63,6 +62,8 @@ public class SiteVisitDAO extends DAO<SiteVisitForm> {
         cv.put(SiteVisitProperties.COLUMN_WSDPF, o.WSDPF);
         cv.put(SiteVisitProperties.COLUMN_WEEDSINVASIVESCOMMENT, o.WeedsInvasivesComment);
         cv.put(SiteVisitProperties.COLUMN_WEEDSINVASIVESPF, o.WeedsInvasivesPF);
+
+        cv.put(SiteVisitProperties.COLUMN_MESSAGE, o.Message);
 
         long insertID = db.insert(SiteVisitProperties.TABLE_SITEVISIT, null, cv);
 
@@ -129,6 +130,8 @@ public class SiteVisitDAO extends DAO<SiteVisitForm> {
         cv.put(SiteVisitProperties.COLUMN_WEEDSINVASIVESCOMMENT, o.WeedsInvasivesComment);
         cv.put(SiteVisitProperties.COLUMN_WEEDSINVASIVESPF, o.WeedsInvasivesPF);
 
+        cv.put(SiteVisitProperties.COLUMN_MESSAGE, o.Message);
+
         db.update(SiteVisitProperties.TABLE_SITEVISIT, cv,
                 SiteVisitProperties.COLUMN_SITEVISITID + " = " + o.ID, null);
 
@@ -145,7 +148,7 @@ public class SiteVisitDAO extends DAO<SiteVisitForm> {
         List<Photo> photos = photoDAO.findPhotos(SiteVisitProperties.FORM_TYPE, o.ID, null);
 
         if(photos != null && photos.size() > 0){
-            Log.i("debug", "Size: " + photos.size());
+
             for(Photo p : photos){
                 photoDAO.delete(p);
 
@@ -220,6 +223,7 @@ public class SiteVisitDAO extends DAO<SiteVisitForm> {
         sv.WeedsInvasivesComment = cursor.getString(cursor.getColumnIndex(SiteVisitProperties.COLUMN_WEEDSINVASIVESCOMMENT));
         sv.WeedsInvasivesPF = cursor.getInt(cursor.getColumnIndex(SiteVisitProperties.COLUMN_WEEDSINVASIVESPF));
 
+        sv.Message = cursor.getString(cursor.getColumnIndex(SiteVisitProperties.COLUMN_MESSAGE));
 
         return sv;
     }

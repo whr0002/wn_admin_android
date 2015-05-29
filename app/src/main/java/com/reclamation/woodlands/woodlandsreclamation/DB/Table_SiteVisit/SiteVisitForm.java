@@ -7,9 +7,6 @@ import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.SiteForm;
  */
 public class SiteVisitForm extends SiteForm {
 
-//    public String SiteID;
-//    public String Date;
-//    public String FacilityType;
 
     public int RefusePF;
     public String RefuseComment;

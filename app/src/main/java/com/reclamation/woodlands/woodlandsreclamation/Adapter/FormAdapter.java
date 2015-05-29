@@ -1,44 +1,57 @@
 package com.reclamation.woodlands.woodlandsreclamation.Adapter;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.TextView;
 
-import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.SiteForm;
-import com.reclamation.woodlands.woodlandsreclamation.R;
+import com.reclamation.woodlands.woodlandsreclamation.Activity.FormActivity;
+import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.Form;
+import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.ViewHolder;
 
 import java.util.List;
 
 /**
  * Created by Jimmy on 5/13/2015.
  */
-public class FormAdapter extends ArrayAdapter<SiteForm> {
+public abstract class FormAdapter extends ArrayAdapter<Form> {
 
+    private int mLayoutResource;
+    public FormActivity mFormActivity;
 
-    public FormAdapter(Context context, int resource, List<SiteForm> siteForms){
-        super(context, resource, siteForms);
+    public FormAdapter(FormActivity context, int resource, List<Form> forms){
+        super(context, resource, forms);
+        mLayoutResource = resource;
+
+        mFormActivity = context;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        ViewHolder viewHolder;
+
         if(convertView == null){
             LayoutInflater inflater = LayoutInflater.from(getContext());
-            convertView = inflater.inflate(R.layout.in_listview, null);
+            convertView = inflater.inflate(mLayoutResource, null);
 
+            viewHolder = getViewHolder();
+            setViewHolder(convertView, viewHolder);
+
+            convertView.setTag(viewHolder);
+        }else{
+            viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        SiteForm siteForm = getItem(position);
 
-        TextView positionView = (TextView) convertView.findViewById(R.id.position);
-        TextView siteView = (TextView) convertView.findViewById(R.id.site_id);
-        positionView.setText(position + ". ");
-
-        siteView.setText(siteForm.SiteID);
+        Form form = getItem(position);
+        setView(viewHolder, position, form);
 
 
         return convertView;
     }
+
+
+    public abstract void setView(ViewHolder viewHolder, int position, Form form);
+    public abstract ViewHolder getViewHolder();
+    public abstract void setViewHolder(View convertView, ViewHolder viewHolder);
 }

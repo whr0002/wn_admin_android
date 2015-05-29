@@ -9,12 +9,15 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Toast;
 
+import com.reclamation.woodlands.woodlandsreclamation.Adapter.FormAdapter;
+import com.reclamation.woodlands.woodlandsreclamation.Adapter.SiteFormAdapter;
 import com.reclamation.woodlands.woodlandsreclamation.DB.Table_SiteVisit.SiteVisitDAO;
 import com.reclamation.woodlands.woodlandsreclamation.DB.Table_SiteVisit.SiteVisitForm;
 import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.Form;
 import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.SiteForm;
 import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.SiteVisit.SVUploader;
 import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.Uploader;
+import com.reclamation.woodlands.woodlandsreclamation.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,13 +37,13 @@ public class SiteVisitActivity extends FormActivity {
     }
 
     @Override
-    public List<SiteForm> getAllForms() {
+    public List<Form> getAllForms() {
         dao = new SiteVisitDAO(mContext);
         dao.open();
 
         List<SiteVisitForm> forms = dao.getAll();
 
-        List<SiteForm> gSiteForms = new ArrayList<SiteForm>();
+        List<Form> gSiteForms = new ArrayList<Form>();
         if(forms != null && forms.size() > 0){
             for(SiteVisitForm sv : forms){
                 gSiteForms.add(sv);
@@ -58,7 +61,7 @@ public class SiteVisitActivity extends FormActivity {
     }
 
     @Override
-    public synchronized void deleteForm(SiteForm siteForm) {
+    public synchronized void deleteForm(Form siteForm) {
         SiteVisitForm sv = (SiteVisitForm) siteForm;
         dao = new SiteVisitDAO(mContext);
         dao.open();
@@ -71,7 +74,7 @@ public class SiteVisitActivity extends FormActivity {
     }
 
     @Override
-    public void submitForms(List<SiteForm> forms) {
+    public void submitForms(List<Form> forms) {
         Log.i("debug", "Total number of forms: " + forms.size());
 
         if(forms.size() > 0){
@@ -83,7 +86,7 @@ public class SiteVisitActivity extends FormActivity {
             progressDialog.show();
 
 
-            Uploader uploader = new SVUploader(mContext, forms.size(), dao, progressDialog);
+            Uploader uploader = new SVUploader(this, forms.size(), dao, progressDialog);
             for(Form form : forms){
                 uploader.execute(form);
             }
@@ -94,8 +97,14 @@ public class SiteVisitActivity extends FormActivity {
     }
 
     @Override
-    public void updateForm(SiteForm siteForm) {
+    public void updateForm(Form siteForm) {
 
+    }
+
+    @Override
+    public FormAdapter getFormAdapter() {
+        SiteFormAdapter siteFormAdapter = new SiteFormAdapter(this, R.layout.in_gridview_formlist, getAllForms());
+        return siteFormAdapter;
     }
 
 
@@ -108,9 +117,10 @@ public class SiteVisitActivity extends FormActivity {
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-        SiteForm f = formAdapter.getItem(position);
+        SiteForm f = (SiteForm) formAdapter.getItem(position);
         Intent i = new Intent(mContext, SiteVisitDetailActivity.class);
         i.putExtra("ID", f.ID);
         startActivityForResult(i, 1);
     }
+
 }

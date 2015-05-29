@@ -1,13 +1,13 @@
 package com.reclamation.woodlands.woodlandsreclamation.Data.Forms;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.reclamation.woodlands.woodlandsreclamation.Activity.FormActivity;
 import com.reclamation.woodlands.woodlandsreclamation.DB.DAO;
 import com.reclamation.woodlands.woodlandsreclamation.DB.Table_Photo.PhotoDAO;
 import com.reclamation.woodlands.woodlandsreclamation.DB.Table_UserInfo.UI_DataSource;
@@ -24,7 +24,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public abstract class Uploader {
 
-    public Context mContext;
+    public FormActivity mActivity;
     public AsyncHttpClient client;
     public ExecutorService executorService;
 
@@ -38,7 +38,7 @@ public abstract class Uploader {
     public static final String BASE_STORAGE_URL = "https://reclamation.blob.core.windows.net/";
     public ProgressDialog mProgressDialog;
 
-    public Uploader(Context c, int total, DAO dao, ProgressDialog progressDialog){
+    public Uploader(FormActivity a, int total, DAO dao, ProgressDialog progressDialog){
 
         mTotal = total;
 
@@ -47,11 +47,11 @@ public abstract class Uploader {
         client.setThreadPool(executorService);
 
         mDao = dao;
-        photoDAO = new PhotoDAO(c);
-        mContext = c;
+        photoDAO = new PhotoDAO(a);
+        mActivity = a;
         mProgressDialog = progressDialog;
 
-        UI_DataSource ui_dataSource = new UI_DataSource(mContext);
+        UI_DataSource ui_dataSource = new UI_DataSource(a);
         ui_dataSource.open();
         userInfo = ui_dataSource.getUserInfo();
         ui_dataSource.close();
@@ -82,9 +82,8 @@ public abstract class Uploader {
 //                                    + successCounter.incrementAndGet() + "/" + mTotal);
                             successCounter.incrementAndGet();
 
-
-
-//                        mDao.delete(form);
+                            // delete data on device
+                            mActivity.deleteForm(form);
 
                         }
                     } catch (Exception e) {
@@ -92,8 +91,11 @@ public abstract class Uploader {
 
                     if(ci == mTotal){
 
+                        // Refresh form list
+                        mActivity.onDataSetChanged();
+
                         mProgressDialog.dismiss();
-                        Toast.makeText(mContext,
+                        Toast.makeText(mActivity,
                                 "Submitted " + successCounter + "/"+ mTotal,
                                 Toast.LENGTH_LONG).show();
                     }
@@ -116,8 +118,12 @@ public abstract class Uploader {
 
 
                     if(ci == mTotal){
+
+                        // Refresh form list
+                        mActivity.onDataSetChanged();
+
                         mProgressDialog.dismiss();
-                        Toast.makeText(mContext,
+                        Toast.makeText(mActivity,
                                 "Submitted " + successCounter + "/"+ mTotal,
                                 Toast.LENGTH_LONG).show();
                     }

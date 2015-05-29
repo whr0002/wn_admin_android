@@ -46,6 +46,7 @@ public class SiteVisitProperties {
     public static final String COLUMN_WSDPF = "WSDPF";
     public static final String COLUMN_WEEDSINVASIVESCOMMENT = "WeedsInvasivesComment";
     public static final String COLUMN_WEEDSINVASIVESPF = "WeedsInvasivesPF";
+    public static final String COLUMN_MESSAGE = "Message";
 
     public static final String FORM_TYPE = "SiteVisit";
     public static final String PHOTO_DRAWING = "Drawing";
@@ -94,7 +95,8 @@ public class SiteVisitProperties {
                     + COLUMN_WSDCOMMENT + " text, "
                     + COLUMN_WSDPF + " integer, "
                     + COLUMN_WEEDSINVASIVESCOMMENT + " text, "
-                    + COLUMN_WEEDSINVASIVESPF + " integer "
+                    + COLUMN_WEEDSINVASIVESPF + " integer, "
+                    + COLUMN_MESSAGE + " text "
                     + " );";
 
 

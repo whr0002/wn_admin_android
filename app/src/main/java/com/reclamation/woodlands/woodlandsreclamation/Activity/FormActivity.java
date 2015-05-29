@@ -11,18 +11,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
-import android.widget.ListView;
+import android.widget.GridView;
 
 import com.reclamation.woodlands.woodlandsreclamation.Adapter.FormAdapter;
-import com.reclamation.woodlands.woodlandsreclamation.DB.Table_ReviewSite.RS_DataSource;
-import com.reclamation.woodlands.woodlandsreclamation.DB.Table_ReviewSite.ReviewSite;
-import com.reclamation.woodlands.woodlandsreclamation.DB.Table_SiteVisit.SiteVisitForm;
-import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.SiteForm;
+import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.Form;
 import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.SubmitAllDialog;
 import com.reclamation.woodlands.woodlandsreclamation.R;
 
 import java.util.List;
-import java.util.Random;
 
 /**
  * Created by Jimmy on 5/12/2015.
@@ -31,7 +27,8 @@ public abstract class FormActivity extends ActionBarActivity implements AdapterV
 
     protected Context mContext;
     protected ActionBar mActionBar;
-    protected ListView mListview;
+//    protected ListView mListview;
+    protected GridView mGridview;
     protected FormAdapter formAdapter;
     protected ProgressDialog progressDialog;
 
@@ -50,12 +47,14 @@ public abstract class FormActivity extends ActionBarActivity implements AdapterV
         mActionBar = getSupportActionBar();
         mActionBar.setDisplayHomeAsUpEnabled(true);
 
-        mListview = (ListView) findViewById(R.id.listView);
+//        mListview = (ListView) findViewById(R.id.listView);
+        mGridview = (GridView)findViewById(R.id.gridview);
+        formAdapter = getFormAdapter();
+        mGridview.setAdapter(formAdapter);
+        mGridview.setOnItemClickListener(this);
 
-        formAdapter = new FormAdapter(mContext, R.layout.in_listview, getAllForms());
 
-        mListview.setAdapter(formAdapter);
-        mListview.setOnItemClickListener(this);
+
 
 
     }
@@ -82,11 +81,8 @@ public abstract class FormActivity extends ActionBarActivity implements AdapterV
                 break;
 
             case R.id.delete:
-                progressDialog = ProgressDialog.show(this, "", "Deleting...", true);
-                DeleteAsync deleteAsync = new DeleteAsync();
-                deleteAsync.execute();
 
-
+                deleteInView(0);
 
                 break;
 
@@ -105,33 +101,9 @@ public abstract class FormActivity extends ActionBarActivity implements AdapterV
     }
 
 
-    public SiteForm getTestData(){
-        SiteVisitForm sv = new SiteVisitForm();
-        RS_DataSource dao = new RS_DataSource(mContext);
-        dao.open();
-        List<ReviewSite> sites = dao.getAll();
-        if(sites != null && sites.size() > 0){
-            Random random = new Random();
-            int i = random.nextInt(sites.size());
-
-            ReviewSite r = sites.get(i);
-
-            String siteID = r.ReviewSiteID;
-
-            sv.SiteID = siteID;
-
-            return sv;
-
-
-        }
-
-        dao.close();
-        return sv;
-    }
-
-    private void onDataSetChanged(){
-        formAdapter = new FormAdapter(mContext, R.layout.in_listview, getAllForms());
-        mListview.setAdapter(formAdapter);
+    public void onDataSetChanged(){
+        formAdapter = getFormAdapter();
+        mGridview.setAdapter(formAdapter);
     }
 
     @Override
@@ -142,27 +114,36 @@ public abstract class FormActivity extends ActionBarActivity implements AdapterV
         }
     }
 
-    public abstract List<SiteForm> getAllForms();
+    public void deleteInView(int position){
+        progressDialog = ProgressDialog.show(this, "", "Deleting...", true);
+        DeleteAsync deleteAsync = new DeleteAsync();
+        deleteAsync.execute(position);
+
+    }
+
+    public abstract List<Form> getAllForms();
 
 
     public abstract void createForm();
 
 
-    public abstract void deleteForm(SiteForm siteForm);
+    public abstract void deleteForm(Form form);
 
 
-    public abstract void submitForms(List<SiteForm> forms);
+    public abstract void submitForms(List<Form> forms);
 
-    public abstract void updateForm(SiteForm siteForm);
+    public abstract void updateForm(Form form);
 
-    class DeleteAsync extends AsyncTask<Object,Object,SiteForm> {
+    public abstract FormAdapter getFormAdapter();
+
+    class DeleteAsync extends AsyncTask<Integer,Object,Form> {
 
 
         @Override
-        protected SiteForm doInBackground(Object[] objects) {
+        protected Form doInBackground(Integer[] positions) {
 
             if(formAdapter.getCount() > 0){
-                SiteForm temp = formAdapter.getItem(0);
+                Form temp = formAdapter.getItem(positions[0]);
                 deleteForm(temp);
                 return temp;
 
@@ -172,10 +153,10 @@ public abstract class FormActivity extends ActionBarActivity implements AdapterV
         }
 
         @Override
-        protected void onPostExecute(SiteForm siteForm) {
+        protected void onPostExecute(Form form) {
 
-            if(siteForm != null) {
-                formAdapter.remove(siteForm);
+            if(form != null) {
+                formAdapter.remove(form);
 
             }
             progressDialog.dismiss();

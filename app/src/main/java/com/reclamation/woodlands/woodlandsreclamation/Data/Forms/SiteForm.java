@@ -14,6 +14,7 @@ public abstract class SiteForm extends Form{
     public String FacilityType;
 
     public String Status;
+    public String Message;
     public ArrayList<String> Messages;
 
 }

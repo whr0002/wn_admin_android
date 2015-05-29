@@ -14,7 +14,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.Form;
 import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.SiteForm;
+import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.Validator;
 import com.reclamation.woodlands.woodlandsreclamation.R;
 
 /**
@@ -61,17 +63,21 @@ public abstract class FormDetailActivity extends ActionBarActivity{
 
             case R.id.save:
                 Log.i("debug", "save");
-                SaveAsync saveAsync = new SaveAsync();
-                progressDialog = ProgressDialog.show(this, "", "Saving...", true);
-//                addOrUpdate(getCurrentForm());
-                saveAsync.execute();
 
+                // Get the current form
+                Form form = getCurrentForm();
+
+                // Validate the current form
+                Validator validator = getValidator();
+                validator.validate(form);
+
+                // Saving in background
+                progressDialog = ProgressDialog.show(this, "", "Saving...", true);
+                SaveAsync saveAsync = new SaveAsync();
+                saveAsync.execute(form);
 
 
                 break;
-
-
-
 
         }
 
@@ -112,18 +118,20 @@ public abstract class FormDetailActivity extends ActionBarActivity{
 
     public abstract void setLayout(Activity a);
 
-    public abstract void addOrUpdate(SiteForm f);
+    public abstract void addOrUpdate(Form f);
 
     public abstract SiteForm getCurrentForm();
 
     public abstract void onFinishWithoutSave();
 
+    public abstract Validator getValidator();
 
-    class SaveAsync extends AsyncTask {
+
+    class SaveAsync extends AsyncTask<Form, Object, Object> {
         @Override
-        protected Object doInBackground(Object[] objects) {
+        protected Object doInBackground(Form[] forms) {
 
-            addOrUpdate(getCurrentForm());
+            addOrUpdate(forms[0]);
 
             return null;
         }
