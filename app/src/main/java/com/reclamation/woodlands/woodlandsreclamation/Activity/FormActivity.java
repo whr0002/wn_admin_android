@@ -8,16 +8,24 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.util.SparseBooleanArray;
+import android.view.ActionMode;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
 import android.widget.GridView;
 
 import com.reclamation.woodlands.woodlandsreclamation.Adapter.FormAdapter;
+import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.DeleteDialog;
 import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.Form;
-import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.SubmitAllDialog;
+import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.SubmitDialog;
 import com.reclamation.woodlands.woodlandsreclamation.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,12 +35,13 @@ public abstract class FormActivity extends ActionBarActivity implements AdapterV
 
     protected Context mContext;
     protected ActionBar mActionBar;
-//    protected ListView mListview;
+
     protected GridView mGridview;
-    protected FormAdapter formAdapter;
+    public FormAdapter formAdapter;
     protected ProgressDialog progressDialog;
 
     protected final String DEBUG = "debug";
+
 
 
     @Override
@@ -49,14 +58,131 @@ public abstract class FormActivity extends ActionBarActivity implements AdapterV
 
 //        mListview = (ListView) findViewById(R.id.listView);
         mGridview = (GridView)findViewById(R.id.gridview);
+
         formAdapter = getFormAdapter();
         mGridview.setAdapter(formAdapter);
         mGridview.setOnItemClickListener(this);
 
+        mGridview.setChoiceMode(GridView.CHOICE_MODE_MULTIPLE_MODAL);
+        mGridview.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
+            @Override
+            public void onItemCheckedStateChanged(ActionMode actionMode, int position, long id, boolean checked) {
+
+                actionMode.setTitle("Selected " + mGridview.getCheckedItemCount());
+
+                View v = mGridview.getChildAt(position);
+                CheckBox checkBox = (CheckBox) v.findViewById(R.id.checkbox);
+                checkBox.setChecked(checked);
+
+
+
+            }
+
+            @Override
+            public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
+
+                MenuInflater inflater = actionMode.getMenuInflater();
+                inflater.inflate(R.menu.edit_mode_menu, menu);
+
+                for(int i=0;i<formAdapter.getCount();i++){
+                    View v = mGridview.getChildAt(i);
+                    CheckBox checkBox = (CheckBox) v.findViewById(R.id.checkbox);
+                    checkBox.setVisibility(View.VISIBLE);
+
+
+                }
+
+                return true;
+            }
+
+            @Override
+            public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
+                return false;
+            }
+
+            @Override
+            public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
+                // Respond to clicks on the actions in the CAB
+                switch (menuItem.getItemId()) {
+                    case R.id.delete:
+                        deleteSelectedItems();
+                        actionMode.finish(); // Action picked, so close the CAB
+                        return true;
+
+                    case R.id.submit_selected:
+
+                        submitSelectedItems();
+                        actionMode.finish();
+
+                        return true;
+
+
+                    default:
+                        return false;
+
+
+                }
+            }
+
+            @Override
+            public void onDestroyActionMode(ActionMode actionMode) {
+
+                formAdapter.notifyDataSetChanged();
+
+                mGridview.clearChoices();
+
+                for(int i=0;i<formAdapter.getCount();i++){
+                    View v = mGridview.getChildAt(i);
+                    CheckBox checkBox = (CheckBox) v.findViewById(R.id.checkbox);
+                    checkBox.setChecked(false);
+                    checkBox.setVisibility(View.GONE);
+
+
+                }
+            }
+        });
 
 
 
 
+
+    }
+
+    /**
+     * Delete selected items in action mode
+     */
+    public void deleteSelectedItems(){
+        SparseBooleanArray sparseBooleanArray = mGridview.getCheckedItemPositions();
+        List<Form> forms = new ArrayList<Form>();
+
+        for(int i=0;i<formAdapter.getCount();i++){
+            if(sparseBooleanArray.get(i)){
+                forms.add(formAdapter.getItem(i));
+            }
+
+        }
+
+        DeleteDialog deleteDialog = new DeleteDialog(this, forms, "Do you want to delete selected forms?");
+        deleteDialog.show();
+
+    }
+
+    /**
+     * Submit selected items in action mode
+     */
+    public void submitSelectedItems(){
+        SparseBooleanArray sparseBooleanArray = mGridview.getCheckedItemPositions();
+
+        List<Form> forms = new ArrayList<Form>();
+
+        for(int i=0;i<formAdapter.getCount();i++){
+            if(sparseBooleanArray.get(i)){
+                forms.add(formAdapter.getItem(i));
+            }
+        }
+
+        SubmitDialog dialog = new SubmitDialog(this, forms, "Do you want to submit selected forms?");
+        dialog.show();
     }
 
     @Override
@@ -80,16 +206,10 @@ public abstract class FormActivity extends ActionBarActivity implements AdapterV
                 createForm();
                 break;
 
-            case R.id.delete:
-
-                deleteInView(0);
-
-                break;
-
             case R.id.submit_all:
-                Log.i("debug", "Submit all");
-                SubmitAllDialog submitAllDialog = new SubmitAllDialog(this);
-                submitAllDialog.show();
+
+                SubmitDialog submitDialog = new SubmitDialog(this, getAllForms(), "Do you want to submit all forms?");
+                submitDialog.show();
 
                 break;
 
@@ -135,6 +255,7 @@ public abstract class FormActivity extends ActionBarActivity implements AdapterV
     public abstract void updateForm(Form form);
 
     public abstract FormAdapter getFormAdapter();
+
 
     class DeleteAsync extends AsyncTask<Integer,Object,Form> {
 

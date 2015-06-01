@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Toast;
@@ -13,6 +12,8 @@ import com.reclamation.woodlands.woodlandsreclamation.Adapter.FormAdapter;
 import com.reclamation.woodlands.woodlandsreclamation.Adapter.SiteFormAdapter;
 import com.reclamation.woodlands.woodlandsreclamation.DB.Table_SiteVisit.SiteVisitDAO;
 import com.reclamation.woodlands.woodlandsreclamation.DB.Table_SiteVisit.SiteVisitForm;
+import com.reclamation.woodlands.woodlandsreclamation.DB.Table_UserInfo.UI_DataSource;
+import com.reclamation.woodlands.woodlandsreclamation.DB.Table_UserInfo.UserInfo;
 import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.Form;
 import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.SiteForm;
 import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.SiteVisit.SVUploader;
@@ -75,25 +76,45 @@ public class SiteVisitActivity extends FormActivity {
 
     @Override
     public void submitForms(List<Form> forms) {
-        Log.i("debug", "Total number of forms: " + forms.size());
+        UI_DataSource uiDao = new UI_DataSource(this);
+        uiDao.open();
+        UserInfo userInfo = uiDao.getUserInfo();
+        uiDao.close();
 
-        if(forms.size() > 0){
-            ProgressDialog progressDialog = new ProgressDialog(this);
-            progressDialog.setMessage("Uploading...");
-            progressDialog.setMax(forms.size());
-            progressDialog.setProgress(0);
-            progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-            progressDialog.show();
+        if(userInfo != null){
+            if(userInfo.role != null && !userInfo.role.equalsIgnoreCase("null")){
+
+                if(forms.size() > 0){
+                    ProgressDialog progressDialog = new ProgressDialog(this);
+                    progressDialog.setMessage("Uploading...");
+                    progressDialog.setMax(forms.size());
+                    progressDialog.setProgress(0);
+                    progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                    progressDialog.show();
 
 
-            Uploader uploader = new SVUploader(this, forms.size(), dao, progressDialog);
-            for(Form form : forms){
-                uploader.execute(form);
+                    Uploader uploader = new SVUploader(this, forms.size(), dao, progressDialog);
+                    for(Form form : forms){
+                        uploader.execute(form);
+                    }
+
+                }else{
+                    Toast.makeText(this, "There is no form to submit", Toast.LENGTH_SHORT).show();
+                }
+
+            }else{
+                Toast.makeText(this,
+                        "Your account is not authorized to " +
+                                "submit forms now, please contact us for details."
+                        , Toast.LENGTH_LONG).show();
+
             }
-
         }else{
-            Toast.makeText(this, "Nothing to submit!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please login first.", Toast.LENGTH_SHORT).show();
         }
+
+
+
     }
 
     @Override

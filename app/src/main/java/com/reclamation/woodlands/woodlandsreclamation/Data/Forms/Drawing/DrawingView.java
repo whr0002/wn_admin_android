@@ -164,6 +164,7 @@ public class DrawingView extends View {
         erase = isErase;
 
         if(erase){
+            drawPaint.setAlpha(0xff);
             drawPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
 
         }else{

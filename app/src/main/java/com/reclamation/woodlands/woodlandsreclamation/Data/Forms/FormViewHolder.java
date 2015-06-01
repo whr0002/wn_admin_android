@@ -11,7 +11,6 @@ public class FormViewHolder extends ViewHolder {
     public TextView titleView;
     public TextView dateView;
     public TextView statusView;
-    public ImageView singleSubmitView;
     public ImageView singleWarningView;
-    public ImageView singleDeleteView;
+
 }

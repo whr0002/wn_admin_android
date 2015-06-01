@@ -5,14 +5,13 @@
     tools:context="com.reclamation.woodlands.woodlandsreclamation.Activity.FormActivity">
 
     <item
-        android:id="@+id/create"
-        android:title="Create"
+        android:id="@+id/delete"
+        android:title="Delete"
         app:showAsAction="always"
-        android:orderInCategory="0"></item>
-
+        android:orderInCategory="1"></item>
 
     <item
-        android:id="@+id/submit_all"
+        android:id="@+id/submit_selected"
         android:title="Submit"
         app:showAsAction="always"
         android:orderInCategory="2"></item>

@@ -141,8 +141,9 @@ public class DrawingActivity extends ActionBarActivity implements View.OnClickLi
                 smallBtn.setOnClickListener(new View.OnClickListener(){
                     @Override
                     public void onClick(View v) {
-                        drawingView.setErase(true);
+                        drawingView.setErase(false);
                         drawingView.setBrushSize(smallBrush);
+                        drawingView.setColor("#FFFFFFFF");
                         brushDialog.dismiss();
                     }
                 });
@@ -150,8 +151,9 @@ public class DrawingActivity extends ActionBarActivity implements View.OnClickLi
                 mediumBtn.setOnClickListener(new View.OnClickListener(){
                     @Override
                     public void onClick(View v) {
-                        drawingView.setErase(true);
+                        drawingView.setErase(false);
                         drawingView.setBrushSize(mediumBrush);
+                        drawingView.setColor("#FFFFFFFF");
                         brushDialog.dismiss();
                     }
                 });
@@ -159,13 +161,15 @@ public class DrawingActivity extends ActionBarActivity implements View.OnClickLi
                 largeBtn.setOnClickListener(new View.OnClickListener(){
                     @Override
                     public void onClick(View v) {
-                        drawingView.setErase(true);
+                        drawingView.setErase(false);
                         drawingView.setBrushSize(largeBrush);
+                        drawingView.setColor("#FFFFFFFF");
                         brushDialog.dismiss();
                     }
                 });
 
                 brushDialog.show();
+
             }else if(view.getId() == R.id.new_btn){
                 AlertDialog.Builder newDialog = new AlertDialog.Builder(this);
                 newDialog.setTitle("New drawing");

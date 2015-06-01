@@ -19,6 +19,7 @@ public abstract class FormAdapter extends ArrayAdapter<Form> {
     private int mLayoutResource;
     public FormActivity mFormActivity;
 
+
     public FormAdapter(FormActivity context, int resource, List<Form> forms){
         super(context, resource, forms);
         mLayoutResource = resource;

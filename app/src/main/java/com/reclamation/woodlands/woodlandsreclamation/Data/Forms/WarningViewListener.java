@@ -6,13 +6,16 @@ import com.reclamation.woodlands.woodlandsreclamation.Activity.FormActivity;
  * Created by Jimmy on 5/29/2015.
  */
 public class WarningViewListener extends ViewClickListener {
-    public WarningViewListener(FormActivity formActivity, int position) {
-        super(formActivity, position);
+
+    public WarningViewListener(FormActivity formActivity, int position, String message) {
+        super(formActivity, position, message);
+
     }
 
     @Override
     public void onViewClicked() {
-        showDialog("Errors", "", "OK", null);
+
+        showDialog("Errors", mMessage, "OK", null);
     }
 
     @Override

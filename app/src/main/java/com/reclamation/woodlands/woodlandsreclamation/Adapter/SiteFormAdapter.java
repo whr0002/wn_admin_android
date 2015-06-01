@@ -5,7 +5,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.reclamation.woodlands.woodlandsreclamation.Activity.FormActivity;
-import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.DeleteViewListener;
 import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.Form;
 import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.FormViewHolder;
 import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.SiteForm;
@@ -34,15 +33,13 @@ public class SiteFormAdapter extends FormAdapter {
 
         formViewHolder.positionView.setText(position + 1 + "");
         formViewHolder.titleView.setText(siteForm.SiteID);
-        formViewHolder.singleDeleteView.setOnClickListener(new DeleteViewListener(mFormActivity, position));
-        formViewHolder.singleWarningView.setOnClickListener(new WarningViewListener(mFormActivity, position));
+        formViewHolder.singleWarningView
+                .setOnClickListener(new WarningViewListener(mFormActivity, position, siteForm.Message));
 
         if(siteForm.Message != null){
-            formViewHolder.singleSubmitView.setVisibility(View.GONE);
+
             formViewHolder.singleWarningView.setVisibility(View.VISIBLE);
         }else{
-
-            formViewHolder.singleSubmitView.setVisibility(View.VISIBLE);
             formViewHolder.singleWarningView.setVisibility(View.GONE);
 
         }
@@ -62,8 +59,7 @@ public class SiteFormAdapter extends FormAdapter {
 
         formViewHolder.positionView = (TextView) convertView.findViewById(R.id.position);
         formViewHolder.titleView = (TextView) convertView.findViewById(R.id.site_id);
-        formViewHolder.singleSubmitView = (ImageView) convertView.findViewById(R.id.single_submit_view);
         formViewHolder.singleWarningView = (ImageView) convertView.findViewById(R.id.single_warning_view);
-        formViewHolder.singleDeleteView = (ImageView) convertView.findViewById(R.id.single_delete_view);
+
     }
 }

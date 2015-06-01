@@ -13,11 +13,13 @@ public abstract class ViewClickListener implements View.OnClickListener {
 
     public FormActivity mFormActivity;
     public int mPosition;
+    public String mMessage;
 
-    public ViewClickListener(FormActivity formActivity, int position){
+    public ViewClickListener(FormActivity formActivity, int position, String message){
 
         mFormActivity = formActivity;
         mPosition = position;
+        mMessage = message;
 
     }
 
