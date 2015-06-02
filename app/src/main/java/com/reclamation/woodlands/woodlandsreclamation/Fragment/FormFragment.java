@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
+import com.reclamation.woodlands.woodlandsreclamation.Activity.SitePrepActivity;
 import com.reclamation.woodlands.woodlandsreclamation.Activity.SiteVisitActivity;
 import com.reclamation.woodlands.woodlandsreclamation.Adapter.FormTypeAdapter;
 import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.FormType;
@@ -46,12 +47,12 @@ public class FormFragment extends android.support.v4.app.Fragment implements Ada
     private ArrayList<FormType> getAllFormTypes(){
         ArrayList<FormType> forms = new ArrayList<FormType>();
         FormType f = new FormType();
-        f.typeID = 0;
+        f.typeID = FormType.TYPE_SITEVISIT;
         f.formName = "Site Visit Report";
         forms.add(f);
 
         FormType f1 = new FormType();
-        f1.typeID = 1;
+        f1.typeID = FormType.TYPE_SITEPREP;
         f1.formName = "Site Preparation Report";
         forms.add(f1);
 
@@ -84,6 +85,12 @@ public class FormFragment extends android.support.v4.app.Fragment implements Ada
                 Intent intent = new Intent(mContext, SiteVisitActivity.class);
                 startActivity(intent);
 
+                break;
+
+            case FormType.TYPE_SITEPREP:
+
+                Intent intent1 = new Intent(mContext, SitePrepActivity.class);
+                startActivity(intent1);
                 break;
 
         }

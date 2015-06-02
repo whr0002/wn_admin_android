@@ -7,44 +7,74 @@
 
 
         <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_gravity="center"
-        android:padding="5dp"
-        android:weightSum="1"
-        android:orientation="vertical">
-
-        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.7"
+            android:layout_height="200dp"
+            android:layout_gravity="center"
+            android:padding="5dp"
+            android:weightSum="1"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:layout_centerVertical="true"
-                android:layout_margin="10dp"
-                android:id="@+id/position"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:layout_centerVertical="true"
-                android:layout_margin="10dp"
-                android:id="@+id/site_id"
-                android:layout_toRightOf="@+id/position"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.7"
+                android:orientation="vertical"
+                android:weightSum="1">
 
 
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.3">
+
+
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:text="Status"
+                        android:id="@+id/statusView"
+                        android:textSize="20sp"/>
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:orientation="vertical"
+                    android:padding="5dp"
+                    android:layout_weight="0.7"
+                    android:weightSum="1">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="20sp"
+                        android:layout_gravity="center"
+                        android:layout_margin="5dp"
+                        android:text="bla"
+                        android:id="@+id/site_id" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="15sp"
+                        android:text="date"
+                        android:layout_gravity="center_horizontal"
+                        android:id="@+id/date_view"/>
+
+
+                </LinearLayout>
 
         </LinearLayout>
 
-        <RelativeLayout
+            <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="0.3">
+
 
                 <ImageView
                     android:layout_width="50dp"
@@ -69,6 +99,15 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:visibility="gone"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true"
+                    android:text="1"
+                    android:id="@+id/position"/>
         </RelativeLayout>
     </LinearLayout>
 

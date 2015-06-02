@@ -1,6 +1,6 @@
 package com.reclamation.woodlands.woodlandsreclamation.Data.Forms;
 
-import android.util.Log;
+import android.content.Context;
 
 import com.reclamation.woodlands.woodlandsreclamation.DB.Table_SiteVisit.SiteVisitForm;
 
@@ -9,13 +9,30 @@ import com.reclamation.woodlands.woodlandsreclamation.DB.Table_SiteVisit.SiteVis
  */
 public class SiteVisitValidator extends Validator{
 
+    public SiteVisitValidator(Context context) {
+        super(context);
+    }
+
     @Override
     public void validate(Form form) {
 
         SiteVisitForm svf = (SiteVisitForm) form;
+        svf.Message = "";
 
-        svf.Message = "- ### is required \n - $$$ is required \n";
-        Log.i("debug", "Message: "+ svf.Message);
+        if(svf.FacilityType == null || svf.FacilityType.length() == 0){
+            svf.Message += "- Facility Type is required \n";
+        }
 
+        // Check number of photos
+        if(svf.numberOfPhotos > 35){
+            svf.Message += "- Total number of photos must be less than 36 \n";
+        }
+
+
+
+
+        if(svf.Message.equals("")){
+            svf.Message = null;
+        }
     }
 }

@@ -53,6 +53,8 @@ public class SiteVisitProperties {
     public static final String PHOTO_NLF = "NLF";
     public static final String PHOTO_AP = "AP";
     public static final String PHOTO_AD = "AD";
+    public static final String STATUS_NOT_COMPLETE = "Not complete";
+    public static final String STATUS_COMPLETE = "Ready to submit";
 
     public static final String TABLE_SITEVISIT = "SiteVisit";
 

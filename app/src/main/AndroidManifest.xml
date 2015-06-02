@@ -44,6 +44,13 @@
 
         <activity android:name=".Activity.DrawingActivity"></activity>
 
+        <activity android:name=".Activity.SitePrepActivity"
+            android:configChanges="orientation|screenSize"
+            android:windowSoftInputMode="stateHidden"></activity>
+        <activity android:name=".Activity.SitePrepDetailActivity"
+            android:configChanges="orientation|screenSize"
+            android:windowSoftInputMode="stateHidden"></activity>
+
     </application>
 
 </manifest>

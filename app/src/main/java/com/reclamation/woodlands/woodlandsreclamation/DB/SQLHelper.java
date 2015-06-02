@@ -9,6 +9,7 @@ import com.reclamation.woodlands.woodlandsreclamation.DB.Table_DesktopReview.DR_
 import com.reclamation.woodlands.woodlandsreclamation.DB.Table_FacilityType.FacilityType;
 import com.reclamation.woodlands.woodlandsreclamation.DB.Table_Photo.Photo;
 import com.reclamation.woodlands.woodlandsreclamation.DB.Table_ReviewSite.RS_Properties;
+import com.reclamation.woodlands.woodlandsreclamation.DB.Table_SitePrep.SitePrepProperties;
 import com.reclamation.woodlands.woodlandsreclamation.DB.Table_SiteVisit.SiteVisitProperties;
 import com.reclamation.woodlands.woodlandsreclamation.DB.Table_UserInfo.UserInfo;
 
@@ -18,7 +19,7 @@ import com.reclamation.woodlands.woodlandsreclamation.DB.Table_UserInfo.UserInfo
 public class SQLHelper extends SQLiteOpenHelper{
 
     private static final String DATABASE_NAME = "wn_reclamation.db";
-    private static final int DATABASE_VERSION = 21;
+    private static final int DATABASE_VERSION = 28;
 
 
     public SQLHelper(Context context) {
@@ -40,6 +41,7 @@ public class SQLHelper extends SQLiteOpenHelper{
         sqLiteDatabase.execSQL(FacilityType.FT_CREATE);
         sqLiteDatabase.execSQL(UserInfo.USERINFO_CREATE);
         sqLiteDatabase.execSQL(SiteVisitProperties.SITEVISIT_CREATE);
+        sqLiteDatabase.execSQL(SitePrepProperties.SITEPREP_CREATE);
 
         sqLiteDatabase.execSQL(Photo.TABLE_CREATE);
 
@@ -55,7 +57,7 @@ public class SQLHelper extends SQLiteOpenHelper{
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + FacilityType.TABLE_FT);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + UserInfo.TABLE_USERINFO);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + SiteVisitProperties.TABLE_SITEVISIT);
-
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + SitePrepProperties.TABLE_SITEPREP);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + Photo.TABLE_NAME);
 
         onCreate(sqLiteDatabase);

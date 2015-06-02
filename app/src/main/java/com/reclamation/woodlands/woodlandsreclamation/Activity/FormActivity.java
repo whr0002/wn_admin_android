@@ -3,6 +3,7 @@ package com.reclamation.woodlands.woodlandsreclamation.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -144,8 +145,6 @@ public abstract class FormActivity extends ActionBarActivity implements AdapterV
 
 
 
-
-
     }
 
     /**
@@ -177,7 +176,11 @@ public abstract class FormActivity extends ActionBarActivity implements AdapterV
 
         for(int i=0;i<formAdapter.getCount();i++){
             if(sparseBooleanArray.get(i)){
-                forms.add(formAdapter.getItem(i));
+
+                Form form = formAdapter.getItem(i);
+                if(form.Message == null) {
+                    forms.add(form);
+                }
             }
         }
 
@@ -208,7 +211,7 @@ public abstract class FormActivity extends ActionBarActivity implements AdapterV
 
             case R.id.submit_all:
 
-                SubmitDialog submitDialog = new SubmitDialog(this, getAllForms(), "Do you want to submit all forms?");
+                SubmitDialog submitDialog = new SubmitDialog(this, getReadyForms(), "Do you want to submit all forms?");
                 submitDialog.show();
 
                 break;
@@ -241,8 +244,14 @@ public abstract class FormActivity extends ActionBarActivity implements AdapterV
 
     }
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+    }
+
     public abstract List<Form> getAllForms();
 
+    public abstract List<Form> getReadyForms();
 
     public abstract void createForm();
 

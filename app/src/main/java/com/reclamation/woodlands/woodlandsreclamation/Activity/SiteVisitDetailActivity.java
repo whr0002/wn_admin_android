@@ -7,6 +7,7 @@ import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v7.app.ActionBar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -57,17 +58,18 @@ public class SiteVisitDetailActivity extends FormDetailActivity implements View.
     public static final int CAMERA_REQUEST_CODE = 10;
     private SiteVisitDAO svDao;
     private SiteForm sf;
+    private Form savedForm;
 
     private Photo curDrawing;
 
     private TextView dateView;
-    private String timeStamp;
+
     private EditText recommendation;
 
     private ImageView drawingView;
     private Spinner facilityTypeSpinner, siteIdSpinner;
     private Button drawerBtn;
-//    private HorizontalScrollView NLFScrollView;
+
 
     private int mId;
     private PhotoDAO photoDAO;
@@ -128,11 +130,14 @@ public class SiteVisitDetailActivity extends FormDetailActivity implements View.
 
         mId = a.getIntent().getIntExtra("ID", -1);
         Log.i("debug", "Form id: " + mId);
+        ActionBar actionBar = getSupportActionBar();
         if(mId != -1){
+            actionBar.setTitle("View");
             setGallery();
             setForm(mId);
 
         }else{
+            actionBar.setTitle("Create");
             setDate();
         }
 
@@ -141,7 +146,7 @@ public class SiteVisitDetailActivity extends FormDetailActivity implements View.
     private void setDate(){
         Date date = new Date();
         String cDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
-        timeStamp = new SimpleDateFormat("HH:mm:ss").format(date);
+
 
         dateView.setText(cDate);
     }
@@ -415,10 +420,12 @@ public class SiteVisitDetailActivity extends FormDetailActivity implements View.
 
         sf.SiteID = siteIdSpinner.getSelectedItem().toString();
         sf.Date = dateView.getText().toString();
-        sf.TimeStamp = timeStamp;
+
         sf.FacilityType = facilityTypeSpinner.getSelectedItem().toString();
         setFieldObservations(sf);
         sf.Recommendation = recommendation.getText().toString();
+
+        sf.numberOfPhotos = allPhotos.size() - removedPhotos.size();
 
         return sf;
     }
@@ -442,8 +449,9 @@ public class SiteVisitDetailActivity extends FormDetailActivity implements View.
 
     @Override
     public Validator getValidator() {
-        return new SiteVisitValidator();
+        return new SiteVisitValidator(mContext);
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -614,7 +622,11 @@ public class SiteVisitDetailActivity extends FormDetailActivity implements View.
             Log.i("debug", "creating");
             svDao.open();
 
-            SiteVisitForm svTemp = svDao.create((SiteVisitForm)f);
+            SiteVisitForm svTemp = svDao.create(f);
+
+            // 'savedForm' is used for validating
+            savedForm = svTemp;
+
             svDao.close();
 
             photoDAO.open();
@@ -636,8 +648,11 @@ public class SiteVisitDetailActivity extends FormDetailActivity implements View.
             Log.i("debug", "updating");
 
             f.ID = mId;
+
+            savedForm = f;
+
             svDao.open();
-            svDao.update((SiteVisitForm) f);
+            svDao.update(f);
             svDao.close();
 
             photoDAO.open();

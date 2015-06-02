@@ -9,95 +9,57 @@ import android.widget.Toast;
 
 import com.reclamation.woodlands.woodlandsreclamation.Adapter.FormAdapter;
 import com.reclamation.woodlands.woodlandsreclamation.Adapter.SiteFormAdapter;
-import com.reclamation.woodlands.woodlandsreclamation.DB.Table_SiteVisit.SiteVisitDAO;
-import com.reclamation.woodlands.woodlandsreclamation.DB.Table_SiteVisit.SiteVisitForm;
+import com.reclamation.woodlands.woodlandsreclamation.DB.Table_SitePrep.SitePrepDAO;
+import com.reclamation.woodlands.woodlandsreclamation.DB.Table_SitePrep.SitePrepForm;
 import com.reclamation.woodlands.woodlandsreclamation.DB.Table_UserInfo.UI_DataSource;
 import com.reclamation.woodlands.woodlandsreclamation.DB.Table_UserInfo.UserInfo;
 import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.Form;
 import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.SiteForm;
-import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.SiteVisit.SVUploader;
+import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.SitePrep.SPUploader;
 import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.Uploader;
 import com.reclamation.woodlands.woodlandsreclamation.R;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Random;
 
 /**
- * Created by Jimmy on 5/13/2015.
+ * Created by Jimmy on 6/2/2015.
  */
-public class SiteVisitActivity extends FormActivity {
-
-    private SiteVisitDAO dao;
-
-
+public class SitePrepActivity extends FormActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        mActionBar.setTitle("Site Visit Report");
-
-//        dao = new SiteVisitDAO(this);
-//        addTestData();
-    }
-
-    private void addTestData(){
-
-        dao.open();
-
-        for(int i=0;i<20;i++){
-            SiteVisitForm form = new SiteVisitForm();
-
-            form.Date = new SimpleDateFormat("yyyy-MM-dd ").format(new Date());
-            Random random = new Random();
-            form.Date += random.nextInt(24) + ":";
-            form.Date += random.nextInt(60) + ":";
-            form.Date += random.nextInt(60);
-            form.SiteID = "01-03-52-20-W5M";
-            form.FacilityType = "Access Road";
-
-            form.RefuseComment = ""+i;
+        mActionBar.setTitle("Site Prep Report");
 
 
-            dao.create(form);
-
-
-        }
-
-        dao.close();
     }
 
     @Override
     public List<Form> getAllForms() {
-        dao = new SiteVisitDAO(mContext);
-        dao.open();
+        SitePrepDAO sitePrepDAO = new SitePrepDAO(this);
+        sitePrepDAO.open();
 
-        List<SiteVisitForm> forms = dao.getAll();
+        List<SitePrepForm> forms = sitePrepDAO.getAll();
+        List<Form> gForms = new ArrayList<Form>();
 
-        List<Form> gSiteForms = new ArrayList<Form>();
-        if(forms != null && forms.size() > 0){
-            for(SiteVisitForm sv : forms){
-                gSiteForms.add(sv);
-            }
-
+        for(SitePrepForm spf : forms){
+            gForms.add(spf);
         }
-
-        dao.close();
-        return gSiteForms;
+        sitePrepDAO.close();
+        return gForms;
     }
 
     @Override
     public List<Form> getReadyForms() {
-        dao = new SiteVisitDAO(mContext);
+        SitePrepDAO dao = new SitePrepDAO(mContext);
         dao.open();
 
-        List<SiteVisitForm> forms = dao.getAll();
+        List<SitePrepForm> forms = dao.getAll();
 
         List<Form> gSiteForms = new ArrayList<Form>();
         if(forms != null && forms.size() > 0){
-            for(SiteVisitForm sv : forms){
+            for(SitePrepForm sv : forms){
                 if(sv.Message == null) {
                     gSiteForms.add(sv);
                 }
@@ -109,18 +71,21 @@ public class SiteVisitActivity extends FormActivity {
         return gSiteForms;
     }
 
+    @Override
+    public void createForm() {
+        Intent intent = new Intent(mContext, SitePrepDetailActivity.class);
+        startActivityForResult(intent, 1);
+    }
 
     @Override
-    public synchronized void deleteForm(Form siteForm) {
-        SiteVisitForm sv = (SiteVisitForm) siteForm;
-        dao = new SiteVisitDAO(mContext);
+    public synchronized void deleteForm(Form form) {
+        SitePrepForm sv = (SitePrepForm) form;
+        SitePrepDAO dao = new SitePrepDAO(mContext);
         dao.open();
 
         dao.delete(sv);
 
         dao.close();
-
-
     }
 
     @Override
@@ -129,6 +94,7 @@ public class SiteVisitActivity extends FormActivity {
         uiDao.open();
         UserInfo userInfo = uiDao.getUserInfo();
         uiDao.close();
+        SitePrepDAO dao = new SitePrepDAO(mContext);
 
         if(userInfo != null){
             if(userInfo.role != null && !userInfo.role.equalsIgnoreCase("null")){
@@ -142,10 +108,10 @@ public class SiteVisitActivity extends FormActivity {
                     progressDialog.show();
 
 
-                    Uploader uploader = new SVUploader(this, forms.size(), dao, progressDialog);
+                    Uploader uploader = new SPUploader(this, forms.size(), dao, progressDialog);
                     for(Form form : forms){
 
-                            uploader.execute(form);
+                        uploader.execute(form);
 
                     }
 
@@ -164,12 +130,10 @@ public class SiteVisitActivity extends FormActivity {
             Toast.makeText(this, "Please login first.", Toast.LENGTH_SHORT).show();
         }
 
-
-
     }
 
     @Override
-    public void updateForm(Form siteForm) {
+    public void updateForm(Form form) {
 
     }
 
@@ -179,20 +143,11 @@ public class SiteVisitActivity extends FormActivity {
         return siteFormAdapter;
     }
 
-
     @Override
-    public void createForm() {
-
-        Intent intent = new Intent(mContext, SiteVisitDetailActivity.class);
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        SiteForm f = (SiteForm) formAdapter.getItem(i);
+        Intent intent = new Intent(mContext, SitePrepDetailActivity.class);
+        intent.putExtra("ID", f.ID);
         startActivityForResult(intent, 1);
     }
-
-    @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-        SiteForm f = (SiteForm) formAdapter.getItem(position);
-        Intent i = new Intent(mContext, SiteVisitDetailActivity.class);
-        i.putExtra("ID", f.ID);
-        startActivityForResult(i, 1);
-    }
-
 }

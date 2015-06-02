@@ -5,6 +5,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.reclamation.woodlands.woodlandsreclamation.Activity.FormActivity;
+import com.reclamation.woodlands.woodlandsreclamation.DB.Table_SiteVisit.SiteVisitProperties;
 import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.Form;
 import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.FormViewHolder;
 import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.SiteForm;
@@ -18,8 +19,6 @@ import java.util.List;
  * Created by Jimmy on 5/29/2015.
  */
 public class SiteFormAdapter extends FormAdapter {
-
-
 
     public SiteFormAdapter(FormActivity context, int resource, List<Form> forms) {
         super(context, resource, forms);
@@ -36,11 +35,19 @@ public class SiteFormAdapter extends FormAdapter {
         formViewHolder.singleWarningView
                 .setOnClickListener(new WarningViewListener(mFormActivity, position, siteForm.Message));
 
+
+
+        formViewHolder.dateView.setText(siteForm.Date);
+
         if(siteForm.Message != null){
 
             formViewHolder.singleWarningView.setVisibility(View.VISIBLE);
+            formViewHolder.statusView.setText(SiteVisitProperties.STATUS_NOT_COMPLETE);
+            formViewHolder.statusView.setTextColor(mFormActivity.getResources().getColor(R.color.red));
         }else{
             formViewHolder.singleWarningView.setVisibility(View.GONE);
+            formViewHolder.statusView.setText(SiteVisitProperties.STATUS_COMPLETE);
+            formViewHolder.statusView.setTextColor(mFormActivity.getResources().getColor(R.color.green));
 
         }
 
@@ -60,6 +67,8 @@ public class SiteFormAdapter extends FormAdapter {
         formViewHolder.positionView = (TextView) convertView.findViewById(R.id.position);
         formViewHolder.titleView = (TextView) convertView.findViewById(R.id.site_id);
         formViewHolder.singleWarningView = (ImageView) convertView.findViewById(R.id.single_warning_view);
+        formViewHolder.dateView = (TextView) convertView.findViewById(R.id.date_view);
+        formViewHolder.statusView = (TextView) convertView.findViewById(R.id.statusView);
 
     }
 }

@@ -33,6 +33,8 @@ public class SubmitDialog {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
+
+
                 mActivity.submitForms(mForms);
 
             }

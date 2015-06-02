@@ -16,5 +16,6 @@
     <color name="green">#0CAC37</color>
     <color name="white">#fafafa</color>
     <color name="white_transparent">#80fafafa</color>
+    <color name="blue_transparent">#8060b6ff</color>
     <color name="grey">#dcd9d2</color>
 </resources>
