@@ -112,4 +112,78 @@ public class LayoutBuilder {
         return innerLayout;
     }
 
+    public LinearLayout buildSitePrepLayout(LinearLayout wrapper, String title){
+
+//        String wrapperTag = wrapper.getTag();
+
+        LinearLayout linearLayout = new LinearLayout(mContext);
+        linearLayout.setOrientation(LinearLayout.VERTICAL);
+        linearLayout.setWeightSum(1);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout
+                .LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        linearLayout.setLayoutParams(layoutParams);
+
+
+        // row wrapper
+        LinearLayout innerLayout = new LinearLayout(mContext);
+        innerLayout.setOrientation(LinearLayout.HORIZONTAL);
+        innerLayout.setWeightSum(1);
+        innerLayout.setTag(title);
+
+        LinearLayout.LayoutParams innerParam = new LinearLayout
+                .LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0);
+        innerParam.weight = 1f;
+
+        innerLayout.setLayoutParams(innerParam);
+
+
+
+
+
+
+        LinearLayout.LayoutParams editParam = new LinearLayout
+                .LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT);
+        editParam.weight = 0.5f;
+
+        // Title
+        TextView textView = new TextView(mContext);
+        textView.setText(title);
+        textView.setTextSize(18);
+        textView.setTextColor(mContext.getResources().getColor(R.color.black));
+        textView.setGravity(Gravity.LEFT);
+        textView.setLayoutParams(editParam);
+
+
+        if(title.equalsIgnoreCase("Damage?") || title.equalsIgnoreCase("Issues?")){
+            // Pass or fail dropdown
+            LinearLayout.LayoutParams spinnerParam = new LinearLayout
+                    .LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT);
+            spinnerParam.weight = 0.5f;
+
+            Spinner passFailSpinner = new Spinner(mContext);
+            passFailSpinner.setLayoutParams(spinnerParam);
+            ArrayAdapter<CharSequence> adapter = ArrayAdapter
+                    .createFromResource(mContext, R.array.pass_fail, R.layout.spinner_item);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            passFailSpinner.setAdapter(adapter);
+
+            innerLayout.addView(passFailSpinner);
+        }else {
+            // Description
+            EditText editText = new EditText(mContext);
+            editText.setSingleLine();
+            editText.setLayoutParams(editParam);
+            innerLayout.addView(editText);
+        }
+
+
+        // Add children view to parent view
+        innerLayout.addView(textView);
+
+        linearLayout.addView(innerLayout);
+        wrapper.addView(linearLayout);
+
+
+        return innerLayout;
+    }
 }

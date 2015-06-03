@@ -55,7 +55,47 @@
         <item>Native Species Cover</item>
         <item>Litter/LFH</item>
 
+    </string-array>
 
+    <string-array name="fo_sp_general">
+        <item>Contractor</item>
+        <item>Treated Area(ha)</item>
+    </string-array>
+
+    <string-array name="fo_sp_agree">
+        <item>Road Use</item>
+        <item>Pipeline Crossing</item>
+        <item>Other</item>
+    </string-array>
+
+    <string-array name="fo_sp_onecall">
+        <item>No.</item>
+        <item>Date</item>
+        <item>Disposition Holders</item>
+    </string-array>
+
+    <string-array name="fo_sp_hand">
+        <item>Company</item>
+        <item>Date Completed</item>
+        <item>Damage?</item>
+    </string-array>
+
+    <string-array name="fo_sp_notifications">
+        <item>L/O</item>
+        <item>Client</item>
+        <item>3rd Party(ies)</item>
+    </string-array>
+
+    <string-array name="fo_sp_line">
+        <item>Company</item>
+        <item>Date</item>
+        <item>Method/Pattern</item>
+    </string-array>
+
+    <string-array name="fo_sp_backfill">
+        <item>Inspector(s)</item>
+        <item>Date</item>
+        <item>Issues?</item>
     </string-array>
 
 </resources>

@@ -6,18 +6,53 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.reclamation.woodlands.woodlandsreclamation.DB.Table_FacilityType.FT_DataSource;
+import com.reclamation.woodlands.woodlandsreclamation.DB.Table_FacilityType.FacilityType;
+import com.reclamation.woodlands.woodlandsreclamation.DB.Table_Photo.Photo;
+import com.reclamation.woodlands.woodlandsreclamation.DB.Table_Photo.PhotoDAO;
+import com.reclamation.woodlands.woodlandsreclamation.DB.Table_ReviewSite.RS_DataSource;
+import com.reclamation.woodlands.woodlandsreclamation.DB.Table_ReviewSite.ReviewSite;
+import com.reclamation.woodlands.woodlandsreclamation.DB.Table_SiteVisit.SiteVisitProperties;
+import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.DecodeImageAsync;
 import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.Form;
+import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.ImagePopup;
+import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.ImageProcessor;
+import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.PathView;
 import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.SiteForm;
 import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.Validator;
 import com.reclamation.woodlands.woodlandsreclamation.R;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by Jimmy on 5/13/2015.
@@ -28,18 +63,40 @@ public abstract class FormDetailActivity extends ActionBarActivity{
     protected Context mContext;
     protected ActionBar mActionBar;
     protected ProgressDialog progressDialog;
+    public static final int CAMERA_REQUEST_CODE = 10;
+    public static final int DRAWING_CAMERA_REQUEST_CODE = 11;
+    protected Photo currentPhoto, curDrawing;
+    protected LinearLayout currentLayout;
+    protected PhotoDAO photoDAO;
+    protected ImageProcessor imageProcessor;
+    protected DecodeImageAsync decodeImageAsync;
+    public ArrayList<Photo> removedPhotos,newCreatedPhotos, allPhotos;
+    public HashMap<String, Boolean> photoMap;
+    public int mId;
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setLayout(this);
 
-        mContext = this.getApplicationContext();
+        mContext = this;
         mActionBar = getSupportActionBar();
         mActionBar.setDisplayHomeAsUpEnabled(true);
+        photoDAO = new PhotoDAO(this);
+        imageProcessor = new ImageProcessor(null);
+        decodeImageAsync = new DecodeImageAsync();
 
+        allPhotos = new ArrayList<Photo>();
+        removedPhotos = new ArrayList<Photo>();
+        newCreatedPhotos = new ArrayList<Photo>();
+        photoMap = new HashMap<String, Boolean>();
+
+        setLayout(this);
 
 
     }
@@ -126,6 +183,9 @@ public abstract class FormDetailActivity extends ActionBarActivity{
     public abstract void onFinishWithoutSave();
 
     public abstract Validator getValidator();
+    public abstract ImageView getDrawingView();
+    public abstract String getFormType();
+
 
 
     class SaveAsync extends AsyncTask<Form, Object, Object> {
@@ -143,6 +203,343 @@ public abstract class FormDetailActivity extends ActionBarActivity{
             Intent intent = new Intent();
             setResult(RESULT_OK, intent);
             finish();
+        }
+    }
+
+    public int getSpinnerIndex(Spinner spinner, String name){
+        if(spinner != null && name != null){
+            for(int i=0;i<spinner.getCount();i++){
+                if(spinner.getItemAtPosition(i).equals(name)){
+                    return i;
+                }
+            }
+        }
+
+        return 0;
+    }
+    public void openCamera(String formType, String classification, LinearLayout layout, int requestCode){
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        if(cameraIntent.resolveActivity(getPackageManager()) != null){
+            // image capture app exists
+            String path = generateImagePath(formType+"_"+ classification +"_", ".jpg");
+
+            // set up Photo properties and the layout to be added in
+            currentPhoto = new Photo();
+            currentPhoto.path = path;
+            currentPhoto.classification = classification;
+            currentPhoto.formType = formType;
+
+            currentLayout = layout;
+
+
+            if(path != null){
+
+                File file = new File(path);
+                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
+                startActivityForResult(cameraIntent, requestCode);
+            }else{
+                Toast.makeText(this, "Could not generate image path", Toast.LENGTH_SHORT).show();
+            }
+
+        }
+    }
+    public String generateImagePath(String prefix, String ext){
+
+        if(prefix == null){
+            prefix = SiteVisitProperties.FORM_TYPE + "_";
+        }
+
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+
+        String dir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+                + File.separator + "picupload" + File.separator;
+
+        File dirFile = new File(dir);
+        if(!dirFile.exists()){
+            dirFile.mkdir();
+        }
+
+        String fullPath = dir + prefix + timeStamp + ext;
+
+        Log.i("debug", "Full image path: "+fullPath);
+
+        return fullPath;
+
+
+    }
+
+    public void setDate(TextView textView){
+        Date date = new Date();
+        String cDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
+
+
+        textView.setText(cDate);
+    }
+
+    public void setFTSpinner(Spinner spinner) {
+        ArrayAdapter<CharSequence> adapter;
+        FT_DataSource ftDao = new FT_DataSource(this);
+        ftDao.open();
+
+        List<FacilityType> facilityTypes = ftDao.getAll();
+        ftDao.close();
+
+        if(facilityTypes != null && facilityTypes.size() > 0){
+
+            ArrayList<CharSequence> values = new ArrayList<CharSequence>();
+
+            for(FacilityType ft : facilityTypes){
+                values.add(ft.FacilityTypeName);
+
+            }
+
+            adapter = new ArrayAdapter<CharSequence>(this, R.layout.spinner_item, values);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinner.setAdapter(adapter);
+
+        }
+    }
+    public void setSiteIdSpinner(Spinner spinner) {
+
+        ArrayAdapter<CharSequence> adapter;
+
+        RS_DataSource rsDao = new RS_DataSource(this);
+
+        rsDao.open();
+
+        List<ReviewSite> rss = rsDao.getAll();
+
+        rsDao.close();
+
+        if(rss != null && rss.size() > 0){
+
+            ArrayList<CharSequence> values = new ArrayList<CharSequence>();
+
+            for(ReviewSite rs : rss){
+                values.add(rs.ReviewSiteID);
+
+            }
+
+            adapter = new ArrayAdapter<CharSequence>(this, R.layout.spinner_item, values);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinner.setAdapter(adapter);
+
+        }
+    }
+    public void clearTempImages(List<Photo> removedPhotos){
+
+        if(removedPhotos != null && removedPhotos.size() > 0){
+            photoDAO.open();
+
+            for(Photo photo : removedPhotos){
+
+                if(photo != null) {
+                    File file = new File(photo.path);
+
+                    if (file.exists()) {
+                        file.delete();
+                    }
+                    photoDAO.delete(photo);
+                }
+            }
+
+            photoDAO.close();
+
+        }
+    }
+    public void setDrawing(Photo p, ImageView drawingView){
+
+        drawingView.setVisibility(View.VISIBLE);
+
+        PathView pv = new PathView();
+        pv.imagePath = p.path;
+        pv.imageView = drawingView;
+
+        decodeImageAsync = new DecodeImageAsync();
+        decodeImageAsync.execute(pv);
+
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == 1){
+
+            // coming from drawing activity
+            if(resultCode == RESULT_OK){
+
+                // saved drawing
+                String result = data.getStringExtra("result");
+                Log.i("debug", result);
+
+                if(result != null && result.length()>0){
+                    if(curDrawing != null){
+                        removedPhotos.add(curDrawing);
+                    }
+
+
+                    Photo p = new Photo();
+                    p.path = result;
+                    p.formType = getFormType();
+                    p.classification = "Drawing";
+                    curDrawing = p;
+                    setDrawing(p, getDrawingView());
+                    newCreatedPhotos.add(p);
+                    allPhotos.add(p);
+
+
+                }
+            }
+        }
+        if(requestCode == DRAWING_CAMERA_REQUEST_CODE){
+            // back from camera intent
+            Log.i("debug", "back from camera for drawing");
+
+            if(currentPhoto != null) {
+
+                if(imageProcessor.isImageFound(currentPhoto.path)) {
+
+                    imageProcessor.shrinkImage(currentPhoto.path);
+
+                    if(curDrawing != null){
+                        removedPhotos.add(curDrawing);
+                    }
+
+                    Photo p = new Photo();
+                    p.path = currentPhoto.path;
+                    p.formType = currentPhoto.formType;
+                    p.classification = currentPhoto.classification;
+                    p.description = currentPhoto.description;
+
+                    currentPhoto = null;
+
+                    newCreatedPhotos.add(p);
+
+                    allPhotos.add(p);
+
+                    setDrawing(p, getDrawingView());
+
+                }else{
+                    Log.i("debug", "image or layout does not exist");
+                }
+
+            }
+        }
+
+        if(requestCode == CAMERA_REQUEST_CODE){
+            // back from camera intent
+            Log.i("debug", "back from camera");
+
+            if(currentPhoto != null && currentLayout != null) {
+
+                if(imageProcessor.isImageFound(currentPhoto.path)) {
+
+                    imageProcessor.shrinkImage(currentPhoto.path);
+
+                    Photo p = new Photo();
+                    p.path = currentPhoto.path;
+                    p.formType = currentPhoto.formType;
+                    p.classification = currentPhoto.classification;
+                    p.description = currentPhoto.description;
+
+                    currentPhoto = null;
+
+                    newCreatedPhotos.add(p);
+
+                    allPhotos.add(p);
+                    addGalleryItem(allPhotos.size() - 1, p, currentLayout, allPhotos);
+
+                }else{
+                    Log.i("debug", "image or layout does not exist");
+                }
+
+            }
+        }
+    }
+
+    public void addGalleryItem(int id, Photo photo, final LinearLayout galleryLayout, final ArrayList<Photo> photos){
+        LinearLayout linearLayout = new LinearLayout(this);
+        linearLayout.setId(id);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout
+                .LayoutParams(150
+                , 200);
+        linearLayout.setPadding(5,5,5,5);
+        linearLayout.setOrientation(LinearLayout.VERTICAL);
+        linearLayout.setWeightSum(1.0f);
+
+        linearLayout.setLayoutParams(layoutParams);
+
+        TextView textView = new TextView(this);
+
+        if(photo.description != null){
+            textView.setText(photo.description);
+        }else {
+            textView.setText("Image title goes here");
+        }
+
+        textView.setId(R.id.image_desc);
+        LinearLayout.LayoutParams textViewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, 0);
+        textViewParams.weight = 0.2f;
+        textViewParams.gravity = Gravity.CENTER;
+        textView.setLayoutParams(textViewParams);
+        textView.setSingleLine(true);
+
+
+        ImageView imageView = new ImageView(this);
+        imageView.setId(R.id.image);
+        imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+
+        LinearLayout.LayoutParams imageViewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0);
+        imageViewParams.weight = 0.8f;
+        imageView.setLayoutParams(imageViewParams);
+
+
+
+
+        // Attach views
+        linearLayout.addView(imageView);
+        linearLayout.addView(textView);
+
+        linearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ImagePopup imagePopup = new ImagePopup(mContext, view, photos, removedPhotos, galleryLayout);
+                imagePopup.showPopup();
+            }
+        });
+
+        galleryLayout.addView(linearLayout);
+
+
+
+        // Decode bitmap and set it
+        PathView pv = new PathView();
+        pv.imagePath = photo.path;
+        pv.imageView = imageView;
+        decodeImageAsync = new DecodeImageAsync();
+        decodeImageAsync.execute(pv);
+
+    }
+
+    public static void copyFile(File sourceFile, File destFile) throws IOException {
+        if(!destFile.exists()) {
+            destFile.createNewFile();
+        }
+
+        FileChannel source = null;
+        FileChannel destination = null;
+
+        try {
+            source = new FileInputStream(sourceFile).getChannel();
+            destination = new FileOutputStream(destFile).getChannel();
+            destination.transferFrom(source, 0, source.size());
+        }
+        finally {
+            if(source != null) {
+                source.close();
+            }
+            if(destination != null) {
+                destination.close();
+            }
         }
     }
 }

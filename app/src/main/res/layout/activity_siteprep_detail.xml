@@ -137,38 +137,12 @@
                         android:textSize="18sp"
                         android:textColor="@color/black"/>
 
-                    <LinearLayout
+                    <Button
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:orientation="horizontal"
+                        android:text="Open drawer"
                         android:layout_weight="0.5"
-                        android:weightSum="1.5">
-
-                        <ImageButton
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="0.5"
-                            android:src="@drawable/drawing"
-                            android:scaleType="fitCenter"
-                            android:id="@+id/open_drawer"/>
-
-                        <ImageButton
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="0.5"
-                            android:src="@drawable/camera"
-                            android:scaleType="fitCenter"
-                            android:id="@+id/drawing_camera"/>
-
-                        <ImageButton
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="0.5"
-                            android:src="@drawable/file_attachment"
-                            android:scaleType="fitCenter"
-                            android:id="@+id/drawing_attachment"/>
-                    </LinearLayout>
-
+                        android:id="@+id/open_drawer"/>
 
                 </LinearLayout>
 
@@ -179,18 +153,9 @@
                     android:id="@+id/drawing"
                     android:layout_marginBottom="10dp"
                     android:visibility="gone"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/drawing_desc"
-                    android:text="Description"
-                    android:layout_gravity="center"
-                    android:visibility="gone"
-                    />
             </LinearLayout>
 
-            <!-- Field Observations -->
+            <!-- Treatment Details -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -204,16 +169,31 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="25sp"
-                    android:text="Field Observations"
+                    android:text="Treatment Details"
                     android:layout_gravity="center"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
                     />
 
-                <!-- Landscape Section -->
+                <!-- General Section -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:id="@+id/landscape"
+                    android:id="@+id/general_section"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/border"
+                    android:padding="3dp">
+
+
+                </LinearLayout>
+
+                <!-- Agreements -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:id="@+id/agreement_layout"
                     android:layout_marginTop="10dp"
                     android:background="@drawable/border"
                     android:padding="3dp">
@@ -221,16 +201,61 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="LANDSCAPE"
-                        android:textSize="20sp"/>
+                        android:text="Agreements"
+                        android:textSize="20sp"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"
+                        android:layout_gravity="center"/>
                 </LinearLayout>
 
-                <!-- Soil Section -->
+                <!-- AB One Call -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:id="@+id/soil"
+                    android:id="@+id/one_call_layout"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/border"
+                    android:padding="3dp"
+                    android:tag="OneCall">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="AB One Call"
+                        android:textSize="20sp"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"
+                        android:layout_gravity="center"/>
+                </LinearLayout>
+
+                <!-- Hand Exposure -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:id="@+id/hand_exposure_layout"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/border"
+                    android:padding="3dp"
+                    android:tag="Hand">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Hand Exposure"
+                        android:textSize="20sp"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"
+                        android:layout_gravity="center"/>
+                </LinearLayout>
+
+                <!-- Notifications -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:id="@+id/notification_layout"
                     android:layout_marginTop="10dp"
                     android:background="@drawable/border"
                     android:padding="3dp">
@@ -238,161 +263,108 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="SOIL"
-                        android:textSize="20sp"/>
+                        android:text="Notifications(include date and contact)"
+                        android:textSize="20sp"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"
+                        android:layout_gravity="center"/>
                 </LinearLayout>
 
-                <!-- Vegetation Section -->
+                <!-- Line Locating -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:id="@+id/vegetation"
+                    android:id="@+id/line_layout"
                     android:layout_marginTop="10dp"
                     android:background="@drawable/border"
-                    android:padding="3dp">
+                    android:padding="3dp"
+                    android:tag="Line">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="VEGETATION"
-                        android:textSize="20sp"/>
+                        android:text="Line Locating"
+                        android:textSize="20sp"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"
+                        android:layout_gravity="center"/>
                 </LinearLayout>
 
-                <!-- Recommendations -->
+                <!-- Backfill -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
+                    android:id="@+id/back_fill_layout"
                     android:layout_marginTop="10dp"
                     android:background="@drawable/border"
-                    android:padding="3dp">
+                    android:padding="3dp"
+                    android:tag="Backfill">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="RECOMMENDATIONS"
-                        android:textSize="20sp"/>
-
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="80dp"
-                        android:id="@+id/recommendation"
-                        android:gravity="top|left"
-                        />
+                        android:text="Backfill"
+                        android:textSize="20sp"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"
+                        android:layout_gravity="center"/>
                 </LinearLayout>
+
+
 
             </LinearLayout>
 
 
-
-
-            <!-- NLF Photos -->
+            <!-- Recommendations -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/border"
+                android:orientation="vertical"
                 android:layout_marginTop="10dp"
-                android:orientation="vertical">
+                android:background="@drawable/border"
+                android:padding="3dp">
 
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:layout_gravity="center"
-                    android:weightSum="1"
-                    >
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-
-                        android:text="Photos(non-linear facilities)"
-                        android:layout_marginLeft="10dp"
-                        android:layout_gravity="center"
-                        android:layout_weight="0.5"
-                        android:textSize="18sp"
-                        android:textColor="@color/black"/>
-
-                    <ImageButton
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/add"
-                        android:scaleType="fitCenter"
-                        android:layout_weight="0.5"
-                        android:id="@+id/nlf_image_add"/>
-
-
-                </LinearLayout>
-
-                <HorizontalScrollView
-                    android:layout_width="match_parent"
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/nlf_scroll_view">
+                    android:text="Comments"
+                    android:textSize="20sp"
+                    android:textColor="@color/black" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:id="@+id/nlf_image_gallery"></LinearLayout>
-
-                </HorizontalScrollView>
-
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:id="@+id/comments"
+                    android:gravity="top|left"
+                    />
             </LinearLayout>
 
-
-            <!-- AP Photos -->
+            <!-- Recommendations -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/border"
+                android:orientation="vertical"
                 android:layout_marginTop="10dp"
-                android:orientation="vertical">
+                android:background="@drawable/border"
+                android:padding="3dp">
 
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:layout_gravity="center"
-                    android:weightSum="1"
-                    >
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-
-                        android:text="Photos(access roads, pipelines)"
-                        android:layout_marginLeft="10dp"
-                        android:layout_gravity="center"
-                        android:layout_weight="0.5"
-                        android:textSize="18sp"
-                        android:textColor="@color/black"/>
-
-                    <ImageButton
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/add"
-                        android:scaleType="fitCenter"
-                        android:layout_weight="0.5"
-                        android:id="@+id/ap_image_add"/>
-
-
-                </LinearLayout>
-
-                <HorizontalScrollView
-                    android:layout_width="match_parent"
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/ap_scroll_view">
+                    android:text="Recommendations"
+                    android:textSize="20sp"
+                    android:textColor="@color/black" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:id="@+id/ap_image_gallery"></LinearLayout>
-
-                </HorizontalScrollView>
-
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:id="@+id/recommendation"
+                    android:gravity="top|left"
+                    />
             </LinearLayout>
+
 
             <!-- AD Photos -->
             <LinearLayout

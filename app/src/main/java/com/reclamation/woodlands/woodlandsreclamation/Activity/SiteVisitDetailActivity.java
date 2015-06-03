@@ -1,19 +1,10 @@
 package com.reclamation.woodlands.woodlandsreclamation.Activity;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
-import android.net.Uri;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -22,21 +13,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.reclamation.woodlands.woodlandsreclamation.DB.Table_FacilityType.FT_DataSource;
-import com.reclamation.woodlands.woodlandsreclamation.DB.Table_FacilityType.FacilityType;
 import com.reclamation.woodlands.woodlandsreclamation.DB.Table_Photo.Photo;
-import com.reclamation.woodlands.woodlandsreclamation.DB.Table_Photo.PhotoDAO;
-import com.reclamation.woodlands.woodlandsreclamation.DB.Table_ReviewSite.RS_DataSource;
-import com.reclamation.woodlands.woodlandsreclamation.DB.Table_ReviewSite.ReviewSite;
 import com.reclamation.woodlands.woodlandsreclamation.DB.Table_SiteVisit.SiteVisitDAO;
 import com.reclamation.woodlands.woodlandsreclamation.DB.Table_SiteVisit.SiteVisitForm;
 import com.reclamation.woodlands.woodlandsreclamation.DB.Table_SiteVisit.SiteVisitProperties;
-import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.DecodeImageAsync;
+import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.DirectoryChooserDialog;
 import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.Drawing.DrawingPopup;
 import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.Form;
-import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.ImagePopup;
-import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.ImageProcessor;
-import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.PathView;
 import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.SiteForm;
 import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.SiteVisit.LayoutBuilder;
 import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.SiteVisitValidator;
@@ -47,7 +30,6 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -58,44 +40,22 @@ public class SiteVisitDetailActivity extends FormDetailActivity implements View.
     public static final int CAMERA_REQUEST_CODE = 10;
     private SiteVisitDAO svDao;
     private SiteForm sf;
-    private Form savedForm;
-
-    private Photo curDrawing;
-
-    private TextView dateView;
-
+    private TextView dateView, drawingDesc;
     private EditText recommendation;
-
     private ImageView drawingView;
     private Spinner facilityTypeSpinner, siteIdSpinner;
-    private Button drawerBtn;
 
-
-    private int mId;
-    private PhotoDAO photoDAO;
-    private HashMap<String, Boolean> photoMap;
-    public ArrayList<Photo> removedPhotos,newCreatedPhotos, allPhotos;
-
-    private ImageButton NLFImageBtn, APImageBtn, ADImageBtn;
-
-    private Photo currentPhoto;
-    private LinearLayout currentLayout,NLFLayout,APLayout,ADLayout, landscapeLayout, soilLayout, vegeLayout;
+    private ImageButton drawerBtn, drawingCameraBtn, drawingAttcBtn, NLFImageBtn, APImageBtn, ADImageBtn;
+    private LinearLayout NLFLayout,APLayout,ADLayout, landscapeLayout, soilLayout, vegeLayout;
     private List<LinearLayout> foItems;
-    private ImageProcessor imageProcessor;
 
-
-    private DecodeImageAsync decodeImageAsync;
-
-    private Context mContext;
 
     @Override
     public void setLayout(Activity a) {
         a.setContentView(R.layout.activity_form_detail);
 
-        mContext = this;
+
         svDao = new SiteVisitDAO(this);
-        photoDAO = new PhotoDAO(this);
-        imageProcessor = new ImageProcessor(null);
 
         foItems = new ArrayList<LinearLayout>();
 
@@ -109,20 +69,12 @@ public class SiteVisitDetailActivity extends FormDetailActivity implements View.
 
         addFOItems();
 
-
-//        NLFScrollView = (HorizontalScrollView) findViewById(R.id.nlf_scroll_view);
-
         dateView = (TextView)findViewById(R.id.dateView);
         recommendation = (EditText)findViewById(R.id.recommendation);
-
-        allPhotos = new ArrayList<Photo>();
-        removedPhotos = new ArrayList<Photo>();
-        newCreatedPhotos = new ArrayList<Photo>();
-        photoMap = new HashMap<String, Boolean>();
-
-        decodeImageAsync = new DecodeImageAsync();
         drawingView = (ImageView) findViewById(R.id.drawing);
         drawingView.setOnClickListener(this);
+
+        drawingDesc = (TextView) findViewById(R.id.drawing_desc);
 
 
         setSpinners(a);
@@ -152,8 +104,14 @@ public class SiteVisitDetailActivity extends FormDetailActivity implements View.
     }
 
     private void setButtons(){
-        drawerBtn = (Button) findViewById(R.id.open_drawer);
+        drawerBtn = (ImageButton) findViewById(R.id.open_drawer);
         drawerBtn.setOnClickListener(this);
+
+        drawingCameraBtn = (ImageButton) findViewById(R.id.drawing_camera);
+        drawingCameraBtn.setOnClickListener(this);
+
+        drawingAttcBtn = (ImageButton) findViewById(R.id.drawing_attachment);
+        drawingAttcBtn.setOnClickListener(this);
 
         NLFImageBtn = (ImageButton) findViewById(R.id.nlf_image_add);
         NLFImageBtn.setOnClickListener(this);
@@ -204,86 +162,16 @@ public class SiteVisitDetailActivity extends FormDetailActivity implements View.
 
                     // Drawing
                     curDrawing = allPhotos.get(i);
-                    setDrawing(curDrawing);
+                    drawingDesc.setText(curDrawing.description);
+                    drawingDesc.setVisibility(View.VISIBLE);
+                    setDrawing(curDrawing, drawingView);
 
                 }
             }
 
         }
-
-
-
     }
 
-    private void addGalleryItem(int id, Photo photo, final LinearLayout galleryLayout, final ArrayList<Photo> photos){
-        LinearLayout linearLayout = new LinearLayout(this);
-        linearLayout.setId(id);
-        LinearLayout.LayoutParams layoutParams = new LinearLayout
-                .LayoutParams(150
-                , 200);
-        linearLayout.setPadding(5,5,5,5);
-        linearLayout.setOrientation(LinearLayout.VERTICAL);
-        linearLayout.setWeightSum(1.0f);
-
-        linearLayout.setLayoutParams(layoutParams);
-
-        TextView textView = new TextView(this);
-
-        if(photo.description != null){
-            textView.setText(photo.description);
-        }else {
-            textView.setText("Image title goes here");
-        }
-
-        textView.setId(R.id.image_desc);
-        LinearLayout.LayoutParams textViewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, 0);
-        textViewParams.weight = 0.2f;
-        textViewParams.gravity = Gravity.CENTER;
-        textView.setLayoutParams(textViewParams);
-        textView.setSingleLine(true);
-
-
-        ImageView imageView = new ImageView(this);
-        imageView.setId(R.id.image);
-        imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-
-        LinearLayout.LayoutParams imageViewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0);
-        imageViewParams.weight = 0.8f;
-        imageView.setLayoutParams(imageViewParams);
-
-
-
-
-        // Attach views
-        linearLayout.addView(imageView);
-        linearLayout.addView(textView);
-
-        linearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ImagePopup imagePopup = new ImagePopup(mContext, view, photos, removedPhotos, galleryLayout);
-                imagePopup.showPopup();
-            }
-        });
-
-        galleryLayout.addView(linearLayout);
-
-
-
-        // Decode bitmap and set it
-        PathView pv = new PathView();
-        pv.imagePath = photo.path;
-        pv.imageView = imageView;
-        decodeImageAsync = new DecodeImageAsync();
-        decodeImageAsync.execute(pv);
-
-    }
-
-
-    private void setImageViews(){
-
-
-    }
 
     private void setSpinners(Activity a){
         facilityTypeSpinner = (Spinner) a.findViewById(R.id.facilityTypeSpinner);
@@ -295,7 +183,7 @@ public class SiteVisitDetailActivity extends FormDetailActivity implements View.
 
     private void setForm(int id) {
         svDao.open();
-        sf = (SiteForm) svDao.findFormById(id);
+        sf = svDao.findFormById(id);
         svDao.close();
 
         if(sf != null){
@@ -311,105 +199,10 @@ public class SiteVisitDetailActivity extends FormDetailActivity implements View.
 
     }
 
-    private void setDrawing(Photo p){
-
-        drawingView.setVisibility(View.VISIBLE);
-
-        PathView pv = new PathView();
-        pv.imagePath = p.path;
-        pv.imageView = drawingView;
-
-        decodeImageAsync = new DecodeImageAsync();
-        decodeImageAsync.execute(pv);
-
-    }
-
-    private void setFTSpinner(Spinner spinner) {
-        ArrayAdapter<CharSequence> adapter;
-        FT_DataSource ftDao = new FT_DataSource(this);
-        ftDao.open();
-
-        List<FacilityType> facilityTypes = ftDao.getAll();
-        ftDao.close();
-
-        if(facilityTypes != null && facilityTypes.size() > 0){
-
-            ArrayList<CharSequence> values = new ArrayList<CharSequence>();
-
-            for(FacilityType ft : facilityTypes){
-                values.add(ft.FacilityTypeName);
-
-            }
-
-            adapter = new ArrayAdapter<CharSequence>(this, R.layout.spinner_item, values);
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinner.setAdapter(adapter);
-
-        }
-    }
-    private void setSiteIdSpinner(Spinner spinner) {
-
-        ArrayAdapter<CharSequence> adapter;
-
-        RS_DataSource rsDao = new RS_DataSource(this);
-
-        rsDao.open();
-
-        List<ReviewSite> rss = rsDao.getAll();
-
-        rsDao.close();
-
-        if(rss != null && rss.size() > 0){
-
-            ArrayList<CharSequence> values = new ArrayList<CharSequence>();
-
-            for(ReviewSite rs : rss){
-                values.add(rs.ReviewSiteID);
-
-            }
-
-            adapter = new ArrayAdapter<CharSequence>(this, R.layout.spinner_item, values);
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinner.setAdapter(adapter);
-
-        }
-    }
-
-    public int getSpinnerIndex(Spinner spinner, String name){
-        if(spinner != null && name != null){
-            for(int i=0;i<spinner.getCount();i++){
-                if(spinner.getItemAtPosition(i).equals(name)){
-                    return i;
-                }
-            }
-        }
-
-        return 0;
-    }
 
 
 
-    private void clearTempImages(){
 
-        if(removedPhotos != null && removedPhotos.size() > 0){
-            photoDAO.open();
-
-            for(Photo photo : removedPhotos){
-
-                if(photo != null) {
-                    File file = new File(photo.path);
-
-                    if (file != null && file.exists()) {
-                        file.delete();
-                    }
-                    photoDAO.delete(photo);
-                }
-            }
-
-            photoDAO.close();
-
-        }
-    }
 
     @Override
     public SiteForm getCurrentForm() {
@@ -452,127 +245,16 @@ public class SiteVisitDetailActivity extends FormDetailActivity implements View.
         return new SiteVisitValidator(mContext);
     }
 
+    @Override
+    public ImageView getDrawingView() {
+        return drawingView;
+    }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == 1){
-
-            // coming from drawing activity
-            if(resultCode == RESULT_OK){
-
-                // saved drawing
-                String result = data.getStringExtra("result");
-                Log.i("debug", result);
-
-                if(result != null && result.length()>0){
-
-
-                    if(curDrawing != null){
-                        removedPhotos.add(curDrawing);
-                    }
-
-
-                    Photo p = new Photo();
-                    p.path = result;
-                    p.formType = "SiteVisit";
-                    p.classification = "Drawing";
-                    curDrawing = p;
-                    setDrawing(p);
-                    newCreatedPhotos.add(p);
-                    allPhotos.add(p);
-
-
-                }
-
-
-            }
-        }
-
-        if(requestCode == CAMERA_REQUEST_CODE){
-            // back from camera intent
-            Log.i("debug", "back from camera");
-
-            if(currentPhoto != null && currentLayout != null) {
-
-                if(imageProcessor.isImageFound(currentPhoto.path)) {
-
-                    imageProcessor.shrinkImage(currentPhoto.path);
-
-                    Photo p = new Photo();
-                    p.path = currentPhoto.path;
-                    p.formType = currentPhoto.formType;
-                    p.classification = currentPhoto.classification;
-                    p.description = currentPhoto.description;
-
-                    currentPhoto = null;
-
-                    newCreatedPhotos.add(p);
-
-                    allPhotos.add(p);
-                    addGalleryItem(allPhotos.size() - 1, p, currentLayout, allPhotos);
-
-                }else{
-                    Log.i("debug", "image or layout does not exist");
-                }
-
-            }
-        }
-
-
+    public String getFormType() {
+        return SiteVisitProperties.FORM_TYPE;
     }
 
-    public void openCamera(String classification, LinearLayout layout){
-        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-        if(cameraIntent.resolveActivity(getPackageManager()) != null){
-            // image capture app exists
-            String path = generateImagePath(SiteVisitProperties.FORM_TYPE+"_"+ classification +"_");
-
-            // set up Photo properties and the layout to be added in
-            currentPhoto = new Photo();
-            currentPhoto.path = path;
-            currentPhoto.classification = classification;
-            currentPhoto.formType = SiteVisitProperties.FORM_TYPE;
-
-            currentLayout = layout;
-
-
-            if(path != null){
-
-                File file = new File(path);
-                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
-                startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE);
-            }else{
-                Toast.makeText(this, "Could not generate image path", Toast.LENGTH_SHORT).show();
-            }
-
-        }
-    }
-
-    public String generateImagePath(String prefix){
-
-        if(prefix == null){
-            prefix = SiteVisitProperties.FORM_TYPE + "_";
-        }
-
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-
-        String dir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-                + File.separator + "picupload" + File.separator;
-
-        File dirFile = new File(dir);
-        if(!dirFile.exists()){
-            dirFile.mkdir();
-        }
-
-        String fullPath = dir + prefix + timeStamp + ".jpg";
-
-        Log.i("debug", "Full image path: "+fullPath);
-
-        return fullPath;
-
-
-    }
 
     @Override
     public void onClick(View view) {
@@ -588,25 +270,82 @@ public class SiteVisitDetailActivity extends FormDetailActivity implements View.
 
                 break;
 
+            case R.id.drawing_camera:
+                openCamera(SiteVisitProperties.FORM_TYPE,
+                        SiteVisitProperties.PHOTO_DRAWING, null, DRAWING_CAMERA_REQUEST_CODE);
+                break;
+
+            case R.id.drawing_attachment:
+                DirectoryChooserDialog directoryChooserDialog = new DirectoryChooserDialog(this, new DirectoryChooserDialog.ChosenDirectoryListener() {
+                    @Override
+                    public void onChosenDir(String chosenDir) {
+                        if(curDrawing != null){
+                            removedPhotos.add(curDrawing);
+                        }
+
+                        File file = new File(chosenDir);
+                        if(file.exists()){
+                            long fileSizeInBytes = file.length();
+                            if(fileSizeInBytes > 10000000){
+                                Toast.makeText(SiteVisitDetailActivity.this,
+                                        "File size must be less than 10MB",
+                                        Toast.LENGTH_SHORT).show();
+                            }else{
+
+                                String extension = chosenDir
+                                        .substring(chosenDir
+                                                .lastIndexOf("."));
+
+                                String newPath = generateImagePath(getFormType(), extension);
+                                File newFile = new File(newPath);
+                                try {
+                                    copyFile(file, newFile);
+
+                                    Photo p = new Photo();
+                                    p.path = newPath;
+                                    p.formType = getFormType();
+                                    p.classification = "Drawing";
+                                    curDrawing = p;
+                                    setDrawing(p, getDrawingView());
+                                    newCreatedPhotos.add(p);
+                                    allPhotos.add(p);
+
+                                }catch (Exception e){
+                                    Toast.makeText(mContext, "Fail to copy file", Toast.LENGTH_SHORT).show();
+                                }
+
+
+                            }
+                        }
+
+
+                    }
+                });
+
+                directoryChooserDialog.setNewFolderEnabled(false);
+                directoryChooserDialog.chooseDirectory("");
+
+                break;
+
             case R.id.drawing:
-                DrawingPopup drawingPopup = new DrawingPopup(mContext, view, curDrawing, removedPhotos);
+                DrawingPopup drawingPopup = new DrawingPopup(mContext, drawingView,drawingDesc, curDrawing, removedPhotos);
                 drawingPopup.showPopup();
                 break;
 
             case R.id.nlf_image_add:
 
-               openCamera(SiteVisitProperties.PHOTO_NLF, NLFLayout);
+               openCamera(SiteVisitProperties.FORM_TYPE, SiteVisitProperties.PHOTO_NLF, NLFLayout, CAMERA_REQUEST_CODE);
 
                 break;
 
             case R.id.ap_image_add:
 
-                openCamera(SiteVisitProperties.PHOTO_AP, APLayout);
+                openCamera(SiteVisitProperties.FORM_TYPE, SiteVisitProperties.PHOTO_AP, APLayout,CAMERA_REQUEST_CODE);
                 break;
 
             case R.id.ad_image_add:
 
-                openCamera(SiteVisitProperties.PHOTO_AD, ADLayout);
+                openCamera(SiteVisitProperties.FORM_TYPE, SiteVisitProperties.PHOTO_AD, ADLayout,CAMERA_REQUEST_CODE);
                 break;
 
         }
@@ -623,9 +362,6 @@ public class SiteVisitDetailActivity extends FormDetailActivity implements View.
             svDao.open();
 
             SiteVisitForm svTemp = svDao.create(f);
-
-            // 'savedForm' is used for validating
-            savedForm = svTemp;
 
             svDao.close();
 
@@ -648,8 +384,6 @@ public class SiteVisitDetailActivity extends FormDetailActivity implements View.
             Log.i("debug", "updating");
 
             f.ID = mId;
-
-            savedForm = f;
 
             svDao.open();
             svDao.update(f);
@@ -684,7 +418,7 @@ public class SiteVisitDetailActivity extends FormDetailActivity implements View.
 
         }
 
-        clearTempImages();
+        clearTempImages(removedPhotos);
 
     }
 
@@ -872,24 +606,6 @@ public class SiteVisitDetailActivity extends FormDetailActivity implements View.
 
             }
         }
-    }
-
-    private void setFOItem(Spinner spinner, int number){
-
-        spinner.setSelection(number);
-//
-//        if(number == 1){
-//            spinner.setSelection(getSpinnerIndex(spinner, "Pass"));
-//        }else if(number == 2){
-//            spinner.setSelection(getSpinnerIndex(spinner, "Fail"));
-//        }else{
-//            spinner.setSelection(0);
-//        }
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
     }
 
     private void addFOItems(){

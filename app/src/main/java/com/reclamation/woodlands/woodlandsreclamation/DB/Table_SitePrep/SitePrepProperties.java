@@ -45,8 +45,9 @@ public class SitePrepProperties {
     public static final String COLUMN_Recommendation = "Recommendation";
     public static final String COLUMN_MESSAGE = "Message";
 
-    public static final String TABLE_SITEPREP = "SitePrep";
 
+    public static final String PHOTO_AD = "Additional";
+    public static final String TABLE_SITEPREP = "SitePrep";
     public static final String SITEPREP_CREATE =
             "create table " + TABLE_SITEPREP
                     + " ( "

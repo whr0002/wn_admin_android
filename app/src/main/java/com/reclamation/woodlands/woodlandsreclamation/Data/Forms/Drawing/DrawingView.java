@@ -1,5 +1,6 @@
 package com.reclamation.woodlands.woodlandsreclamation.Data.Forms.Drawing;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,10 +12,12 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.DecodeImageAsync;
 import com.reclamation.woodlands.woodlandsreclamation.R;
 
 /**
@@ -38,10 +41,14 @@ public class DrawingView extends View {
 
     private boolean hasBitmap = false;
 
+    private Context mContext;
+
     public DrawingView(Context context, AttributeSet attrs) {
         super(context, attrs);
-
+        mContext = context;
         setupDrawing();
+
+
     }
 
 
@@ -178,7 +185,25 @@ public class DrawingView extends View {
     }
 
     public void setCanvasBitmap(String path){
-        canvasBitmap = BitmapFactory.decodeFile(path);
+
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(path, options);
+
+        // Calculate inSampleSize
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        ((Activity)mContext).getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+        int height = displaymetrics.heightPixels;
+        int width = displaymetrics.widthPixels;
+
+        options.inSampleSize = DecodeImageAsync.calculateInSampleSize(options,
+                width, height);
+        // Decode bitmap with inSampleSize
+        options.inJustDecodeBounds = false;
+        Bitmap bitmap = BitmapFactory.decodeFile(path, options);
+
         hasBitmap = true;
+        canvasBitmap = bitmap;
     }
+
 }
