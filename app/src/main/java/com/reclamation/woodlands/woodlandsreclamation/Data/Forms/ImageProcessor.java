@@ -78,9 +78,9 @@ public class ImageProcessor {
         options.inPurgeable = true;
 
         Bitmap bitmap = BitmapFactory.decodeFile(mPath, options);
+
         compressImage(bitmap, mPath);
-
-
+        setGeoTag(mPath);
     }
 
     public boolean isImageFound(String path){
@@ -164,7 +164,7 @@ public class ImageProcessor {
                 return true;
 
             } catch (Exception e) {
-//                e.printStackTrace();
+                e.printStackTrace();
                 return false;
             }
 

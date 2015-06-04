@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.location.Location;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -27,6 +28,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 import com.reclamation.woodlands.woodlandsreclamation.DB.Table_FacilityType.FT_DataSource;
 import com.reclamation.woodlands.woodlandsreclamation.DB.Table_FacilityType.FacilityType;
 import com.reclamation.woodlands.woodlandsreclamation.DB.Table_Photo.Photo;
@@ -57,8 +62,15 @@ import java.util.List;
 /**
  * Created by Jimmy on 5/13/2015.
  */
-public abstract class FormDetailActivity extends ActionBarActivity{
+public abstract class FormDetailActivity extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener{
 
+    public GoogleApiClient mGoogleApiClient;
+    public Location location;
+    protected static final LocationRequest REQUEST = LocationRequest.create()
+            .setInterval(5000)
+            .setFastestInterval(16)
+            .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
     protected Context mContext;
     protected ActionBar mActionBar;
@@ -83,12 +95,17 @@ public abstract class FormDetailActivity extends ActionBarActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addApi(LocationServices.API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build();
 
         mContext = this;
         mActionBar = getSupportActionBar();
         mActionBar.setDisplayHomeAsUpEnabled(true);
         photoDAO = new PhotoDAO(this);
-        imageProcessor = new ImageProcessor(null);
+        imageProcessor = new ImageProcessor(location);
         decodeImageAsync = new DecodeImageAsync();
 
         allPhotos = new ArrayList<Photo>();
@@ -185,6 +202,8 @@ public abstract class FormDetailActivity extends ActionBarActivity{
     public abstract Validator getValidator();
     public abstract ImageView getDrawingView();
     public abstract String getFormType();
+    public abstract TextView getLatitudeView();
+    public abstract TextView getLongitudeView();
 
 
 
@@ -218,6 +237,8 @@ public abstract class FormDetailActivity extends ActionBarActivity{
         return 0;
     }
     public void openCamera(String formType, String classification, LinearLayout layout, int requestCode){
+        imageProcessor = new ImageProcessor(location);
+
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
         if(cameraIntent.resolveActivity(getPackageManager()) != null){
@@ -541,5 +562,61 @@ public abstract class FormDetailActivity extends ActionBarActivity{
                 destination.close();
             }
         }
+    }
+
+
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        LocationServices.FusedLocationApi.requestLocationUpdates(
+                mGoogleApiClient,
+                REQUEST,
+                this);  // LocationListener
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+
+    }
+
+
+    @Override
+    public void onLocationChanged(Location location) {
+
+        TextView lat = getLatitudeView();
+        TextView longi = getLongitudeView();
+
+        if (lat != null && longi != null) {
+            if(mId == -1) {
+
+                // Update location for creating form only
+                lat.setText("" + location.getLatitude());
+                longi.setText("" + location.getLongitude());
+
+            }
+
+        }
+
+        this.location = location;
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mGoogleApiClient.connect();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mGoogleApiClient.disconnect();
     }
 }

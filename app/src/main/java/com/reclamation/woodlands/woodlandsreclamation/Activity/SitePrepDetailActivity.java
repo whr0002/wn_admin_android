@@ -133,6 +133,16 @@ public class SitePrepDetailActivity extends FormDetailActivity implements View.O
     }
 
     @Override
+    public TextView getLatitudeView() {
+        return null;
+    }
+
+    @Override
+    public TextView getLongitudeView() {
+        return null;
+    }
+
+    @Override
     public void onClick(View view) {
         switch(view.getId()){
             case R.id.open_drawer:

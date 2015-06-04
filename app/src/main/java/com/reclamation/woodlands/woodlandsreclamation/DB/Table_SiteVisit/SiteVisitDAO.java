@@ -62,8 +62,9 @@ public class SiteVisitDAO extends DAO<SiteVisitForm> {
         cv.put(SiteVisitProperties.COLUMN_WSDPF, o.WSDPF);
         cv.put(SiteVisitProperties.COLUMN_WEEDSINVASIVESCOMMENT, o.WeedsInvasivesComment);
         cv.put(SiteVisitProperties.COLUMN_WEEDSINVASIVESPF, o.WeedsInvasivesPF);
-
         cv.put(SiteVisitProperties.COLUMN_MESSAGE, o.Message);
+        cv.put(SiteVisitProperties.COLUMN_LATITUDE, o.Latitude);
+        cv.put(SiteVisitProperties.COLUMN_LONGITUDE, o.Longitude);
 
         long insertID = db.insert(SiteVisitProperties.TABLE_SITEVISIT, null, cv);
 
@@ -129,8 +130,9 @@ public class SiteVisitDAO extends DAO<SiteVisitForm> {
         cv.put(SiteVisitProperties.COLUMN_WSDPF, o.WSDPF);
         cv.put(SiteVisitProperties.COLUMN_WEEDSINVASIVESCOMMENT, o.WeedsInvasivesComment);
         cv.put(SiteVisitProperties.COLUMN_WEEDSINVASIVESPF, o.WeedsInvasivesPF);
-
         cv.put(SiteVisitProperties.COLUMN_MESSAGE, o.Message);
+        cv.put(SiteVisitProperties.COLUMN_LATITUDE, o.Latitude);
+        cv.put(SiteVisitProperties.COLUMN_LONGITUDE, o.Longitude);
 
         db.update(SiteVisitProperties.TABLE_SITEVISIT, cv,
                 SiteVisitProperties.COLUMN_SITEVISITID + " = " + o.ID, null);
@@ -222,8 +224,9 @@ public class SiteVisitDAO extends DAO<SiteVisitForm> {
         sv.WSDPF = cursor.getInt(cursor.getColumnIndex(SiteVisitProperties.COLUMN_WSDPF));
         sv.WeedsInvasivesComment = cursor.getString(cursor.getColumnIndex(SiteVisitProperties.COLUMN_WEEDSINVASIVESCOMMENT));
         sv.WeedsInvasivesPF = cursor.getInt(cursor.getColumnIndex(SiteVisitProperties.COLUMN_WEEDSINVASIVESPF));
-
         sv.Message = cursor.getString(cursor.getColumnIndex(SiteVisitProperties.COLUMN_MESSAGE));
+        sv.Latitude = cursor.getString(cursor.getColumnIndex(SiteVisitProperties.COLUMN_LATITUDE));
+        sv.Longitude = cursor.getString(cursor.getColumnIndex(SiteVisitProperties.COLUMN_LONGITUDE));
 
         return sv;
     }

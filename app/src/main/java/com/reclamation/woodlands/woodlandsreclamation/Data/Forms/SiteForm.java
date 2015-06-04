@@ -10,6 +10,8 @@ public abstract class SiteForm extends Form{
     public String Date;
     public String TimeStamp;
     public String FacilityType;
+    public String Latitude;
+    public String Longitude;
 
     public int numberOfPhotos;
 

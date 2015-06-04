@@ -35,12 +35,15 @@ import java.util.List;
 /**
  * Created by Jimmy on 5/13/2015.
  */
-public class SiteVisitDetailActivity extends FormDetailActivity implements View.OnClickListener{
+public class SiteVisitDetailActivity extends FormDetailActivity
+        implements View.OnClickListener{
+
+
 
     public static final int CAMERA_REQUEST_CODE = 10;
     private SiteVisitDAO svDao;
     private SiteForm sf;
-    private TextView dateView, drawingDesc;
+    private TextView dateView, drawingDesc, latitudeView, longitudeView;
     private EditText recommendation;
     private ImageView drawingView;
     private Spinner facilityTypeSpinner, siteIdSpinner;
@@ -65,18 +68,16 @@ public class SiteVisitDetailActivity extends FormDetailActivity implements View.
         landscapeLayout = (LinearLayout)findViewById(R.id.landscape);
         soilLayout = (LinearLayout)findViewById(R.id.soil);
         vegeLayout = (LinearLayout)findViewById(R.id.vegetation);
-
-
-        addFOItems();
-
         dateView = (TextView)findViewById(R.id.dateView);
         recommendation = (EditText)findViewById(R.id.recommendation);
         drawingView = (ImageView) findViewById(R.id.drawing);
         drawingView.setOnClickListener(this);
-
         drawingDesc = (TextView) findViewById(R.id.drawing_desc);
+        latitudeView = (TextView) findViewById(R.id.latitudeView);
+        longitudeView = (TextView) findViewById(R.id.longitudeView);
 
 
+        addFOItems();
         setSpinners(a);
         setButtons();
 
@@ -87,6 +88,7 @@ public class SiteVisitDetailActivity extends FormDetailActivity implements View.
             actionBar.setTitle("View");
             setGallery();
             setForm(mId);
+
 
         }else{
             actionBar.setTitle("Create");
@@ -192,7 +194,9 @@ public class SiteVisitDetailActivity extends FormDetailActivity implements View.
             dateView.setText(sf.Date);
             siteIdSpinner.setSelection(getSpinnerIndex(siteIdSpinner, sf.SiteID));
             facilityTypeSpinner.setSelection(getSpinnerIndex(facilityTypeSpinner, sf.FacilityType));
-            getFieldObservations((SiteVisitForm)sf);
+            latitudeView.setText(sf.Latitude);
+            longitudeView.setText(sf.Longitude);
+            getFieldObservations((SiteVisitForm) sf);
             recommendation.setText(((SiteVisitForm) sf).Recommendation);
 
         }
@@ -213,11 +217,11 @@ public class SiteVisitDetailActivity extends FormDetailActivity implements View.
 
         sf.SiteID = siteIdSpinner.getSelectedItem().toString();
         sf.Date = dateView.getText().toString();
-
         sf.FacilityType = facilityTypeSpinner.getSelectedItem().toString();
+        sf.Latitude = latitudeView.getText().toString();
+        sf.Longitude = longitudeView.getText().toString();
         setFieldObservations(sf);
         sf.Recommendation = recommendation.getText().toString();
-
         sf.numberOfPhotos = allPhotos.size() - removedPhotos.size();
 
         return sf;
@@ -253,6 +257,16 @@ public class SiteVisitDetailActivity extends FormDetailActivity implements View.
     @Override
     public String getFormType() {
         return SiteVisitProperties.FORM_TYPE;
+    }
+
+    @Override
+    public TextView getLatitudeView() {
+        return latitudeView;
+    }
+
+    @Override
+    public TextView getLongitudeView() {
+        return longitudeView;
     }
 
 
@@ -630,4 +644,8 @@ public class SiteVisitDetailActivity extends FormDetailActivity implements View.
 
 
     }
+
+
+
+
 }

@@ -64,7 +64,6 @@
                     android:text="Date"
                     android:id="@+id/dateLabel"
                     android:layout_marginLeft="10dp"
-
                     android:layout_gravity="center"
                     android:layout_weight="0.5" />
 
@@ -107,6 +106,66 @@
                     android:layout_weight="0.5"
                     android:layout_gravity="center"/>
 
+
+            </LinearLayout>
+
+            <!-- Lat -->
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_gravity="center"
+                android:weightSum="1">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:textColor="@color/black"
+                    android:text="Latitude"
+                    android:layout_marginLeft="10dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.5" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:id="@+id/latitudeView"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.5"
+                    android:text="0.000000"
+                    android:textColor="@color/cblue"/>
+
+            </LinearLayout>
+
+            <!-- Long -->
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_gravity="center"
+                android:weightSum="1">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:textColor="@color/black"
+                    android:text="Longitude"
+                    android:layout_marginLeft="10dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.5" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:id="@+id/longitudeView"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.5"
+                    android:text="0.000000"
+                    android:textColor="@color/cblue"/>
 
             </LinearLayout>
 

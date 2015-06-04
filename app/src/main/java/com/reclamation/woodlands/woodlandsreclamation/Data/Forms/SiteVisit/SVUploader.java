@@ -80,8 +80,9 @@ public class SVUploader extends Uploader {
         p.put("NSCComment", f.NSCComment);
         p.put("LitterPF", getPassOrFail(f.LitterPF));
         p.put("LitterComment", f.LitterComment);
-
         p.put("Recommendation", f.Recommendation);
+        p.put("Latitude", f.Latitude);
+        p.put("Longitude", f.Longitude);
 
 
         // Attach photos

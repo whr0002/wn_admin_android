@@ -136,6 +136,7 @@ public class SiteVisitActivity extends FormActivity {
                 if(forms.size() > 0){
                     ProgressDialog progressDialog = new ProgressDialog(this);
                     progressDialog.setMessage("Uploading...");
+                    progressDialog.setIndeterminate(true);
                     progressDialog.setMax(forms.size());
                     progressDialog.setProgress(0);
                     progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);

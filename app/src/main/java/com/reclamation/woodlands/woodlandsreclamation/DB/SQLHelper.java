@@ -19,7 +19,7 @@ import com.reclamation.woodlands.woodlandsreclamation.DB.Table_UserInfo.UserInfo
 public class SQLHelper extends SQLiteOpenHelper{
 
     private static final String DATABASE_NAME = "wn_reclamation.db";
-    private static final int DATABASE_VERSION = 28;
+    private static final int DATABASE_VERSION = 29;
 
 
     public SQLHelper(Context context) {
