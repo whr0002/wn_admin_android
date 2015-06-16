@@ -1,6 +1,7 @@
 package com.reclamation.woodlands.woodlandsreclamation.Adapter;
 
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -38,6 +39,14 @@ public class SiteFormAdapter extends FormAdapter {
 
 
         formViewHolder.dateView.setText(siteForm.Date);
+        if(isEditMode){
+            formViewHolder.checkBoxView.setVisibility(View.VISIBLE);
+            formViewHolder.checkBoxView.setChecked(this.isChecked.get(position));
+        }else{
+            formViewHolder.checkBoxView.setChecked(false);
+            formViewHolder.checkBoxView.setVisibility(View.GONE);
+        }
+//        formViewHolder.checkBoxView.setChecked(this.isChecked.get(position));
 
         if(siteForm.Message != null){
 
@@ -69,6 +78,7 @@ public class SiteFormAdapter extends FormAdapter {
         formViewHolder.singleWarningView = (ImageView) convertView.findViewById(R.id.single_warning_view);
         formViewHolder.dateView = (TextView) convertView.findViewById(R.id.date_view);
         formViewHolder.statusView = (TextView) convertView.findViewById(R.id.statusView);
+        formViewHolder.checkBoxView = (CheckBox) convertView.findViewById(R.id.checkbox);
 
     }
 }

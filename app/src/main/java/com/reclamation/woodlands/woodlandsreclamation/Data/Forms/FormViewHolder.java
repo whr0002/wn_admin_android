@@ -1,5 +1,6 @@
 package com.reclamation.woodlands.woodlandsreclamation.Data.Forms;
 
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -12,5 +13,7 @@ public class FormViewHolder extends ViewHolder {
     public TextView dateView;
     public TextView statusView;
     public ImageView singleWarningView;
+
+    public CheckBox checkBoxView;
 
 }

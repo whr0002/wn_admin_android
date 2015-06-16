@@ -9,6 +9,7 @@ import com.reclamation.woodlands.woodlandsreclamation.Activity.FormActivity;
 import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.Form;
 import com.reclamation.woodlands.woodlandsreclamation.Data.Forms.ViewHolder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,6 +19,8 @@ public abstract class FormAdapter extends ArrayAdapter<Form> {
 
     private int mLayoutResource;
     public FormActivity mFormActivity;
+    public List<Boolean>isChecked;
+    public boolean isEditMode = false;
 
 
     public FormAdapter(FormActivity context, int resource, List<Form> forms){
@@ -25,6 +28,11 @@ public abstract class FormAdapter extends ArrayAdapter<Form> {
         mLayoutResource = resource;
 
         mFormActivity = context;
+        isChecked = new ArrayList<Boolean>();
+
+        if(forms != null){
+            resetCheckTrace(forms.size());
+        }
     }
 
     @Override
@@ -48,10 +56,16 @@ public abstract class FormAdapter extends ArrayAdapter<Form> {
         setView(viewHolder, position, form);
 
 
+
         return convertView;
     }
 
-
+    public void resetCheckTrace(int size){
+        isChecked = new ArrayList<>();
+        for(int i=0;i<size;i++){
+            isChecked.add(false);
+        }
+    }
     public abstract void setView(ViewHolder viewHolder, int position, Form form);
     public abstract ViewHolder getViewHolder();
     public abstract void setViewHolder(View convertView, ViewHolder viewHolder);

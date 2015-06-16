@@ -71,9 +71,11 @@ public abstract class FormActivity extends ActionBarActivity implements AdapterV
 
                 actionMode.setTitle("Selected " + mGridview.getCheckedItemCount());
 
-                View v = mGridview.getChildAt(position);
+                View v = getViewByPosition(position, mGridview);
                 CheckBox checkBox = (CheckBox) v.findViewById(R.id.checkbox);
                 checkBox.setChecked(checked);
+
+                formAdapter.isChecked.set(position, true);
 
 
 
@@ -84,14 +86,17 @@ public abstract class FormActivity extends ActionBarActivity implements AdapterV
 
                 MenuInflater inflater = actionMode.getMenuInflater();
                 inflater.inflate(R.menu.edit_mode_menu, menu);
-
-                for(int i=0;i<formAdapter.getCount();i++){
-                    View v = mGridview.getChildAt(i);
-                    CheckBox checkBox = (CheckBox) v.findViewById(R.id.checkbox);
-                    checkBox.setVisibility(View.VISIBLE);
-
-
-                }
+//                formAdapter.resetCheckTrace();
+                formAdapter.isEditMode = true;
+//                for(int i=0;i<formAdapter.getCount();i++){
+//                    formAdapter.isChecked.set(i, false);
+//
+//                    View v = getViewByPosition(i, mGridview);
+//                    CheckBox checkBox = (CheckBox) v.findViewById(R.id.checkbox);
+//                    checkBox.setVisibility(View.VISIBLE);
+//
+//
+//                }
 
                 return true;
             }
@@ -131,20 +136,35 @@ public abstract class FormActivity extends ActionBarActivity implements AdapterV
                 formAdapter.notifyDataSetChanged();
 
                 mGridview.clearChoices();
-
-                for(int i=0;i<formAdapter.getCount();i++){
-                    View v = mGridview.getChildAt(i);
-                    CheckBox checkBox = (CheckBox) v.findViewById(R.id.checkbox);
-                    checkBox.setChecked(false);
-                    checkBox.setVisibility(View.GONE);
-
-
-                }
+                formAdapter.isEditMode = false;
+                formAdapter.resetCheckTrace(formAdapter.getCount());
+//                for(int i=0;i<formAdapter.getCount();i++){
+//                    View v = getViewByPosition(i, mGridview);
+//
+//
+//                    CheckBox checkBox = (CheckBox) v.findViewById(R.id.checkbox);
+//                    checkBox.setChecked(false);
+//                    checkBox.setVisibility(View.GONE);
+//
+//
+//                }
             }
         });
 
 
 
+    }
+
+    public View getViewByPosition(int pos, GridView gridView){
+        final int firstListItemPosition = gridView.getFirstVisiblePosition();
+        final int lastListItemPosition = firstListItemPosition + gridView.getChildCount() -1;
+
+        if(pos < firstListItemPosition || pos > lastListItemPosition){
+            return gridView.getAdapter().getView(pos, null, gridView);
+        }else{
+            final int childIndex = pos - firstListItemPosition;
+            return gridView.getChildAt(childIndex);
+        }
     }
 
     /**
