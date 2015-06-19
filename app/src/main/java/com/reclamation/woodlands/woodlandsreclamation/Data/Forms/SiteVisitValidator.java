@@ -19,7 +19,10 @@ public class SiteVisitValidator extends Validator{
         SiteVisitForm svf = (SiteVisitForm) form;
         svf.Message = "";
 
-        if(svf.FacilityType == null || svf.FacilityType.length() == 0){
+        if(svf.SiteID == null || svf.SiteID.trim().length() == 0){
+            svf.Message += "- Site ID is required \n";
+        }
+        if(svf.FacilityType == null || svf.FacilityType.trim().length() == 0){
             svf.Message += "- Facility Type is required \n";
         }
 

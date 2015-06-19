@@ -27,8 +27,6 @@ import org.apache.http.Header;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.List;
-
 /**
  * Created by Jimmy on 5/11/2015.
  */
@@ -53,11 +51,6 @@ public class SyncFragment  extends Fragment implements View.OnClickListener{
         Button syncBtn =  (Button) v.findViewById(R.id.sync);
         syncBtn.setOnClickListener(this);
 
-        Button testBtn =  (Button) v.findViewById(R.id.test);
-        testBtn.setOnClickListener(this);
-
-        Button rsBtn =  (Button) v.findViewById(R.id.rs);
-        rsBtn.setOnClickListener(this);
 
         mActivity = this.getActivity();
 
@@ -76,37 +69,6 @@ public class SyncFragment  extends Fragment implements View.OnClickListener{
         switch (view.getId()){
             case R.id.sync:
                 getData();
-                break;
-
-            case R.id.test:
-                daoFT.open();
-                List<FacilityType> fts = daoFT.getAll();
-                daoFT.close();
-                if(fts != null){
-                    int i = 1;
-                    for(FacilityType f : fts){
-                        Log.i(DEBUG, i + "..." + f.FacilityTypeName);
-                        i++;
-                    }
-                }else{
-                    Log.i(DEBUG, "No fts");
-                }
-
-
-                break;
-
-            case R.id.rs:
-                daoRS.open();
-                List<ReviewSite> reviewSites = daoRS.getAll();
-                daoRS.close();
-
-                if(reviewSites != null){
-                    for(ReviewSite r : reviewSites){
-                        Log.i(DEBUG, r.ReviewSiteID);
-                    }
-                }else{
-                    Log.i(DEBUG, "no sites");
-                }
                 break;
         }
     }
@@ -143,6 +105,8 @@ public class SyncFragment  extends Fragment implements View.OnClickListener{
 
 
 
+        }else{
+            Toast.makeText(mActivity, "Please login first", Toast.LENGTH_LONG).show();
         }
 
     }
@@ -162,7 +126,7 @@ public class SyncFragment  extends Fragment implements View.OnClickListener{
 
 
         }catch (Exception e){
-            Log.i(DEBUG, "Parsing JSON errors");
+            Toast.makeText(mActivity, "Failed to parse data", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -204,7 +168,7 @@ public class SyncFragment  extends Fragment implements View.OnClickListener{
                     FacilityType facilityType = new FacilityType();
                     facilityType.FacilityTypeName = ft
                             .getJSONObject(i)
-                            .getString("FacilityTypeName");
+                            .getString("Facility Type");
 
                     daoFT.create(facilityType);
 
@@ -216,6 +180,7 @@ public class SyncFragment  extends Fragment implements View.OnClickListener{
             }
         }catch (Exception e){
             Log.i(DEBUG, "parsing FT errors");
+            e.printStackTrace();
         }
     }
 }

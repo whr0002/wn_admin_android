@@ -2,6 +2,7 @@ package com.reclamation.woodlands.woodlandsreclamation.Data.Forms.SiteVisit;
 
 import android.content.Context;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -72,7 +73,7 @@ public class LayoutBuilder {
         innerLayout.setLayoutParams(innerParam);
 
         // Pass or fail dropdown
-        Spinner passFailSpinner = new Spinner(mContext);
+        final Spinner passFailSpinner = (Spinner)((LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.cspinner, null);
         LinearLayout.LayoutParams spinnerParam = new LinearLayout
                 .LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT);
         spinnerParam.weight = 0.3f;

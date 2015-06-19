@@ -16,7 +16,6 @@ import android.view.ViewGroup;
 import com.reclamation.woodlands.woodlandsreclamation.Fragment.FormFragment;
 import com.reclamation.woodlands.woodlandsreclamation.Fragment.LoginFragment;
 import com.reclamation.woodlands.woodlandsreclamation.Fragment.SyncFragment;
-import com.reclamation.woodlands.woodlandsreclamation.Fragment.TestFragment;
 
 
 public class MainActivity extends ActionBarActivity
@@ -77,12 +76,6 @@ public class MainActivity extends ActionBarActivity
                 onSectionAttached(3);
                 break;
 
-            case 3:
-                fragmentManager.beginTransaction()
-                        .replace(R.id.container, new TestFragment())
-                        .commit();
-                onSectionAttached(4);
-                break;
 
         }
     }
@@ -98,9 +91,7 @@ public class MainActivity extends ActionBarActivity
             case 3:
                 mTitle = getString(R.string.sync_section);
                 break;
-            case 4:
-                mTitle = "Test";
-                break;
+
         }
     }
 

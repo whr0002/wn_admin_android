@@ -224,6 +224,8 @@ public class SiteVisitDetailActivity extends FormDetailActivity
         sf.Recommendation = recommendation.getText().toString();
         sf.numberOfPhotos = allPhotos.size() - removedPhotos.size();
 
+
+
         return sf;
     }
 

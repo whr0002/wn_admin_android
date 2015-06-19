@@ -306,20 +306,20 @@ public abstract class FormDetailActivity extends ActionBarActivity implements Go
         List<FacilityType> facilityTypes = ftDao.getAll();
         ftDao.close();
 
-        if(facilityTypes != null && facilityTypes.size() > 0){
+        ArrayList<CharSequence> values = new ArrayList<CharSequence>();
+        values.add("");
 
-            ArrayList<CharSequence> values = new ArrayList<CharSequence>();
+        if(facilityTypes != null && facilityTypes.size() > 0){
 
             for(FacilityType ft : facilityTypes){
                 values.add(ft.FacilityTypeName);
 
             }
-
-            adapter = new ArrayAdapter<CharSequence>(this, R.layout.spinner_item, values);
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinner.setAdapter(adapter);
-
         }
+
+        adapter = new ArrayAdapter<CharSequence>(this, R.layout.spinner_item, values);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
     }
     public void setSiteIdSpinner(Spinner spinner) {
 
@@ -333,20 +333,19 @@ public abstract class FormDetailActivity extends ActionBarActivity implements Go
 
         rsDao.close();
 
+        ArrayList<CharSequence> values = new ArrayList<CharSequence>();
+        values.add("");
+
         if(rss != null && rss.size() > 0){
-
-            ArrayList<CharSequence> values = new ArrayList<CharSequence>();
-
             for(ReviewSite rs : rss){
                 values.add(rs.ReviewSiteID);
 
             }
-
-            adapter = new ArrayAdapter<CharSequence>(this, R.layout.spinner_item, values);
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinner.setAdapter(adapter);
-
         }
+
+        adapter = new ArrayAdapter<CharSequence>(this, R.layout.spinner_item, values);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
     }
     public void clearTempImages(List<Photo> removedPhotos){
 
@@ -430,6 +429,8 @@ public abstract class FormDetailActivity extends ActionBarActivity implements Go
                     p.formType = currentPhoto.formType;
                     p.classification = currentPhoto.classification;
                     p.description = currentPhoto.description;
+
+                    curDrawing = p;
 
                     currentPhoto = null;
 
