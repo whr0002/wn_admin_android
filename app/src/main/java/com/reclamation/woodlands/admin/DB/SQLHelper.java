@@ -9,8 +9,10 @@ import com.reclamation.woodlands.admin.DB.Table_DesktopReview.DR_Properties;
 import com.reclamation.woodlands.admin.DB.Table_FacilityType.FacilityType;
 import com.reclamation.woodlands.admin.DB.Table_Photo.Photo;
 import com.reclamation.woodlands.admin.DB.Table_ReviewSite.RS_Properties;
+import com.reclamation.woodlands.admin.DB.Table_SiteLatLng.SiteLatLng;
 import com.reclamation.woodlands.admin.DB.Table_SitePrep.SitePrepProperties;
 import com.reclamation.woodlands.admin.DB.Table_SiteVisit.SiteVisitProperties;
+import com.reclamation.woodlands.admin.DB.Table_Timesheet.TimesheetProperties;
 import com.reclamation.woodlands.admin.DB.Table_UserInfo.UserInfo;
 
 /**
@@ -19,7 +21,7 @@ import com.reclamation.woodlands.admin.DB.Table_UserInfo.UserInfo;
 public class SQLHelper extends SQLiteOpenHelper{
 
     private static final String DATABASE_NAME = "wn_reclamation.db";
-    private static final int DATABASE_VERSION = 29;
+    private static final int DATABASE_VERSION = 36;
 
 
     public SQLHelper(Context context) {
@@ -39,11 +41,14 @@ public class SQLHelper extends SQLiteOpenHelper{
         sqLiteDatabase.execSQL(RS_Properties.RS_CREATE);
         sqLiteDatabase.execSQL(DR_Properties.DR_CREATE);
         sqLiteDatabase.execSQL(FacilityType.FT_CREATE);
+        sqLiteDatabase.execSQL(SiteLatLng.SLL_CREATE);
         sqLiteDatabase.execSQL(UserInfo.USERINFO_CREATE);
         sqLiteDatabase.execSQL(SiteVisitProperties.SITEVISIT_CREATE);
         sqLiteDatabase.execSQL(SitePrepProperties.SITEPREP_CREATE);
 
         sqLiteDatabase.execSQL(Photo.TABLE_CREATE);
+        sqLiteDatabase.execSQL(TimesheetProperties.TABLE_Create);
+
 
     }
 
@@ -55,10 +60,12 @@ public class SQLHelper extends SQLiteOpenHelper{
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DR_Properties.TABLE_DESKTOPREVIEWS);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + RS_Properties.TABLE_REVIEWSITE);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + FacilityType.TABLE_FT);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + SiteLatLng.TABLE_NAME);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + UserInfo.TABLE_USERINFO);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + SiteVisitProperties.TABLE_SITEVISIT);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + SitePrepProperties.TABLE_SITEPREP);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + Photo.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TimesheetProperties.TABLE_Timesheet);
 
         onCreate(sqLiteDatabase);
     }

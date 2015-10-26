@@ -21,8 +21,8 @@ import com.reclamation.woodlands.admin.Data.Forms.DirectoryChooserDialog;
 import com.reclamation.woodlands.admin.Data.Forms.Drawing.DrawingPopup;
 import com.reclamation.woodlands.admin.Data.Forms.Form;
 import com.reclamation.woodlands.admin.Data.Forms.SiteForm;
-import com.reclamation.woodlands.admin.Data.Forms.SiteVisit.LayoutBuilder;
-import com.reclamation.woodlands.admin.Data.Forms.SiteVisitValidator;
+import com.reclamation.woodlands.admin.Data.Forms.LayoutBuilder;
+import com.reclamation.woodlands.admin.Data.Forms.SiteVisit.SiteVisitValidator;
 import com.reclamation.woodlands.admin.Data.Forms.Validator;
 import com.reclamation.woodlands.admin.R;
 

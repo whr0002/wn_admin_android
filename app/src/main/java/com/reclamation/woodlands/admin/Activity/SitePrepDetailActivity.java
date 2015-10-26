@@ -22,8 +22,9 @@ import com.reclamation.woodlands.admin.DB.Table_SiteVisit.SiteVisitProperties;
 import com.reclamation.woodlands.admin.Data.Forms.DecodeImageAsync;
 import com.reclamation.woodlands.admin.Data.Forms.Drawing.DrawingPopup;
 import com.reclamation.woodlands.admin.Data.Forms.Form;
+import com.reclamation.woodlands.admin.Data.Forms.LayoutBuilder;
 import com.reclamation.woodlands.admin.Data.Forms.SiteForm;
-import com.reclamation.woodlands.admin.Data.Forms.SiteVisit.LayoutBuilder;
+import com.reclamation.woodlands.admin.Data.Forms.SitePrep.SitePrepValidator;
 import com.reclamation.woodlands.admin.Data.Forms.Validator;
 import com.reclamation.woodlands.admin.R;
 
@@ -103,13 +104,77 @@ public class SitePrepDetailActivity extends FormDetailActivity implements View.O
     }
 
     @Override
-    public void addOrUpdate(Form f) {
+    public void addOrUpdate(Form form) {
+        SitePrepForm f = (SitePrepForm) form;
 
+        if(mId == -1){
+
+            // Creating a form
+            Log.i("debug", "creating");
+            sitePrepDAO.open();
+
+            SitePrepForm svTemp = sitePrepDAO.create(f);
+
+            sitePrepDAO.close();
+
+            photoDAO.open();
+
+            if(allPhotos != null && allPhotos.size()>0){
+                for(Photo photo : allPhotos){
+                    photo.formId = svTemp.ID;
+
+                    photoDAO.create(photo);
+
+                }
+            }
+
+            photoDAO.close();
+
+        }else {
+
+            // Updating a form
+            Log.i("debug", "updating");
+
+            f.ID = mId;
+
+            sitePrepDAO.open();
+            sitePrepDAO.update(f);
+            sitePrepDAO.close();
+
+            photoDAO.open();
+
+            // update all photos
+            Log.i("debug", "Size All Photos: " + allPhotos.size());
+
+
+            // update NLF photos
+            for (Photo p : allPhotos) {
+                Log.i("debug", "Photo Path: " + p.path);
+                Boolean hasPhoto = photoMap.get(p.path);
+
+                if (hasPhoto != null) {
+                    // The photo exists in db
+                    Log.i("debug", "Found Path ------- Updating");
+                    photoDAO.update(p, p);
+
+                } else {
+                    // Photo does not exist in database, create a new photo
+                    Log.i("debug", "Path Not Found ------- Creating");
+                    p.formId = f.ID;
+                    photoDAO.create(p);
+                }
+
+            }
+
+            photoDAO.close();
+        }
     }
 
     @Override
     public SiteForm getCurrentForm() {
-        return null;
+        SitePrepForm spf = new SitePrepForm();
+
+        return spf;
     }
 
     @Override
@@ -119,7 +184,8 @@ public class SitePrepDetailActivity extends FormDetailActivity implements View.O
 
     @Override
     public Validator getValidator() {
-        return null;
+        SitePrepValidator validator = new SitePrepValidator(mContext);
+        return validator;
     }
 
     @Override
@@ -249,7 +315,7 @@ public class SitePrepDetailActivity extends FormDetailActivity implements View.O
 
         photoDAO.open();
 
-        allPhotos = photoDAO.findPhotos(SiteVisitProperties.FORM_TYPE, mId, null);
+        allPhotos = photoDAO.findPhotos(SitePrepProperties.FORM_TYPE, mId, null);
 
         Log.i("debug", "Size All Photo Get: " + allPhotos.size());
 
@@ -261,10 +327,10 @@ public class SitePrepDetailActivity extends FormDetailActivity implements View.O
                 Photo photo = allPhotos.get(i);
                 photoMap.put(photo.path, true);
 
-                if(photo.classification.equals(SiteVisitProperties.PHOTO_AD)){
+                if(photo.classification.equals(SitePrepProperties.PHOTO_AD)){
 
                     // Photos belong to AD
-//                    addGalleryItem(i, allPhotos.get(i), ADLayout, allPhotos);
+                    addGalleryItem(i, allPhotos.get(i), ADLayout, allPhotos);
 
                 }else if(photo.classification.equals(SiteVisitProperties.PHOTO_DRAWING)){
 

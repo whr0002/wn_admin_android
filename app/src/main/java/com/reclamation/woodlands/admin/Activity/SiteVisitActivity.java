@@ -1,18 +1,14 @@
 package com.reclamation.woodlands.admin.Activity;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Toast;
 
 import com.reclamation.woodlands.admin.Adapter.FormAdapter;
 import com.reclamation.woodlands.admin.Adapter.SiteFormAdapter;
 import com.reclamation.woodlands.admin.DB.Table_SiteVisit.SiteVisitDAO;
 import com.reclamation.woodlands.admin.DB.Table_SiteVisit.SiteVisitForm;
-import com.reclamation.woodlands.admin.DB.Table_UserInfo.UI_DataSource;
-import com.reclamation.woodlands.admin.DB.Table_UserInfo.UserInfo;
 import com.reclamation.woodlands.admin.Data.Forms.Form;
 import com.reclamation.woodlands.admin.Data.Forms.SiteForm;
 import com.reclamation.woodlands.admin.Data.Forms.SiteVisit.SVUploader;
@@ -123,50 +119,11 @@ public class SiteVisitActivity extends FormActivity {
 
     }
 
+
     @Override
-    public void submitForms(List<Form> forms) {
-        UI_DataSource uiDao = new UI_DataSource(this);
-        uiDao.open();
-        UserInfo userInfo = uiDao.getUserInfo();
-        uiDao.close();
-
-        if(userInfo != null){
-            if(userInfo.role != null && !userInfo.role.equalsIgnoreCase("null")){
-
-                if(forms.size() > 0){
-                    ProgressDialog progressDialog = new ProgressDialog(this);
-                    progressDialog.setMessage("Uploading...");
-                    progressDialog.setIndeterminate(true);
-                    progressDialog.setMax(forms.size());
-                    progressDialog.setProgress(0);
-                    progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                    progressDialog.show();
-
-
-                    Uploader uploader = new SVUploader(this, forms.size(), dao, progressDialog);
-                    for(Form form : forms){
-
-                            uploader.execute(form);
-
-                    }
-
-                }else{
-                    Toast.makeText(this, "There is no form to submit", Toast.LENGTH_SHORT).show();
-                }
-
-            }else{
-                Toast.makeText(this,
-                        "Your account is not authorized to " +
-                                "submit forms now, please contact us for details."
-                        , Toast.LENGTH_LONG).show();
-
-            }
-        }else{
-            Toast.makeText(this, "Please login first.", Toast.LENGTH_SHORT).show();
-        }
-
-
-
+    public Uploader getUploader(List<Form> forms) {
+        Uploader uploader = new SVUploader(this, forms.size(), dao, progressDialog);
+        return uploader;
     }
 
     @Override

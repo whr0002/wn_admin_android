@@ -8,6 +8,7 @@ public class FormType {
     public String formName;
 
     public static final int TYPE_SITEVISIT = 0;
-    public static final int TYPE_SITEPREP = 1;
+    public static final int TYPE_TIMESHEET = 1;
+    public static final int TYPE_SITEPREP = 2;
 
 }

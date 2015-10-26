@@ -37,7 +37,7 @@
 
         </LinearLayout>
 
-    <com.reclamation.woodlands.woodlandsreclamation.Data.Forms.Drawing.DrawingView
+    <com.reclamation.woodlands.admin.Data.Forms.Drawing.DrawingView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="3dp"

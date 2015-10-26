@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.reclamation.woodlands.admin.Activity.SitePrepActivity;
 import com.reclamation.woodlands.admin.Activity.SiteVisitActivity;
+import com.reclamation.woodlands.admin.Activity.TimesheetsActivity;
 import com.reclamation.woodlands.admin.Adapter.FormTypeAdapter;
 import com.reclamation.woodlands.admin.Data.Forms.FormType;
 import com.reclamation.woodlands.admin.R;
@@ -52,19 +53,14 @@ public class FormFragment extends android.support.v4.app.Fragment implements Ada
         forms.add(f);
 
         FormType f1 = new FormType();
-        f1.typeID = FormType.TYPE_SITEPREP;
-        f1.formName = "Site Preparation Report";
+        f1.typeID = FormType.TYPE_TIMESHEET;
+        f1.formName = "Timesheet";
         forms.add(f1);
 
         FormType f2 = new FormType();
-        f2.typeID = 2;
-        f2.formName = "Vegetation Control Report";
+        f2.typeID = FormType.TYPE_SITEPREP;
+        f2.formName = "Site Prep";
         forms.add(f2);
-
-        FormType f3 = new FormType();
-        f3.typeID = 3;
-        f3.formName = "Revegetation Report";
-        forms.add(f3);
 
         return forms;
 
@@ -87,12 +83,17 @@ public class FormFragment extends android.support.v4.app.Fragment implements Ada
 
                 break;
 
-            case FormType.TYPE_SITEPREP:
+            case FormType.TYPE_TIMESHEET:
 
-                Intent intent1 = new Intent(mContext, SitePrepActivity.class);
+                Intent intent1 = new Intent(mContext, TimesheetsActivity.class);
                 startActivity(intent1);
                 break;
 
+            case FormType.TYPE_SITEPREP:
+
+                Intent intent2 = new Intent(mContext, SitePrepActivity.class);
+                startActivity(intent2);
+                break;
         }
 
 

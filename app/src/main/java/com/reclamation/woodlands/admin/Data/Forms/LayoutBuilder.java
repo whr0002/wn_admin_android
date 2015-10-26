@@ -1,4 +1,4 @@
-package com.reclamation.woodlands.admin.Data.Forms.SiteVisit;
+package com.reclamation.woodlands.admin.Data.Forms;
 
 import android.content.Context;
 import android.view.Gravity;
@@ -154,6 +154,8 @@ public class LayoutBuilder {
         textView.setGravity(Gravity.LEFT);
         textView.setLayoutParams(editParam);
 
+        // Add children view to parent view
+        innerLayout.addView(textView);
 
         if(title.equalsIgnoreCase("Damage?") || title.equalsIgnoreCase("Issues?")){
             // Pass or fail dropdown
@@ -178,8 +180,7 @@ public class LayoutBuilder {
         }
 
 
-        // Add children view to parent view
-        innerLayout.addView(textView);
+
 
         linearLayout.addView(innerLayout);
         wrapper.addView(linearLayout);

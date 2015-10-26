@@ -19,6 +19,8 @@ import com.reclamation.woodlands.admin.DB.Table_FacilityType.FT_DataSource;
 import com.reclamation.woodlands.admin.DB.Table_FacilityType.FacilityType;
 import com.reclamation.woodlands.admin.DB.Table_ReviewSite.RS_DataSource;
 import com.reclamation.woodlands.admin.DB.Table_ReviewSite.ReviewSite;
+import com.reclamation.woodlands.admin.DB.Table_SiteLatLng.SLL_Datasource;
+import com.reclamation.woodlands.admin.DB.Table_SiteLatLng.SiteLatLng;
 import com.reclamation.woodlands.admin.DB.Table_UserInfo.UI_DataSource;
 import com.reclamation.woodlands.admin.DB.Table_UserInfo.UserInfo;
 import com.reclamation.woodlands.admin.R;
@@ -42,6 +44,7 @@ public class SyncFragment  extends Fragment implements View.OnClickListener{
     private ProgressDialog progressDialog;
     private static RS_DataSource daoRS;
     private static FT_DataSource daoFT;
+    private static SLL_Datasource daoSLL;
 
 
     @Override
@@ -57,6 +60,7 @@ public class SyncFragment  extends Fragment implements View.OnClickListener{
         daoUI = new UI_DataSource(mActivity);
         daoRS = new RS_DataSource(mActivity);
         daoFT = new FT_DataSource(mActivity);
+        daoSLL = new SLL_Datasource(mActivity);
 
         client = new AsyncHttpClient();
 
@@ -118,10 +122,10 @@ public class SyncFragment  extends Fragment implements View.OnClickListener{
             JSONObject whole = new JSONObject(json);
             JSONArray RS = whole.getJSONArray("RS");
             JSONArray FT = whole.getJSONArray("FT");
-
+            JSONArray SLL = whole.getJSONArray("sll");
             syncRS(RS);
             syncFT(FT);
-
+            syncSLL(SLL);
 
 
 
@@ -180,6 +184,30 @@ public class SyncFragment  extends Fragment implements View.OnClickListener{
             }
         }catch (Exception e){
             Log.i(DEBUG, "parsing FT errors");
+            e.printStackTrace();
+        }
+    }
+
+    private void syncSLL(JSONArray slls){
+        try{
+            if(slls != null && slls.length()> 0){
+                daoSLL.open();
+                daoSLL.deleteAll();
+
+                for(int i=0;i<slls.length();i++){
+                    SiteLatLng s = new SiteLatLng();
+                    s.SiteID = slls.getJSONObject(i).getString("siteId");
+                    s.Lat = slls.getJSONObject(i).getString("lat");
+                    s.Lng = slls.getJSONObject(i).getString("lng");
+
+                    daoSLL.create(s);
+
+                }
+
+                daoSLL.close();
+            }
+        }catch (Exception e){
+            Log.i(DEBUG, "parsing SLL errors");
             e.printStackTrace();
         }
     }

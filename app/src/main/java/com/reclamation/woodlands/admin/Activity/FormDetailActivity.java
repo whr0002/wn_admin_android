@@ -36,17 +36,17 @@ import com.reclamation.woodlands.admin.DB.Table_FacilityType.FT_DataSource;
 import com.reclamation.woodlands.admin.DB.Table_FacilityType.FacilityType;
 import com.reclamation.woodlands.admin.DB.Table_Photo.Photo;
 import com.reclamation.woodlands.admin.DB.Table_Photo.PhotoDAO;
-import com.reclamation.woodlands.admin.DB.Table_ReviewSite.RS_DataSource;
-import com.reclamation.woodlands.admin.DB.Table_ReviewSite.ReviewSite;
+import com.reclamation.woodlands.admin.DB.Table_SiteLatLng.SLL_Datasource;
+import com.reclamation.woodlands.admin.DB.Table_SiteLatLng.SiteLatLng;
 import com.reclamation.woodlands.admin.DB.Table_SiteVisit.SiteVisitProperties;
 import com.reclamation.woodlands.admin.Data.Forms.DecodeImageAsync;
 import com.reclamation.woodlands.admin.Data.Forms.Form;
 import com.reclamation.woodlands.admin.Data.Forms.ImagePopup;
 import com.reclamation.woodlands.admin.Data.Forms.ImageProcessor;
 import com.reclamation.woodlands.admin.Data.Forms.PathView;
-import com.reclamation.woodlands.admin.Data.Forms.SiteForm;
 import com.reclamation.woodlands.admin.Data.Forms.Validator;
 import com.reclamation.woodlands.admin.R;
+import com.reclamation.woodlands.admin.Services.SiteService;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -80,11 +80,13 @@ public abstract class FormDetailActivity extends ActionBarActivity implements Go
     protected Photo currentPhoto, curDrawing;
     protected LinearLayout currentLayout;
     protected PhotoDAO photoDAO;
+    protected SLL_Datasource siteDAO;
     protected ImageProcessor imageProcessor;
     protected DecodeImageAsync decodeImageAsync;
     public ArrayList<Photo> removedPhotos,newCreatedPhotos, allPhotos;
     public HashMap<String, Boolean> photoMap;
     public int mId;
+    private  ArrayAdapter<CharSequence> mSiteAdapter;
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -105,6 +107,7 @@ public abstract class FormDetailActivity extends ActionBarActivity implements Go
         mActionBar = getSupportActionBar();
         mActionBar.setDisplayHomeAsUpEnabled(true);
         photoDAO = new PhotoDAO(this);
+        siteDAO = new SLL_Datasource(this);
         imageProcessor = new ImageProcessor(location);
         decodeImageAsync = new DecodeImageAsync();
 
@@ -114,8 +117,6 @@ public abstract class FormDetailActivity extends ActionBarActivity implements Go
         photoMap = new HashMap<String, Boolean>();
 
         setLayout(this);
-
-
     }
 
     @Override
@@ -195,7 +196,7 @@ public abstract class FormDetailActivity extends ActionBarActivity implements Go
 
     public abstract void addOrUpdate(Form f);
 
-    public abstract SiteForm getCurrentForm();
+    public abstract Form getCurrentForm();
 
     public abstract void onFinishWithoutSave();
 
@@ -323,30 +324,62 @@ public abstract class FormDetailActivity extends ActionBarActivity implements Go
     }
     public void setSiteIdSpinner(Spinner spinner) {
 
+
+
         ArrayAdapter<CharSequence> adapter;
 
-        RS_DataSource rsDao = new RS_DataSource(this);
+//        RS_DataSource rsDao = new RS_DataSource(this);
+//
+//        rsDao.open();
+//
+//        List<ReviewSite> rss = rsDao.getAll();
+//
+//        rsDao.close();
 
-        rsDao.open();
+        // Get sites which are around a given set of coordinates
+        SiteService siteService = new SiteService();
+        double cLat = 53.498503;
+        double cLng = -113.576660;
+        List<SiteLatLng> sites = siteService.getSitesAround(this, cLat, cLng, 220);
 
-        List<ReviewSite> rss = rsDao.getAll();
-
-        rsDao.close();
 
         ArrayList<CharSequence> values = new ArrayList<CharSequence>();
         values.add("");
 
-        if(rss != null && rss.size() > 0){
-            for(ReviewSite rs : rss){
-                values.add(rs.ReviewSiteID);
-
+        if(sites != null && sites.size() > 0){
+            for(SiteLatLng site : sites){
+                values.add(site.SiteID);
             }
         }
 
         adapter = new ArrayAdapter<CharSequence>(this, R.layout.spinner_item, values);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
+
+        this.mSiteAdapter = adapter;
     }
+
+    // Used for updating site spinner based on a given set of coordinates
+    private void updateSiteSpinner(double lat, double lng){
+        if(mSiteAdapter != null){
+            mSiteAdapter.clear();
+
+            // Get sites which are around a given set of coordinates
+            SiteService siteService = new SiteService();
+            List<SiteLatLng> sites = siteService.getSitesAround(this, lat, lng, 220);
+
+            mSiteAdapter.add("");
+
+            if(sites != null && sites.size() > 0){
+                for(SiteLatLng site : sites){
+                    mSiteAdapter.add(site.SiteID);
+                }
+            }
+
+            mSiteAdapter.notifyDataSetChanged();
+        }
+    }
+
     public void clearTempImages(List<Photo> removedPhotos){
 
         if(removedPhotos != null && removedPhotos.size() > 0){
@@ -591,6 +624,9 @@ public abstract class FormDetailActivity extends ActionBarActivity implements Go
     @Override
     public void onLocationChanged(Location location) {
 
+        Log.i("debug", "In");
+//        updateSiteSpinner(location.getLatitude(), location.getLongitude());
+
         TextView lat = getLatitudeView();
         TextView longi = getLongitudeView();
 
@@ -602,7 +638,6 @@ public abstract class FormDetailActivity extends ActionBarActivity implements Go
                 longi.setText("" + location.getLongitude());
 
             }
-
         }
 
         this.location = location;

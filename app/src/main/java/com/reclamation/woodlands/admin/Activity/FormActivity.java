@@ -19,11 +19,15 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.GridView;
+import android.widget.Toast;
 
 import com.reclamation.woodlands.admin.Adapter.FormAdapter;
+import com.reclamation.woodlands.admin.DB.Table_UserInfo.UI_DataSource;
+import com.reclamation.woodlands.admin.DB.Table_UserInfo.UserInfo;
 import com.reclamation.woodlands.admin.Data.Forms.DeleteDialog;
 import com.reclamation.woodlands.admin.Data.Forms.Form;
 import com.reclamation.woodlands.admin.Data.Forms.SubmitDialog;
+import com.reclamation.woodlands.admin.Data.Forms.Uploader;
 import com.reclamation.woodlands.admin.R;
 
 import java.util.ArrayList;
@@ -279,7 +283,51 @@ public abstract class FormActivity extends ActionBarActivity implements AdapterV
     public abstract void deleteForm(Form form);
 
 
-    public abstract void submitForms(List<Form> forms);
+    public void submitForms(List<Form> forms){
+        UI_DataSource uiDao = new UI_DataSource(this);
+        uiDao.open();
+        UserInfo userInfo = uiDao.getUserInfo();
+        uiDao.close();
+
+        if(userInfo != null){
+            if(userInfo.role != null && !userInfo.role.equalsIgnoreCase("null")){
+
+                if(forms.size() > 0){
+                    ProgressDialog progressDialog = new ProgressDialog(this);
+                    progressDialog.setMessage("Uploading...");
+                    progressDialog.setIndeterminate(true);
+                    progressDialog.setMax(forms.size());
+                    progressDialog.setProgress(0);
+                    progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+
+
+
+                    Uploader uploader = getUploader(getReadyForms());
+                    uploader.mProgressDialog = progressDialog;
+                    progressDialog.show();
+                    for(Form form : forms){
+
+                        uploader.execute(form);
+
+                    }
+
+                }else{
+                    Toast.makeText(this, "There is no form to submit", Toast.LENGTH_SHORT).show();
+                }
+
+            }else{
+                Toast.makeText(this,
+                        "Your account is not authorized to " +
+                                "submit forms now, please contact us for details."
+                        , Toast.LENGTH_LONG).show();
+
+            }
+        }else{
+            Toast.makeText(this, "Please login first.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public abstract Uploader getUploader(List<Form> forms);
 
     public abstract void updateForm(Form form);
 

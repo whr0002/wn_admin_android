@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,6 +50,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
         this.mActivity = this.getActivity();
         this.usernameView = (EditText) rootView.findViewById(R.id.username);
         this.passwordView = (EditText) rootView.findViewById(R.id.password);
+        this.usernameView.setText("whr0002@gmail.com");
+        this.passwordView.setText("`Nmhwj0002");
 
         this.nameView = (TextView) rootView.findViewById(R.id.name);
         this.roleView = (TextView) rootView.findViewById(R.id.role);
@@ -136,6 +139,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
                         processJSON(result, ui, dao);
 
                     }else{
+                        Log.i("debug", result);
                         Toast.makeText(mActivity, "Login failed", Toast.LENGTH_LONG).show();
                     }
 

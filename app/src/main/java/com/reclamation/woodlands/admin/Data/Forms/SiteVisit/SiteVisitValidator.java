@@ -1,13 +1,15 @@
-package com.reclamation.woodlands.admin.Data.Forms;
+package com.reclamation.woodlands.admin.Data.Forms.SiteVisit;
 
 import android.content.Context;
 
 import com.reclamation.woodlands.admin.DB.Table_SiteVisit.SiteVisitForm;
+import com.reclamation.woodlands.admin.Data.Forms.Form;
+import com.reclamation.woodlands.admin.Data.Forms.Validator;
 
 /**
  * Created by Jimmy on 5/29/2015.
  */
-public class SiteVisitValidator extends Validator{
+public class SiteVisitValidator extends Validator {
 
     public SiteVisitValidator(Context context) {
         super(context);

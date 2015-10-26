@@ -1,0 +1,602 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"></LinearLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+
+            android:orientation="vertical">
+
+            <!-- Name -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:textSize="18sp"
+                    android:text="Name"
+                    android:textColor="@color/black"
+                    android:layout_gravity="center"
+                    />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:textColor="@color/cblue"
+                    android:textSize="18sp"
+                    android:id="@+id/nameView"
+                    android:layout_gravity="center_vertical"/>
+            </LinearLayout>
+
+            <!-- Date -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:textSize="18sp"
+                    android:text="Date"
+                    android:textColor="@color/black"
+                    android:layout_gravity="center"
+                    />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.49"
+                    android:textColor="@color/cblue"
+                    android:textSize="18sp"
+                    android:id="@+id/dateView"
+                    android:layout_gravity="center_vertical"/>
+
+                <ImageButton
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/date_picker"
+                    android:id="@+id/date_picker"
+                    android:scaleType="fitCenter"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="0.01"
+                    />
+            </LinearLayout>
+
+            <!-- Pay Period Year -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:textSize="18sp"
+                    android:text="Pay Period Year"
+                    android:textColor="@color/black"
+                    android:layout_gravity="center"
+                    />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:textColor="@color/cblue"
+                    android:textSize="18sp"
+                    android:id="@+id/ppyView"
+                    android:layout_gravity="center_vertical"/>
+            </LinearLayout>
+
+            <!-- Pay Period -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:textSize="18sp"
+                    android:text="Pay Period"
+                    android:textColor="@color/black"
+                    android:layout_gravity="center"
+                    />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:textColor="@color/cblue"
+                    android:textSize="18sp"
+                    android:id="@+id/ppView"
+                    android:layout_gravity="center" />
+            </LinearLayout>
+
+            <!-- Client -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:textSize="18sp"
+                    android:text="Client"
+                    android:textColor="@color/black"
+                    android:layout_gravity="center"
+                    />
+
+                <Spinner
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:id="@+id/client_spinner" />
+            </LinearLayout>
+
+            <!-- Project -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:textSize="18sp"
+                    android:text="Project"
+                    android:textColor="@color/black"
+                    android:layout_gravity="center"
+                    />
+
+                <Spinner
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:id="@+id/project_spinner"/>
+            </LinearLayout>
+
+            <!-- Project ID -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:textSize="18sp"
+                    android:text="Project ID"
+                    android:textColor="@color/black"
+                    android:layout_gravity="center"
+                    />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:layout_gravity="center"
+                    android:textColor="@color/cblue"
+                    android:id="@+id/project_id"/>
+            </LinearLayout>
+
+            <!-- Task -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:textSize="18sp"
+                    android:text="Task"
+                    android:textColor="@color/black"
+                    android:layout_gravity="center"
+                    />
+
+                <Spinner
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:singleLine="true"
+                    android:imeOptions="actionNext"
+                    android:layout_gravity="center"
+                    android:textColor="@color/cblue"
+                    android:id="@+id/task_spinner"/>
+            </LinearLayout>
+
+            <!-- Identifier -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:textSize="18sp"
+                    android:text="Identifier"
+                    android:textColor="@color/black"
+                    android:layout_gravity="center"
+                    />
+
+                <EditText
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:singleLine="true"
+                    android:imeOptions="actionNext"
+                    android:layout_gravity="center"
+                    android:textColor="@color/cblue"
+                    android:id="@+id/identifier_field"/>
+            </LinearLayout>
+
+            <!-- Vehicle -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:textSize="18sp"
+                    android:text="Vehicle"
+                    android:textColor="@color/black"
+                    android:layout_gravity="center"
+                    />
+
+                <Spinner
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:id="@+id/vehicle_spinner"/>
+            </LinearLayout>
+
+            <!-- Crew -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:textSize="18sp"
+                    android:text="Crew"
+                    android:textColor="@color/black"
+                    android:layout_gravity="center"
+                    />
+
+                <EditText
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:singleLine="true"
+                    android:imeOptions="actionNext"
+                    android:layout_gravity="center"
+                    android:textColor="@color/cblue"
+                    android:id="@+id/crew_edittext"/>
+
+            </LinearLayout>
+
+            <!-- Start KM -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:textSize="18sp"
+                    android:text="Start Km"
+                    android:textColor="@color/black"
+                    android:layout_gravity="center"
+                    />
+
+                <EditText
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:singleLine="true"
+                    android:imeOptions="actionNext"
+                    android:layout_gravity="center"
+                    android:textColor="@color/cblue"
+                    android:inputType="numberDecimal"
+                    android:id="@+id/startkm_edittext"
+                    />
+            </LinearLayout>
+
+            <!-- End KM -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:textSize="18sp"
+                    android:text="End Km"
+                    android:textColor="@color/black"
+                    android:layout_gravity="center"
+                    />
+
+                <EditText
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:singleLine="true"
+                    android:imeOptions="actionNext"
+                    android:layout_gravity="center"
+                    android:textColor="@color/cblue"
+                    android:inputType="numberDecimal"
+                    android:id="@+id/endkm_edittext"
+                    />
+            </LinearLayout>
+
+            <!-- GPS -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:textSize="18sp"
+                    android:text="GPS"
+                    android:textColor="@color/black"
+                    android:layout_gravity="center"
+                    />
+
+                <CheckBox
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:gravity="center"
+                    android:id="@+id/gps_checkbox"/>
+            </LinearLayout>
+
+            <!-- Field Access -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:textSize="18sp"
+                    android:text="Field"
+                    android:textColor="@color/black"
+                    android:layout_gravity="center"
+                    />
+
+                <Spinner
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:id="@+id/field_spinner"/>
+            </LinearLayout>
+
+            <!-- PD -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:textSize="18sp"
+                    android:text="PD"
+                    android:textColor="@color/black"
+                    android:layout_gravity="center"
+                    />
+
+                <CheckBox
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:gravity="center"
+                    android:id="@+id/pd_checkbox"/>
+            </LinearLayout>
+
+            <!-- Job Description -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:textSize="18sp"
+                    android:text="Job Description"
+                    android:textColor="@color/black"
+                    android:layout_gravity="center"
+                    />
+
+                <EditText
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:singleLine="true"
+                    android:imeOptions="actionNext"
+                    android:layout_gravity="center"
+                    android:textColor="@color/cblue"
+                    android:id="@+id/job_desc_edittext"
+                    />
+            </LinearLayout>
+
+            <!-- Off Reason -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:textSize="18sp"
+                    android:text="Off Reason"
+                    android:textColor="@color/black"
+                    android:layout_gravity="center"
+                    />
+
+                <Spinner
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:id="@+id/off_spinner"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:textSize="18sp"
+                    android:text="Hours"
+                    android:textColor="@color/black"
+                    android:layout_gravity="center"
+                    />
+
+                <EditText
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:singleLine="true"
+                    android:imeOptions="actionNext"
+                    android:layout_gravity="center"
+                    android:textColor="@color/cblue"
+                    android:inputType="numberDecimal"
+                    android:id="@+id/hours_edittext"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:textSize="18sp"
+                    android:text="Bank"
+                    android:textColor="@color/black"
+                    android:layout_gravity="center"
+                    />
+
+                <EditText
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:singleLine="true"
+                    android:imeOptions="actionNext"
+                    android:layout_gravity="center"
+                    android:textColor="@color/cblue"
+                    android:inputType="numberDecimal"
+                    android:id="@+id/bank_edittext"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:textSize="18sp"
+                    android:text="Over Time"
+                    android:textColor="@color/black"
+                    android:layout_gravity="center"
+                    />
+
+                <EditText
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:singleLine="true"
+                    android:imeOptions="actionNext"
+                    android:layout_gravity="center"
+                    android:textColor="@color/cblue"
+                    android:inputType="numberDecimal"
+                    android:id="@+id/ot_edittext"
+                    />
+            </LinearLayout>
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>
